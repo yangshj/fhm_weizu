@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weizu.user">
+	
+	
+	<!-- 新增-->
+	<insert id="inserWeiZuUser" parameterType="userInfoBean">
+		insert into weizu_user(
+			 avatar_url,
+			 city,
+			 country,
+			 gender,
+			 language,
+			 nick_name,
+			 province,
+			 open_id
+		) values (
+			#{avatarUrl},	
+			#{city},	
+			#{country},
+			#{gender},		
+			#{language},	
+			#{nickName},	
+			#{province},
+			#{openId}
+		)
+	</insert>
+	
+	
+	<!-- 删除-->
+	<delete id="deleteUser" >
+		delete from weizu_user where open_id = #{openId}
+	</delete>
+	
+	
+	<!-- 修改 -->
+	<update id="updateUserByOpenId" parameterType="userInfoBean">
+		update  weizu_user
+			set 
+				avatar_url = #{avatarUrl},
+				city = #{city},
+				province = #{province},
+				country = #{country},
+				nick_name = #{nickName}
+			where 
+				open_id = #{openId}
+	</update>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findUserById" resultType="userInfoBean">
+		select 
+			 id as id,
+			 avatar_url as avatarUrl,
+			 city as city,
+			 country as country,
+			 gender as gender,
+			 language as language,
+			 nick_name as nickName,
+			 province as province,
+			 open_id as openId
+		from 
+			weizu_user
+		where 
+			id = #{id}
+	</select>
+	
+	<!-- 通过openId获取数据 -->
+	<select id="findUserByOpenId" resultType="userInfoBean">
+		select 
+			 id as id,
+			 avatar_url as avatarUrl,
+			 city as city,
+			 country as country,
+			 gender as gender,
+			 language as language,
+			 nick_name as nickName,
+			 province as province,
+			 open_id as openId
+		from 
+			weizu_user
+		where 
+			open_id = #{openId}
+	</select>
+	
+	
+	<!-- 新增-->
+	<insert id="insertLocation" parameterType="userInfoBean">
+		insert into weizu_location(
+			 user_id,
+			 latitude,
+			 longitude,
+			 location_info,
+			 create_time
+		) values (
+			#{userId},	
+			#{latitude},	
+			#{longitude},
+			#{locationInfo},
+			now()		
+		)
+	</insert>
+	
+	<!-- 获取所有用户最近的位置信息 -->
+	<select id="getAllUserLatelyLocaitons" resultType="userLocationMarkerBean">
+		select la.id as id,
+			 la.latitude as latitude,
+			 wu.nick_name as name,
+			 la.longitude as longitude,
+			 wu.avatar_url as iconPath 
+		from 
+			weizu_location la left join weizu_user wu on la.user_id=wu.id 
+			where la.id in(select max(id) from weizu_location group by user_id)
+	</select>
+	
+	
+	
+</mapper>
