@@ -12,7 +12,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<javax-activation.version>1.1</javax-activation.version>
-		<spring.version>4.0.4.RELEASE</spring.version>
+		<spring.version>4.3.20.RELEASE</spring.version>
 		<mysql-connector-java.version>5.1.34</mysql-connector-java.version>
 	</properties>
 
@@ -123,11 +123,6 @@
 			<groupId>asm</groupId>
 			<artifactId>asm</artifactId>
 			<version>3.3.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.axis</groupId>
-			<artifactId>axis</artifactId>
-			<version>1.4</version>
 		</dependency>
 		<dependency>
 			<groupId>cglib</groupId>
@@ -503,13 +498,6 @@
 		    <artifactId>shiro-all</artifactId>
 		    <version>1.2.3</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>shiro</groupId>
-			<artifactId>shiro</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/shiro-all-1.2.3.jar</systemPath>
-		</dependency> -->
 		<!-- sun.misc.BASE64Decoder -->
 		<dependency>
 			<groupId>sun-misc</groupId>
