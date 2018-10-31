@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.weizu.dao.UserInfoDao;
 import com.weizu.pojo.UserInfoBean;
 
-@Service("userServiceImpl")
+@Service("userInfoServiceImpl")
 public class UserInfoServiceImpl implements UserInfoService{
 	
 	@Autowired

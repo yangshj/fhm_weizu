@@ -9,7 +9,7 @@ import com.weizu.service.AddressLookService;
 
 @Controller
 @RequestMapping(value="/weizu/user")
-public class UserController extends BaseController{
+public class UserInfoController extends BaseController{
 	
 	String menuUrl = "weizu/user/list.do"; //菜单地址(权限用)
 	@Autowired
