@@ -154,9 +154,6 @@ public class AddressLookController extends BaseController{
 			mv.setViewName("weizu/addressLook/list");
 			mv.addObject("userList", userList);
 			mv.addObject("pd", pd);
-			System.out.println("page.getCurrentPage(): "+page.getCurrentPage());
-			System.out.println("page: "+JSON.toJSONString(page));
-			System.out.println("page.getPageStr(): "+page.getPageStr());
 			mv.addObject(Const.SESSION_QX,this.getHC());	//按钮权限
 		} catch(Exception e){
 			logger.error(e.toString(), e);

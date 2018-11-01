@@ -13,11 +13,11 @@ public class UserLocationDaoImpl extends DaoSupport implements UserLocationDao{
 	
 	@Override
 	public Integer insertLocation(WeiZuLocationBean bean) throws Exception {
-		return (Integer) this.save("com.weizu.user.insertLocation", bean);
+		return (Integer) this.save("com.weizu.userLocation.insertLocation", bean);
 	}
 
 	@Override
 	public List<UserLocationMarkerBean> getAllUserLatelyLocaitons() throws Exception {
-		return (List<UserLocationMarkerBean>) this.findForList("com.weizu.user.getAllUserLatelyLocaitons", null);
+		return (List<UserLocationMarkerBean>) this.findForList("com.weizu.userLocation.getAllUserLatelyLocaitons", null);
 	}
 }

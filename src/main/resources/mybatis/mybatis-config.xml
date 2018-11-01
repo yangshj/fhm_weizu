@@ -18,6 +18,7 @@
 		<typeAlias type="com.weizu.pojo.WeiZuLocationBean" alias="weiZuLocationBean"/>
 		<typeAlias type="com.weizu.pojo.UserLocationMarkerBean" alias="userLocationMarkerBean"/>
 		<typeAlias type="com.weizu.pojo.AddressLookBean" alias="addressLookBean"/>
+		<typeAlias type="com.weizu.pojo.SurNameBean" alias="surNameBean"/>
 		<!-- 分页 -->
 		<typeAlias type="com.fh.entity.Page" alias="Page"/>
 	</typeAliases>

@@ -46,6 +46,19 @@
 				open_id = #{openId}
 	</update>
 	
+	<!-- 修改 -->
+	<update id="updateUserById" parameterType="userInfoBean">
+		update  weizu_user
+			set 
+				avatar_url = #{avatarUrl},
+				city = #{city},
+				province = #{province},
+				country = #{country},
+				nick_name = #{nickName},
+				rights = #{rights}
+			where 
+				id = #{id}
+	</update>
 	
 	<!-- 通过ID获取数据 -->
 	<select id="findUserById" resultType="userInfoBean">
@@ -58,7 +71,8 @@
 			 language as language,
 			 nick_name as nickName,
 			 province as province,
-			 open_id as openId
+			 open_id as openId,
+			 rights
 		from 
 			weizu_user
 		where 
@@ -83,36 +97,33 @@
 			open_id = #{openId}
 	</select>
 	
-	
-	<!-- 新增-->
-	<insert id="insertLocation" parameterType="userInfoBean">
-		insert into weizu_location(
-			 user_id,
-			 latitude,
-			 longitude,
-			 location_info,
-			 create_time
-		) values (
-			#{userId},	
-			#{latitude},	
-			#{longitude},
-			#{locationInfo},
-			now()		
-		)
-	</insert>
-	
-	<!-- 获取所有用户最近的位置信息 -->
-	<select id="getAllUserLatelyLocaitons" resultType="userLocationMarkerBean">
-		select la.id as id,
-			 la.latitude as latitude,
-			 wu.nick_name as name,
-			 la.longitude as longitude,
-			 wu.avatar_url as iconPath 
+	<!-- 列表后台查询页面 -->
+	<select id="getAllUserInfoListPage" parameterType="page" resultType="pd">
+		select 
+			 id as id,
+			 avatar_url as avatarUrl,
+			 city as city,
+			 country as country,
+			 gender as gender,
+			 language as language,
+			 nick_name as nickName,
+			 province as province,
+			 open_id as openId,
+			 create_time as createTime,
+			 modify_time as modifyTime
 		from 
-			weizu_location la left join weizu_user wu on la.user_id=wu.id 
-			where la.id in(select max(id) from weizu_location group by user_id)
+			weizu_user
+		where 1 = 1		
+		<if test="pd.USERNAME != null and pd.USERNAME != ''"><!-- 用户名检索 -->
+			and nick_name LIKE CONCAT(CONCAT('%', #{pd.USERNAME}),'%')
+		</if>
+		<if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 到期时间检索 -->
+			and create_time &gt;= #{pd.lastLoginStart} 
+		</if>
+		<if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
+			and create_time &lt;= #{pd.lastLoginEnd} 
+		</if>
 	</select>
-	
-	
+		
 	
 </mapper>

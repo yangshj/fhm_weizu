@@ -1,6 +1,7 @@
 package com.weizu.pojo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.apache.ibatis.type.Alias;
 
@@ -27,8 +28,12 @@ public class UserInfoBean implements Serializable{
 	private String nickName;
 	/** 唯一标示 */
 	private String openId;
-	
-	
+	/** 权限 */
+	private String rights;
+	/** 创建时间 */
+	private Date createTime;
+	/** 修改时间 */
+	private Date modifyTime;
 	
 	
 	public Long getId() {
@@ -84,6 +89,24 @@ public class UserInfoBean implements Serializable{
 	}
 	public void setOpenId(String openId) {
 		this.openId = openId;
+	}
+	public Date getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+	public Date getModifyTime() {
+		return modifyTime;
+	}
+	public void setModifyTime(Date modifyTime) {
+		this.modifyTime = modifyTime;
+	}
+	public String getRights() {
+		return rights;
+	}
+	public void setRights(String rights) {
+		this.rights = rights;
 	}
 	
 	
