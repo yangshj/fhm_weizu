@@ -72,7 +72,7 @@
 			 nick_name as nickName,
 			 province as province,
 			 open_id as openId,
-			 rights
+			 rights as rights
 		from 
 			weizu_user
 		where 
@@ -90,7 +90,8 @@
 			 language as language,
 			 nick_name as nickName,
 			 province as province,
-			 open_id as openId
+			 open_id as openId,
+			 rights as rights
 		from 
 			weizu_user
 		where 
@@ -109,6 +110,7 @@
 			 nick_name as nickName,
 			 province as province,
 			 open_id as openId,
+			 rights as rights,
 			 create_time as createTime,
 			 modify_time as modifyTime
 		from 
