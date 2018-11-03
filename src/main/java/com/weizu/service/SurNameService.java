@@ -7,7 +7,7 @@ import com.weizu.pojo.SurNameBean;
 public interface SurNameService {
 	
 	
-	public List<SurNameBean> getAllSurName() throws Exception;
+	List<SurNameBean> getAllSurName() throws Exception;
 	
 	
 }

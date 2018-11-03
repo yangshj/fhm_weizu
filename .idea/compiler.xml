@@ -9,8 +9,8 @@
         <module name="fhm_weizu" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="fhm_weizu" target="1.5" />
+    <bytecodeTargetLevel target="7">
+      <module name="fhm_weizu" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

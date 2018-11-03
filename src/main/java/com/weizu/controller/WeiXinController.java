@@ -6,6 +6,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fh.util.RightsHelper;
+import com.weizu.helper.ResultHelper;
+import com.weizu.pojo.*;
+import com.weizu.service.SurNameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,13 +20,6 @@ import com.alibaba.fastjson.JSON;
 import com.fh.controller.base.BaseController;
 import com.weizu.helper.UserOpenInfo;
 import com.weizu.helper.WeiXinMemoryCacheHelper;
-import com.weizu.pojo.AddressLookBean;
-import com.weizu.pojo.AddressLookRE;
-import com.weizu.pojo.BackLocationRe;
-import com.weizu.pojo.UserInfoBean;
-import com.weizu.pojo.UserLocationMarkerBean;
-import com.weizu.pojo.UserLocationRe;
-import com.weizu.pojo.WeiZuLocationBean;
 import com.weizu.service.AddressLookService;
 import com.weizu.service.UserLocationService;
 import com.weizu.service.UserInfoService;
@@ -30,23 +27,17 @@ import com.weizu.service.UserInfoService;
 @Controller
 @RequestMapping(value="/weizu/weixin")
 public class WeiXinController extends BaseController{
-	
-//	验证域名：weizu.site
-//
-//	TXT 记录： _dnsauth
-//
-//	记录值：201810131620062ifazk375vz8ilkx150trgybpa0f9b0ujw02spxm507tmr9wjd
 
-// 又拍云  yangshj  Yang18910970262
-// freessl 754179755@qq.com Yang18910970262
-	
+
+    @Autowired
+    private SurNameService surNameService;
 	@Autowired
-	private UserInfoService weiZuService;
+	private UserInfoService userInfoService;
 	@Autowired
 	private UserLocationService userLocation;
 	@Autowired
 	private AddressLookService addressLookService;
-	
+
 	
 	@RequestMapping(value="/backLocation")
 	@ResponseBody
@@ -58,7 +49,7 @@ public class WeiXinController extends BaseController{
 			String longitude = request.getParameter("longitude");
 			UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
 			if(userOpenInfo!=null){
-				UserInfoBean exit = weiZuService.findUserByOpenId(userOpenInfo.getOpenId());
+				UserInfoBean exit = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
 				if(exit!=null){
 					WeiZuLocationBean bean = new WeiZuLocationBean();
 					bean.setUserId(exit.getId());
@@ -104,7 +95,7 @@ public class WeiXinController extends BaseController{
 		UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidByCode(code);
 		try {
 			System.out.println("成功……"+userOpenInfo);
-			UserInfoBean exit = weiZuService.findUserByOpenId(userOpenInfo.getOpenId());
+			UserInfoBean exit = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
 			if(exit==null){
 				UserInfoBean bean = new UserInfoBean();
 				bean.setAvatarUrl(avatarUrl);
@@ -115,7 +106,7 @@ public class WeiXinController extends BaseController{
 				bean.setNickName(nickName);
 				bean.setOpenId(userOpenInfo.getOpenId());
 				bean.setProvince(province);
-				weiZuService.inserWeiZuUser(bean);
+				userInfoService.inserWeiZuUser(bean);
 			}
 			//return "{sessionId:"+userOpenInfo.getSessionId()+"}";
 		} catch (Exception e) {
@@ -176,4 +167,69 @@ public class WeiXinController extends BaseController{
 			re.setResult("fail");
 		}
 	}
+
+	// 获取姓氏目录
+    @RequestMapping(value="/getSurNames")
+	public void getSurNames(HttpServletRequest request, HttpServletResponse response){
+        SurNameBeanRE re = new SurNameBeanRE();
+        try{
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                List<SurNameBean> list = surNameService.getAllSurName();
+                re.setListData(list);
+                re.setResult(ResultHelper.SUCCESS);
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }catch(Exception e){
+            re.setResult(ResultHelper.FAIL);
+        }
+    }
+
+	// 判断通讯录界面权限
+    @RequestMapping(value="/judgeAddressLookAuthority")
+	public void judgeAddressLookAuthority(HttpServletRequest request, HttpServletResponse response){
+        AddressLookRE re = new AddressLookRE();
+        try{
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String surname = request.getParameter("surname");
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                UserInfoBean userInfo = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+                if(userInfo!=null){
+                    List<SurNameBean> list = surNameService.getAllSurName();
+                    if(list!=null && list.size()>0){
+                        for(SurNameBean surNameBean: list){
+                            if(surNameBean.getSurname().equals(surname)){
+                                String rights = userInfo.getRights();
+                                if(rights!=null && rights!=""){
+                                    Boolean hasRights = RightsHelper.testRights(rights, surNameBean.getId().intValue());
+                                    if(hasRights){
+                                        re.setResult(ResultHelper.SUCCESS);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }catch(Exception e){
+            re.setResult(ResultHelper.FAIL);
+        }
+    }
 }
