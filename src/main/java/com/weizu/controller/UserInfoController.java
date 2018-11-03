@@ -95,7 +95,7 @@ public class UserInfoController extends BaseController{
 	public String auth(@RequestParam String userId, Model model)throws Exception{
 		try{
 			List<SurNameBean> surList = surNameService.getAllSurName();
-			List<Menu> menuList = new ArrayList<>();
+			List<Menu> menuList = new ArrayList<Menu>();
 			UserInfoBean userInfo = userInfoService.findUserById(userId);
 				String roleRights = userInfo.getRights();
 				for(SurNameBean surNameBean : surList){

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="fhm_weizu:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="fhm_weizu.war">
+      <element id="artifact" artifact-name="fhm_weizu:war exploded" />
+    </root>
+  </artifact>
+</component>
