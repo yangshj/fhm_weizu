@@ -80,7 +80,6 @@ abstract class AbstractMyMap<K,T> implements ITimeOutMap<K, T>{
 		Iterator<K> iterator = map.keySet().iterator();
 		if(iterator.hasNext()){
 			K k = iterator.next();
-//			map.remove(k);
 			remove(k);
 		}
 	}
@@ -146,7 +145,6 @@ abstract class AbstractMyMap<K,T> implements ITimeOutMap<K, T>{
 	@Override
 	public void setTimeOut(long timeOut) {
 		this.timeOut = timeOut;
-		//
 		updateTimeOutTask();
 	}
 	private boolean addIndex(){
@@ -167,21 +165,13 @@ abstract class AbstractMyMap<K,T> implements ITimeOutMap<K, T>{
 			return false;
 		}
 	}
-	//
-	/**
-	 * ������󳤶�����
-	 * <p>������󳤶����ƺ󣬳��ȳ���ʱ������޳�ԭ�ж�����ݣ����������
-	 * @param maxSize maxSize>0��Ч��С�ڵ���0��ʾ������
-	 */
 	public void setMaxSize(int maxSize){
 		this.maxSize = maxSize;
 	}
-	//
+
 	private TimerTask<Void, Void> timerTask;
 	private ITimeOutHandler<K,T> handler;
-//	protected ITimeOutHandler<T> getTimeOutHandler() {
-//		return handler;
-//	}
+
 	protected void handlerTimeOut(java.util.Map.Entry<K, TimeOutForCreateDateMap<K, T>.Cache<T>> entry){
 		try{
 			if(null != remove(entry.getKey()) && null != handler){
@@ -191,12 +181,9 @@ abstract class AbstractMyMap<K,T> implements ITimeOutMap<K, T>{
 			e.printStackTrace();
 		}
 	}
-	/**
-	 * ������ʱ��������
-	 * @param timeOut
-	 * @return
-	 */
+
 	protected abstract TimerTask<Void, Void> createTimeOutTask(long timeOut, final Map<K, Cache<T>> map);
+
 	private void updateTimeOutTask() {
 		if(null != timerTask){
 			timerTask.cancel(true);
