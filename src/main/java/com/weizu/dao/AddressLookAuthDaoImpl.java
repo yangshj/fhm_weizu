@@ -18,6 +18,6 @@ public class AddressLookAuthDaoImpl  extends DaoSupport implements AddressLookAu
 
     @Override
     public List<PageData> getAllAuthRequestlistPage(Page page) throws Exception {
-        return (List<PageData>) this.findForList("com.weicom.weizu.addressLookAuth.getAllAuthRequestlistPage", page);
+        return (List<PageData>) this.findForList("com.weizu.addressLookAuth.getAllAuthRequestlistPage", page);
     }
 }

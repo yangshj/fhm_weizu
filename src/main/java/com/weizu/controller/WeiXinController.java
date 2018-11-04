@@ -250,7 +250,7 @@ public class WeiXinController extends BaseController{
 	 *  上传请求权限信息
 	 *  @return {sessionId:""};
 	 */
-	@RequestMapping(value="/uploadAuthRequest", method = {RequestMethod.POST})
+	@RequestMapping(value="/uploadAuthRequest")
 	@ResponseBody
 	public String uploadAuthRequest(HttpServletRequest request, HttpServletResponse response){
         AddressLookRE re = new AddressLookRE();

@@ -62,9 +62,10 @@
 						<label><input type="checkbox" id="zcheckbox" /><span class="lbl"></span></label>
 						</th>
 						<th>序号</th>
-						<th>用户名</th>
-						<th>手机号</th>
+						<th>用户昵称</th>
+						<th>请求信息</th>
 						<th>性別</th>
+						<th>用户头像</th>
 						<th><i class="icon-time hidden-phone"></i>创建日期</th>
 						<th class="center">状态</th>
 						<th class="center">操作</th>
@@ -83,11 +84,15 @@
 									<label><input type='checkbox' name='ids' value="${user.id }" id="${user.id }" alt="${user.id }"/><span class="lbl"></span></label>
 								</td>
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
-								<td>${user.userName }</td>
-								<td>${user.mobilePhone }</td>
+								<td>${user.nickName }</td>
+								<td>${user.requestInfo}</td>
 								<td>
 									<c:if test="${user.sex == '1' }"><span class="label label-important arrowed-in">男</span></c:if>
 									<c:if test="${user.sex == '2' }"><span class="label label-success arrowed">女</span></c:if>
+								</td>
+								<td>
+									<img src="${user.avatarUrl_46}"  alt="${user.nickName}" />
+									<a href="${user.avatarUrl_0}" target="_blank">点击看大头像</a>
 								</td>
 								<td>${user.createTime}</td>
 								<td style="width: 60px;" class="center">
