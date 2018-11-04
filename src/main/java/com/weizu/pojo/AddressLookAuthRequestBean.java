@@ -12,7 +12,7 @@ import java.util.Date;
 public class AddressLookAuthRequestBean  implements Serializable {
 
     /** 用户id */
-    private Long userrId;
+    private Long userId;
     /** 用户昵称 */
     private String nickName;
     /** 请求信息 */
@@ -26,11 +26,11 @@ public class AddressLookAuthRequestBean  implements Serializable {
     /** 修改日期 */
     private Date modifyTime;
 
-    public Long getUserrId() {
-        return userrId;
+    public Long getUserId() {
+        return userId;
     }
-    public void setUserrId(Long userrId) {
-        this.userrId = userrId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
     public String getNickName() {
         return nickName;

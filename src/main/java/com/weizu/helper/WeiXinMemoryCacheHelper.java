@@ -11,8 +11,7 @@ import com.weizu.util.WXAppletUserInfoUtil;
 
 
 /**
- * 避免每次授权，存储五分钟的openId
- * TODO 放到session里面
+ * 避免每次授权，存储30分钟的openId
  * @author songlm
  *
  */

@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.fh.util.RightsHelper;
 import com.weizu.helper.ResultHelper;
 import com.weizu.pojo.*;
-import com.weizu.service.SurNameService;
+import com.weizu.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +20,6 @@ import com.alibaba.fastjson.JSON;
 import com.fh.controller.base.BaseController;
 import com.weizu.helper.UserOpenInfo;
 import com.weizu.helper.WeiXinMemoryCacheHelper;
-import com.weizu.service.AddressLookService;
-import com.weizu.service.UserLocationService;
-import com.weizu.service.UserInfoService;
 
 @Controller
 @RequestMapping(value="/weizu/weixin")
@@ -37,7 +34,8 @@ public class WeiXinController extends BaseController{
 	private UserLocationService userLocation;
 	@Autowired
 	private AddressLookService addressLookService;
-
+	@Autowired
+	private AddressLookAuthService addressLookAuthService;
 	
 	@RequestMapping(value="/backLocation")
 	@ResponseBody
@@ -150,21 +148,36 @@ public class WeiXinController extends BaseController{
 		try{
 			response.setContentType("text/json;charset=UTF-8");
 			response.setCharacterEncoding("UTF-8");
-			re.setResult("fail");
+			re.setResult(ResultHelper.FAIL);
 			String sessionId = request.getParameter("sessionId");
+			String surname = request.getParameter("surname");
 			UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
-			//if(userOpenInfo!=null){
-				List<AddressLookBean> list = addressLookService.getAllAddressLook();
-				if(list!=null && list.size()>0){
-					re.setListData(list);
-					re.setResult("success");
-				} 
-			//} 
+			if(userOpenInfo!=null){
+			    SurNameBean surNameBean = null;
+			    List<SurNameBean> surnameList = surNameService.getAllSurName();
+                for(SurNameBean bean : surnameList){
+                    if(bean.getSurname().equals(surname)){
+                        surNameBean = bean;
+                        break;
+                    }
+                }
+                if(surNameBean!=null){
+                    AddressLookBean param = new AddressLookBean();
+                    param.setSurnameId(surNameBean.getId());
+                    List<AddressLookBean> list = addressLookService.findAddressLookByCondition(param);
+                    if(list!=null && list.size()>0){
+                        re.setListData(list);
+                        re.setResult(ResultHelper.SUCCESS);
+                    }
+                }
+			} else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
 			PrintWriter writer = response.getWriter();
 			writer.print(JSON.toJSONString(re));
 			writer.flush();
 		}catch(Exception e){
-			re.setResult("fail");
+			re.setResult(ResultHelper.FAIL);
 		}
 	}
 
@@ -232,4 +245,39 @@ public class WeiXinController extends BaseController{
             re.setResult(ResultHelper.FAIL);
         }
     }
+
+	/**
+	 *  上传请求权限信息
+	 *  @return {sessionId:""};
+	 */
+	@RequestMapping(value="/uploadAuthRequest", method = {RequestMethod.POST})
+	@ResponseBody
+	public String uploadAuthRequest(HttpServletRequest request, HttpServletResponse response){
+        AddressLookRE re = new AddressLookRE();
+		String sessionId = request.getParameter("sessionId");
+		String requestInfo = request.getParameter("requestInfo");
+		String surname = request.getParameter("surname");
+		String nickName = request.getParameter("nickName");
+		try {
+            re.setResult(ResultHelper.FAIL);
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null) {
+                UserInfoBean userInfo = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+                if(userInfo!=null){
+                    AddressLookAuthRequestBean bean = new AddressLookAuthRequestBean();
+                    bean.setUserId(userInfo.getId());
+                    bean.setNickName(nickName);
+                    bean.setSurname(surname);
+                    bean.setRequestInfo(requestInfo);
+                    re.setResult(ResultHelper.SUCCESS);
+                    addressLookAuthService.insertAuthRequest(bean);
+                }
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return JSON.toJSONString(re);
+	}
 }

@@ -52,16 +52,22 @@
 	<!-- 查找通讯录  -->
 	<select id="findAddressLookByCondition" resultType="addressLookBean" parameterType="addressLookBean">
 		select
-		   id,
-		   user_name as userName,
-		   mobile_phone as mobilePhone,
-		   sex,
-		   create_time as createTime
-		from weizu_address_book 
-		where 
-			user_name = #{userName}
+		    bk.id,
+			bk.user_name as userName,
+			bk.mobile_phone as mobilePhone,
+			bk.sex,
+			bk.create_time as createTime
+		from weizu_address_book bk left
+		join weizu_surname su on bk.surname_id = su.id
+		where 1=1
+		<if test="surnameId != null">
+			and su.id = #{surnameId}
+		</if>
 		<if test="mobilePhone != null">
-			and mobile_phone = #{mobilePhone}
+			and bk.user_name = #{userName}
+		</if>
+		<if test="mobilePhone != null">
+			and bk.mobile_phone = #{mobilePhone}
 		</if>
 	</select>
 	

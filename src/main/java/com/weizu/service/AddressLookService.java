@@ -10,8 +10,8 @@ public interface AddressLookService {
 	
 	/** 查找通讯录 */
 	AddressLookBean findAddressLookById(AddressLookBean bean) throws Exception;
-	
-	AddressLookBean findAddressLookByCondition(AddressLookBean bean) throws Exception;
+
+	List<AddressLookBean> findAddressLookByCondition(AddressLookBean bean) throws Exception;
 	
 	/** 插入通讯录 */
 	Integer inserAddressLook(AddressLookBean bean) throws Exception;

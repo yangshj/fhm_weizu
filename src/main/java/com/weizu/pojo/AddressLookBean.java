@@ -23,7 +23,8 @@ public class AddressLookBean  implements Serializable{
 	private Integer sex;
 	/** 创建时间 */
 	private Date createTime;
-	
+	/** 查询条件-不对应数据库 */
+	private Long surnameId;
 	
 	public Long getId() {
 		return id;
@@ -55,5 +56,10 @@ public class AddressLookBean  implements Serializable{
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-	
-}	
+	public Long getSurnameId() {
+		return surnameId;
+	}
+	public void setSurnameId(Long surnameId) {
+		this.surnameId = surnameId;
+	}
+}

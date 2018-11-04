@@ -47,7 +47,7 @@ public class AddressLookServiceImpl implements AddressLookService{
 	}
 
 	@Override
-	public AddressLookBean findAddressLookByCondition(AddressLookBean bean) throws Exception {
+	public List<AddressLookBean> findAddressLookByCondition(AddressLookBean bean) throws Exception {
 		return addressLookDao.findAddressLookByCondition(bean);
 	}
 

@@ -43,9 +43,9 @@ public class AddressLookDaoImpl  extends DaoSupport implements AddressLookDao{
 	}
 
 	@Override
-	public AddressLookBean findAddressLookByCondition(AddressLookBean bean)
+	public List<AddressLookBean> findAddressLookByCondition(AddressLookBean bean)
 			throws Exception {
-		return (AddressLookBean) this.findForObject("com.weizu.addressLook.findAddressLookByCondition", bean);
+		return (List<AddressLookBean>) this.findForList("com.weizu.addressLook.findAddressLookByCondition", bean);
 	}
 
 }

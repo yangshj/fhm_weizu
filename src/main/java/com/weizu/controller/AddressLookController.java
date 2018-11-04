@@ -92,8 +92,8 @@ public class AddressLookController extends BaseController{
 			pd = this.getPageData();
 			AddressLookBean param = new AddressLookBean();
 			param.setUserName((String)pd.get("userName"));
-			AddressLookBean exit = addressLookService.findAddressLookByCondition(param);
-			if(exit == null){
+			List<AddressLookBean> exits = addressLookService.findAddressLookByCondition(param);
+			if(exits==null || exits.size()==0){
 				AddressLookBean bean = new AddressLookBean();
 				bean.setUserName((String)pd.get("userName"));
 				bean.setMobilePhone((String)pd.get("mobilePhone"));
@@ -174,8 +174,8 @@ public class AddressLookController extends BaseController{
 			pd = this.getPageData();
 			AddressLookBean param = new AddressLookBean();
 			param.setUserName((String)pd.get("userName"));
-			AddressLookBean exit = addressLookService.findAddressLookByCondition(param);
-			if(exit != null){
+			List<AddressLookBean> exits = addressLookService.findAddressLookByCondition(param);
+			if(exits != null && exits.size()>0){
 				errInfo = "error";
 			}
 		} catch(Exception e){
