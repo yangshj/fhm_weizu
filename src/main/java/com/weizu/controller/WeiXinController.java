@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fh.util.RightsHelper;
+import com.weizu.common.amap.GisInfo;
 import com.weizu.helper.ResultHelper;
 import com.weizu.pojo.*;
 import com.weizu.service.*;
@@ -53,6 +54,9 @@ public class WeiXinController extends BaseController{
 					bean.setUserId(exit.getId());
 					bean.setLatitude(Double.parseDouble(latitude));
 					bean.setLongitude(Double.parseDouble(longitude));
+					GisInfo gisInfo =  new GisInfo(bean.getLongitude(), bean.getLatitude());
+					String locationInfo = gisInfo.getContent();
+					bean.setLocationInfo(locationInfo);
 					userLocation.insertLocation(bean);
 					re.setResult("success");
 				}

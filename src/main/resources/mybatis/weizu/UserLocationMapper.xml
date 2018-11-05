@@ -30,5 +30,28 @@
 			weizu_location la left join weizu_user wu on la.user_id=wu.id 
 			where la.id in(select max(id) from weizu_location group by user_id)
 	</select>
-	
+
+	<!-- 列表后台查询页面 -->
+	<select id="getLocationListPage" parameterType="page" resultType="pd">
+		select
+			la.id as id,
+			la.latitude as latitude,
+			la.longitude as longitude,
+			la.location_info as locationInfo,
+			la.create_time as createTime,
+			wu.nick_name as nickName,
+			wu.avatar_url as avatarUrl
+		from
+		weizu_location la left join weizu_user wu on la.user_id=wu.id
+		where 1 = 1
+		<if test="pd.USERNAME != null and pd.USERNAME != ''"><!-- 用户名检索 -->
+			and wu.nick_name LIKE CONCAT(CONCAT('%', #{pd.USERNAME}),'%')
+		</if>
+		<if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 到期时间检索 -->
+			and la.create_time &gt;= #{pd.lastLoginStart}
+		</if>
+		<if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
+			and la.create_time &lt;= #{pd.lastLoginEnd}
+		</if>
+	</select>
 </mapper>
