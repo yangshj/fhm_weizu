@@ -8,10 +8,12 @@
 			 user_name,
 			 mobile_phone,
 			 sex,
+			 surname_id,
 			 create_time
 		) values (
 			#{userName},	
 			#{mobilePhone},	
+			#{surnameId},
 			#{sex},
 			now()		
 		)
@@ -28,6 +30,7 @@
 			set 
 				user_name = #{userName},
 				mobile_phone = #{mobilePhone},
+				surname_id = #{surnameId},
 				sex = #{sex}
 			where 
 				id = #{id}
@@ -40,6 +43,7 @@
 		   user_name as userName,
 		   mobile_phone as mobilePhone,
 		   sex,
+		   surname_id as surnameId,
 		   create_time as createTime
 		from weizu_address_book 
 		where 
@@ -56,6 +60,7 @@
 			bk.user_name as userName,
 			bk.mobile_phone as mobilePhone,
 			bk.sex,
+			bk.surname_id as surnameId,
 			bk.create_time as createTime
 		from weizu_address_book bk left
 		join weizu_surname su on bk.surname_id = su.id
@@ -63,7 +68,7 @@
 		<if test="surnameId != null">
 			and su.id = #{surnameId}
 		</if>
-		<if test="mobilePhone != null">
+		<if test="userName != null">
 			and bk.user_name = #{userName}
 		</if>
 		<if test="mobilePhone != null">
@@ -78,6 +83,7 @@
 		   user_name as userName,
 		   mobile_phone as mobilePhone,
 		   sex,
+		   surname_id as surnameId,
 		   create_time as createTime
 		from weizu_address_book 
 	</select>
@@ -85,21 +91,24 @@
 	<!-- 列表后台查询页面 -->
 	<select id="getAllAddressLooklistPage" parameterType="page" resultType="pd">
 		select
-		   id,
-		   user_name as userName,
-		   mobile_phone as mobilePhone,
-		   sex,
-		   create_time as createTime
-		from weizu_address_book 
+			bk.id,
+			bk.user_name as userName,
+			bk.mobile_phone as mobilePhone,
+			bk.sex,
+			bk.surname_id as surnameId,
+			su.surname as surname,
+			bk.create_time as createTime
+		from weizu_address_book bk left
+		join weizu_surname su on bk.surname_id = su.id
 		where 1 = 1		
 		<if test="pd.USERNAME != null and pd.USERNAME != ''"><!-- 用户名检索 -->
-			and user_name LIKE CONCAT(CONCAT('%', #{pd.USERNAME}),'%')
+			and bk.user_name LIKE CONCAT(CONCAT('%', #{pd.USERNAME}),'%')
 		</if>
 		<if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 到期时间检索 -->
-			and create_time &gt;= #{pd.lastLoginStart} 
+			and bk.create_time &gt;= #{pd.lastLoginStart}
 		</if>
 		<if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
-			and create_time &lt;= #{pd.lastLoginEnd} 
+			and bk.create_time &lt;= #{pd.lastLoginEnd}
 		</if>
 	</select>
 	

@@ -26,6 +26,7 @@
         request.id,
         request.user_id as userId,
         request.nick_name as nickName,
+        request.surname as surname,
         us.gender as gender,
         request.request_info as requestInfo,
         us.avatar_url as avatarUrl,

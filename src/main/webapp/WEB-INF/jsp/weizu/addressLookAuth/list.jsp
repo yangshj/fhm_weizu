@@ -63,6 +63,7 @@
 						</th>
 						<th>序号</th>
 						<th>用户昵称</th>
+						<th>访问家谱</th>
 						<th>请求信息</th>
 						<th>性別</th>
 						<th>用户头像</th>
@@ -85,6 +86,7 @@
 								</td>
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
 								<td>${user.nickName }</td>
+								<td>${user.surname }</td>
 								<td>${user.requestInfo}</td>
 								<td>
 									<c:if test="${user.gender == '1' }"><span class="label label-important arrowed-in">男</span></c:if>

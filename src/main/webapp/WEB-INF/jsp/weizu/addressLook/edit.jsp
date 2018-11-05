@@ -45,28 +45,7 @@
 			$("#userName").focus();
 			return false;
 		}
-		
-		/* 
-		if($("#loginname").val()=="" || $("#loginname").val()=="此用户名已存在!"){
-			
-			$("#loginname").tips({
-				side:3,
-	            msg:'输入用户名',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			
-			$("#loginname").focus();
-			$("#loginname").val('');
-			$("#loginname").css("background-color","white");
-			return false;
-		}else{
-			$("#loginname").val(jQuery.trim($('#loginname').val()));
-		}
-		
-		*/
-		
-		
+
 		if($("#id").val()==""){
 			hasU();
 		}else{
@@ -110,6 +89,18 @@
 					</tr>
 					<tr>
 						<td><input type="text" name="mobilePhone" id="mobilePhone"  value="${bean.mobilePhone}" placeholder="手机号" title="手机号" /></td>
+					</tr>
+					<tr class="info">
+						<td>
+							<select class="chzn-select" name="surnameId" id="role_id" data-placeholder="请选择家谱" style="vertical-align:top;">
+								<option value=""></option>
+								<c:forEach items="${surNameBeanList}" var="surNameBean">
+									<option value="${surNameBean.id}" <c:if test="${surNameBean.id == bean.surnameId }">selected</c:if>>
+											${surNameBean.surname}
+									</option>
+								</c:forEach>
+							</select>
+						</td>
 					</tr>
 					<tr>
 						<td>

@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.weizu.pojo.SurNameBean;
+import com.weizu.service.SurNameService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -38,6 +40,8 @@ public class AddressLookController extends BaseController{
 	String menuUrl = "weizu/addressLook/list.do"; //菜单地址(权限用)
 	@Autowired
 	private AddressLookService addressLookService;
+	@Autowired
+	private SurNameService surNameService;
 	
 	/**
 	 * 去修改页面
@@ -53,6 +57,8 @@ public class AddressLookController extends BaseController{
 				AddressLookBean param = new AddressLookBean();
 				param.setId(id);
 				AddressLookBean bean = addressLookService.findAddressLookById(param);
+				List<SurNameBean> surNameBeanList = surNameService.getAllSurName();
+				mv.addObject("surNameBeanList",surNameBeanList);
 				mv.addObject("bean", bean);
 			}
 			mv.setViewName("weizu/addressLook/edit");
@@ -72,6 +78,8 @@ public class AddressLookController extends BaseController{
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		try {
+			List<SurNameBean> surNameBeanList = surNameService.getAllSurName();
+			mv.addObject("surNameBeanList",surNameBeanList);
 			mv.setViewName("weizu/addressLook/edit");
 			mv.addObject("path", "save");
 			mv.addObject("pd", pd);
@@ -98,6 +106,7 @@ public class AddressLookController extends BaseController{
 				bean.setUserName((String)pd.get("userName"));
 				bean.setMobilePhone((String)pd.get("mobilePhone"));
 				bean.setSex(Integer.parseInt((String)pd.get("sex")));
+				bean.setSurnameId(Long.parseLong((String) pd.get("surnameId")));
 				addressLookService.inserAddressLook(bean);
 				mv.addObject("msg","success");
 			}else{
@@ -127,6 +136,7 @@ public class AddressLookController extends BaseController{
 			bean.setMobilePhone((String)pd.get("mobilePhone"));
 			Integer sex = Integer.parseInt((String) pd.get("sex"));
 			bean.setSex(sex);
+			bean.setSurnameId(Long.parseLong((String) pd.get("surnameId")));
 			addressLookService.updateAddressLook(bean);
 		}
 		mv.addObject("msg","success");

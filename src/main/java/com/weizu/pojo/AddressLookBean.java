@@ -23,7 +23,7 @@ public class AddressLookBean  implements Serializable{
 	private Integer sex;
 	/** 创建时间 */
 	private Date createTime;
-	/** 查询条件-不对应数据库 */
+	/** 所属姓氏 */
 	private Long surnameId;
 	
 	public Long getId() {

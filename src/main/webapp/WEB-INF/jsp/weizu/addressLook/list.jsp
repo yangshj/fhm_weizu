@@ -63,6 +63,7 @@
 						</th>
 						<th>序号</th>
 						<th>用户名</th>
+						<th>所属家谱</th>
 						<th>手机号</th>
 						<th>性別</th>
 						<th><i class="icon-time hidden-phone"></i>创建日期</th>
@@ -84,6 +85,7 @@
 								</td>
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
 								<td>${user.userName }</td>
+								<td>${user.surname}</td>
 								<td>${user.mobilePhone }</td>
 								<td>
 									<c:if test="${user.sex == '1' }"><span class="label label-important arrowed-in">男</span></c:if>
@@ -237,7 +239,7 @@
 			 diag.Title ="新增会员";
 			 diag.URL = '<%=basePath%>weizu/addressLook/goAdd.do';
 			 diag.Width = 450;
-			 diag.Height = 355;
+			 diag.Height = 555;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 if('${page.currentPage}' == '0'){
@@ -260,7 +262,7 @@
 			 diag.Title ="会员资料";
 			 diag.URL = '<%=basePath%>weizu/addressLook/goUpdate.do?id='+user_id;
 			 diag.Width = 450;
-			 diag.Height = 355;
+			 diag.Height = 555;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 nextPage(${page.currentPage});
