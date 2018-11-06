@@ -11,7 +11,7 @@ import com.weizu.util.WXAppletUserInfoUtil;
 
 
 /**
- * 避免每次授权，存储30分钟的openId
+ * 避免每次授权，存储10天的openId
  * @author songlm
  *
  */
@@ -22,7 +22,7 @@ public class WeiXinMemoryCacheHelper {
 	private static ITimeOutMap<String, UserOpenInfo> sessionOpenIdMap = new TimeOutForCreateDateMap<String, UserOpenInfo>();
 
 	static {
-		sessionOpenIdMap.setTimeOut(30 * 60 * 1000); // 30分钟
+		sessionOpenIdMap.setTimeOut(10 * 24 * 60 * 60 * 1000); // 10天
 		sessionOpenIdMap.setCustomTimeOutHandler(new ITimeOutHandler<String, UserOpenInfo>() {
 			@Override
 			public void timeOut(String key, UserOpenInfo UserOpenId) {

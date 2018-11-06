@@ -13,7 +13,9 @@
 			 language,
 			 nick_name,
 			 province,
-			 open_id
+			 open_id,
+			 create_time,
+			 modify_time
 		) values (
 			#{avatarUrl},	
 			#{city},	
@@ -22,7 +24,9 @@
 			#{language},	
 			#{nickName},	
 			#{province},
-			#{openId}
+			#{openId},
+			now(),
+			now()
 		)
 	</insert>
 	
@@ -41,7 +45,8 @@
 				city = #{city},
 				province = #{province},
 				country = #{country},
-				nick_name = #{nickName}
+				nick_name = #{nickName},
+				modify_time = now()
 			where 
 				open_id = #{openId}
 	</update>
@@ -55,7 +60,8 @@
 				province = #{province},
 				country = #{country},
 				nick_name = #{nickName},
-				rights = #{rights}
+				rights = #{rights},
+				modify_time = now()
 			where 
 				id = #{id}
 	</update>
