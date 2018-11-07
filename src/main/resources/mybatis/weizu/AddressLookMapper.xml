@@ -13,9 +13,9 @@
 		) values (
 			#{userName},	
 			#{mobilePhone},	
-			#{surnameId},
 			#{sex},
-			now()		
+			#{surnameId},
+			now()
 		)
 	</insert>
 	
