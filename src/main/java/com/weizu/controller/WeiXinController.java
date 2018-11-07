@@ -43,6 +43,7 @@ public class WeiXinController extends BaseController{
 	 public String backLocation(HttpServletRequest request, HttpServletResponse response){
 		BackLocationRe re = new BackLocationRe();
 		try {
+			re.setResult(ResultHelper.FAIL);
 			String sessionId = request.getParameter("sessionId");
 			String latitude = request.getParameter("latitude");
 			String longitude = request.getParameter("longitude");
@@ -58,14 +59,14 @@ public class WeiXinController extends BaseController{
 					String locationInfo = gisInfo.getContent();
 					bean.setLocationInfo(locationInfo);
 					userLocation.insertLocation(bean);
-					re.setResult("success");
+					re.setResult(ResultHelper.SUCCESS);
 				}
 			} else {
-				re.setResult("fail");
+				re.setResult(ResultHelper.SESSION_INVALID);
 			}
 			System.out.println("成功……");
 		} catch (Exception e) {
-			re.setResult("fail");
+			re.setResult(ResultHelper.FAIL);
 			e.printStackTrace();
 		}
 		return JSON.toJSONString(re);
@@ -129,6 +130,7 @@ public class WeiXinController extends BaseController{
 				List<UserLocationMarkerBean> list = userLocation.getAllUserLatelyLocaitons();
 				if(list!=null && list.size()>0){
 					for(UserLocationMarkerBean marker : list){
+					    if(marker.getIconPath()==null) continue;
 						int end = marker.getIconPath().lastIndexOf("/");
 						String temp = marker.getIconPath().substring(0, end);
 						System.out.println("temp: "+temp);
@@ -136,11 +138,14 @@ public class WeiXinController extends BaseController{
 						marker.setIconPath(temp);
 					}
 					re.setMarkers(list);
-					re.setResult("success");
+					re.setResult(ResultHelper.SUCCESS);
 				} 
-			} 
+			} else {
+				re.setResult(ResultHelper.SESSION_INVALID);
+			}
 		}catch(Exception e){
-			re.setResult("fail");
+		    e.printStackTrace();
+			re.setResult(ResultHelper.FAIL);
 		}
 		return JSON.toJSONString(re);
 	}

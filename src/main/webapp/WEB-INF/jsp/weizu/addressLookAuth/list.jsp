@@ -25,7 +25,7 @@
 	<div class="row-fluid">
 	
 			<!-- 检索  -->
-			<form action="weizu/addressLook/list.do" method="post" name="userForm" id="userForm">
+			<form action="weizu/addressLookAuth/list.do" method="post" name="userForm" id="userForm">
 			<table border='0'>
 				<tr>
 					<td>
