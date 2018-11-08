@@ -117,7 +117,7 @@ public class WeiXinController extends BaseController{
 			} else {
 			    // 更新数据库昵称和头像为空的数据
 			    if(StringUtil.isEmpty(exit.getNickName()) && StringUtil.isNotEmpty(nickName)){
-                    UserInfoBean bean = new UserInfoBean();
+                    UserInfoBean bean = exit;
                     bean.setAvatarUrl(avatarUrl);
                     bean.setCity(city);
                     bean.setCountry(country);
@@ -127,7 +127,6 @@ public class WeiXinController extends BaseController{
                     bean.setLanguage(language);
                     bean.setNickName(nickName);
                     bean.setProvince(province);
-                    bean.setId(exit.getId());
                     System.out.println("更新数据库昵称: "+nickName);
                     userInfoService.updateUserById(bean);
                 }
