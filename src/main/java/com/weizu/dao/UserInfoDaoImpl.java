@@ -24,7 +24,7 @@ public class UserInfoDaoImpl extends DaoSupport implements UserInfoDao{
 
 	@Override
 	public List<PageData> getAllUserInfoListPage(Page page) throws Exception {
-		return (List<PageData>) this.findForList("com.weizu.user.getAllUserInfoListPage", page);
+		return (List<PageData>) this.findForList("com.weizu.user.getAllUserInfolistPage", page);
 	}
 
 	@Override

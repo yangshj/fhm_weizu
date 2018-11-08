@@ -105,7 +105,7 @@
 	</select>
 	
 	<!-- 列表后台查询页面 -->
-	<select id="getAllUserInfoListPage" parameterType="page" resultType="pd">
+	<select id="getAllUserInfolistPage" parameterType="page" resultType="pd">
 		select 
 			 id as id,
 			 avatar_url as avatarUrl,
