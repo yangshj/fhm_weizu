@@ -11,6 +11,7 @@ import com.weizu.common.amap.GisInfo;
 import com.weizu.helper.ResultHelper;
 import com.weizu.pojo.*;
 import com.weizu.service.*;
+import com.weizu.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -104,7 +105,9 @@ public class WeiXinController extends BaseController{
 				bean.setAvatarUrl(avatarUrl);
 				bean.setCity(city);
 				bean.setCountry(country);
-				bean.setGender(Integer.parseInt(gender));
+				if(StringUtils.isNotEmpty(gender,true)){
+					bean.setGender(Integer.parseInt(gender));
+				}
 				bean.setLanguage(language);
 				bean.setNickName(nickName);
 				bean.setOpenId(userOpenInfo.getOpenId());

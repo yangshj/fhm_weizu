@@ -32,7 +32,7 @@
 	</select>
 
 	<!-- 列表后台查询页面 -->
-	<select id="getLocationListPage" parameterType="page" resultType="pd">
+	<select id="getLocationlistPage" parameterType="page" resultType="pd">
 		select
 			la.id as id,
 			la.latitude as latitude,

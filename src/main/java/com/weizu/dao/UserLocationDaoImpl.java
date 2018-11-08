@@ -25,6 +25,6 @@ public class UserLocationDaoImpl extends DaoSupport implements UserLocationDao{
 
 	@Override
 	public List<PageData> getLocationListPage(Page page)  throws Exception {
-		return (List<PageData>) this.findForList("com.weizu.userLocation.getLocationListPage", page);
+		return (List<PageData>) this.findForList("com.weizu.userLocation.getLocationlistPage", page);
 	}
 }
