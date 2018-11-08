@@ -11,6 +11,7 @@ import com.weizu.common.amap.GisInfo;
 import com.weizu.helper.ResultHelper;
 import com.weizu.pojo.*;
 import com.weizu.service.*;
+import com.weizu.util.StringUtil;
 import com.weizu.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -113,7 +114,24 @@ public class WeiXinController extends BaseController{
 				bean.setOpenId(userOpenInfo.getOpenId());
 				bean.setProvince(province);
 				userInfoService.inserWeiZuUser(bean);
-			}
+			} else {
+			    // 更新数据库昵称和头像为空的数据
+			    if(StringUtil.isEmpty(exit.getNickName()) && StringUtil.isNotEmpty(nickName)){
+                    UserInfoBean bean = new UserInfoBean();
+                    bean.setAvatarUrl(avatarUrl);
+                    bean.setCity(city);
+                    bean.setCountry(country);
+                    if(StringUtils.isNotEmpty(gender,true)){
+                        bean.setGender(Integer.parseInt(gender));
+                    }
+                    bean.setLanguage(language);
+                    bean.setNickName(nickName);
+                    bean.setProvince(province);
+                    bean.setId(exit.getId());
+                    System.out.println("更新数据库昵称: "+nickName);
+                    userInfoService.updateUserById(bean);
+                }
+            }
 			//return "{sessionId:"+userOpenInfo.getSessionId()+"}";
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -4,9 +4,8 @@ public class UserOpenInfo {
 	
 	private String sessionId;
 	private String openId;
-	
-	
-	
+
+
 	public String getSessionId() {
 		return sessionId;
 	}
@@ -19,6 +18,5 @@ public class UserOpenInfo {
 	public void setOpenId(String openId) {
 		this.openId = openId;
 	}
-	
-	
+
 }
