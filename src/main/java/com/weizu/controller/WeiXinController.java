@@ -150,7 +150,7 @@ public class WeiXinController extends BaseController{
 				List<UserLocationMarkerBean> list = userLocation.getAllUserLatelyLocaitons();
 				if(list!=null && list.size()>0){
 					for(UserLocationMarkerBean marker : list){
-					    if(marker.getIconPath()==null) continue;
+					    if(StringUtil.isEmpty(marker.getIconPath())) continue;
 						int end = marker.getIconPath().lastIndexOf("/");
 						String temp = marker.getIconPath().substring(0, end);
 						System.out.println("temp: "+temp);
