@@ -6,6 +6,8 @@ public class AddressLookRE {
 	
 	/** success/fail */
 	private String result;
+	/** 是否有管理员权限 */
+	private Boolean managerRights = false;
 	/**  用户位置信息列表  */
 	private List<AddressLookBean> listData;
 	
@@ -21,5 +23,10 @@ public class AddressLookRE {
 	public void setListData(List<AddressLookBean> listData) {
 		this.listData = listData;
 	}
-	
+	public Boolean getManagerRights() {
+		return managerRights;
+	}
+	public void setManagerRights(Boolean managerRights) {
+		this.managerRights = managerRights;
+	}
 }

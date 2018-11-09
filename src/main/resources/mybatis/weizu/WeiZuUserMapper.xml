@@ -78,7 +78,8 @@
 			 nick_name as nickName,
 			 province as province,
 			 open_id as openId,
-			 rights as rights
+			 rights as rights,
+			 manager_rights as managerRights
 		from 
 			weizu_user
 		where 
@@ -97,7 +98,8 @@
 			 nick_name as nickName,
 			 province as province,
 			 open_id as openId,
-			 rights as rights
+			 rights as rights,
+			 manager_rights as managerRights
 		from 
 			weizu_user
 		where 

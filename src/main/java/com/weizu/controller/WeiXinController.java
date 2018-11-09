@@ -130,6 +130,9 @@ public class WeiXinController extends BaseController{
                     System.out.println("更新数据库昵称: "+nickName);
                     userInfoService.updateUserById(bean);
                 }
+                if(StringUtil.isNotEmpty(exit.getManagerRights())){
+					userOpenInfo.setManager(true);
+				}
             }
 			//return "{sessionId:"+userOpenInfo.getSessionId()+"}";
 		} catch (Exception e) {
@@ -182,6 +185,7 @@ public class WeiXinController extends BaseController{
 			String surname = request.getParameter("surname");
 			UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
 			if(userOpenInfo!=null){
+				UserInfoBean userInfoBean = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
 			    SurNameBean surNameBean = null;
 			    List<SurNameBean> surnameList = surNameService.getAllSurName();
                 for(SurNameBean bean : surnameList){
@@ -191,6 +195,10 @@ public class WeiXinController extends BaseController{
                     }
                 }
                 if(surNameBean!=null){
+					if(userInfoBean!=null){
+						Boolean hasRights = RightsHelper.testRights(userInfoBean.getManagerRights(), surNameBean.getId().intValue());
+						re.setManagerRights(hasRights);
+					}
                     AddressLookBean param = new AddressLookBean();
                     param.setSurnameId(surNameBean.getId());
                     List<AddressLookBean> list = addressLookService.findAddressLookByCondition(param);
@@ -287,20 +295,59 @@ public class WeiXinController extends BaseController{
 		String requestInfo = request.getParameter("requestInfo");
 		String surname = request.getParameter("surname");
 		String nickName = request.getParameter("nickName");
+		String modifyOrAdd  = request.getParameter("modifyOrAdd");
+		String modifyId = request.getParameter("modifyId");
+		String userName = request.getParameter("userName");
+		String mobilePhone = request.getParameter("mobilePhone");
+		String manager = request.getParameter("manager");
 		try {
             re.setResult(ResultHelper.FAIL);
             UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
             if(userOpenInfo!=null) {
                 UserInfoBean userInfo = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
-                if(userInfo!=null){
-                    AddressLookAuthRequestBean bean = new AddressLookAuthRequestBean();
-                    bean.setUserId(userInfo.getId());
-                    bean.setNickName(nickName);
-                    bean.setSurname(surname);
-                    bean.setRequestInfo(requestInfo);
-                    re.setResult(ResultHelper.SUCCESS);
-                    addressLookAuthService.insertAuthRequest(bean);
-                }
+                // 新增
+                if(StringUtil.isEmpty(modifyOrAdd) || modifyOrAdd.equals("add")){
+					if(userInfo!=null){
+						AddressLookAuthRequestBean bean = new AddressLookAuthRequestBean();
+						bean.setUserId(userInfo.getId());
+						bean.setNickName(nickName);
+						bean.setSurname(surname);
+						bean.setRequestInfo(requestInfo);
+						re.setResult(ResultHelper.SUCCESS);
+						addressLookAuthService.insertAuthRequest(bean);
+					}
+					// 管理员
+					if(manager.equals("true")){
+						List<SurNameBean> surNameBeanList = surNameService.getAllSurName();
+						SurNameBean surNameBean = null;
+						for(SurNameBean temp : surNameBeanList){
+							if(temp.getSurname().equals(surname)){
+								surNameBean = temp;
+								break;
+							}
+						}
+						if(surNameBean!=null){
+							AddressLookBean param = new AddressLookBean();
+							param.setSurnameId(surNameBean.getId());
+							param.setMobilePhone(mobilePhone);
+							param.setUserName(userName);
+							addressLookService.inserAddressLook(param);
+						}
+					}
+				}
+				// 修改模式
+				else if(modifyOrAdd.equals("modify")){
+					Long id = Long.parseLong(modifyId);
+					AddressLookBean param = new AddressLookBean();
+					param.setId(id);
+					AddressLookBean bean = addressLookService.findAddressLookById(param);
+					if(bean!=null){
+						bean.setUserName(userName);
+						bean.setMobilePhone(mobilePhone);
+						addressLookService.updateAddressLook(bean);
+					}
+					re.setResult(ResultHelper.SUCCESS);
+				}
             } else {
                 re.setResult(ResultHelper.SESSION_INVALID);
             }

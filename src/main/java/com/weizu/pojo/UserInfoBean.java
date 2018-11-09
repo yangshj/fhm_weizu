@@ -30,6 +30,8 @@ public class UserInfoBean implements Serializable{
 	private String openId;
 	/** 权限 */
 	private String rights;
+	/** 管理员权限 */
+	private String managerRights;
 	/** 创建时间 */
 	private Date createTime;
 	/** 修改时间 */
@@ -108,6 +110,10 @@ public class UserInfoBean implements Serializable{
 	public void setRights(String rights) {
 		this.rights = rights;
 	}
-	
-	
+	public String getManagerRights() {
+		return managerRights;
+	}
+	public void setManagerRights(String managerRights) {
+		this.managerRights = managerRights;
+	}
 }

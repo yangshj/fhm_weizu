@@ -4,7 +4,7 @@ public class UserOpenInfo {
 	
 	private String sessionId;
 	private String openId;
-
+	private Boolean manager=false;
 
 	public String getSessionId() {
 		return sessionId;
@@ -18,5 +18,10 @@ public class UserOpenInfo {
 	public void setOpenId(String openId) {
 		this.openId = openId;
 	}
-
+	public Boolean getManager() {
+		return manager;
+	}
+	public void setManager(Boolean manager) {
+		this.manager = manager;
+	}
 }
