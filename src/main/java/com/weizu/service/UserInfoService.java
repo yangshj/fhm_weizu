@@ -22,4 +22,7 @@ public interface UserInfoService {
 	
 	/** 获取用户信息信息 */
 	List<PageData> getAllUserInfoListPage(Page page) throws Exception;
+
+	/** 获取所有没有访问权限的用户 */
+	List<UserInfoBean> getAllUserNoAuth() throws Exception;
 }

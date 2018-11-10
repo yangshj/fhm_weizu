@@ -105,6 +105,25 @@
 		where 
 			open_id = #{openId}
 	</select>
+
+	<!--获取所有没有访问权限的用户-->
+	<select id="getAllUserNoAuth" resultType="userInfoBean">
+		select
+			 id as id,
+			 avatar_url as avatarUrl,
+			 city as city,
+			 country as country,
+			 gender as gender,
+			 language as language,
+			 nick_name as nickName,
+			 province as province,
+			 open_id as openId,
+			 rights as rights,
+			 manager_rights as managerRights
+		from
+			weizu_user
+		where nick_name is not null and nick_name!='' and (rights is null or rights='')
+	</select>
 	
 	<!-- 列表后台查询页面 -->
 	<select id="getAllUserInfolistPage" parameterType="page" resultType="pd">

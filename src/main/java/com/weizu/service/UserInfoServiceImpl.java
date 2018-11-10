@@ -32,6 +32,11 @@ public class UserInfoServiceImpl implements UserInfoService{
 	}
 
 	@Override
+	public List<UserInfoBean> getAllUserNoAuth() throws Exception {
+		return userInfoDao.getAllUserNoAuth();
+	}
+
+	@Override
 	public UserInfoBean findUserById(String userId) throws Exception {
 		return userInfoDao.findUserById(userId);
 	}

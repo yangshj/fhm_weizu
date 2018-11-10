@@ -36,6 +36,7 @@ public class UserInfoBean implements Serializable{
 	private Date createTime;
 	/** 修改时间 */
 	private Date modifyTime;
+	/**  审批权限页面用--不对应数据库 */
 	
 	
 	public Long getId() {

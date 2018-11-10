@@ -1,12 +1,16 @@
 package com.weizu.controller;
 
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fh.util.RightsHelper;
+import com.fh.util.Tools;
 import com.weizu.common.amap.GisInfo;
 import com.weizu.helper.ResultHelper;
 import com.weizu.pojo.*;
@@ -45,6 +49,8 @@ public class WeiXinController extends BaseController{
 	 public String backLocation(HttpServletRequest request, HttpServletResponse response){
 		BackLocationRe re = new BackLocationRe();
 		try {
+			response.setContentType("text/json;charset=UTF-8");
+			response.setCharacterEncoding("UTF-8");
 			re.setResult(ResultHelper.FAIL);
 			String sessionId = request.getParameter("sessionId");
 			String latitude = request.getParameter("latitude");
@@ -146,6 +152,8 @@ public class WeiXinController extends BaseController{
 	public String getAllUserLocations(HttpServletRequest request, HttpServletResponse response){
 		UserLocationRe re = new UserLocationRe();
 		try{
+			response.setContentType("text/json;charset=UTF-8");
+			response.setCharacterEncoding("UTF-8");
 			re.setResult("fail");
 			String sessionId = request.getParameter("sessionId");
 			UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
@@ -301,6 +309,8 @@ public class WeiXinController extends BaseController{
 		String mobilePhone = request.getParameter("mobilePhone");
 		String manager = request.getParameter("manager");
 		try {
+			response.setContentType("text/json;charset=UTF-8");
+			response.setCharacterEncoding("UTF-8");
             re.setResult(ResultHelper.FAIL);
             UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
             if(userOpenInfo!=null) {
@@ -356,4 +366,75 @@ public class WeiXinController extends BaseController{
 		}
 		return JSON.toJSONString(re);
 	}
+
+	/**
+	 *  获取所有没有访问权限的用户
+	 */
+	@RequestMapping(value="/getAllUserNoAuth")
+	@ResponseBody
+	public void getAllUserNoAuth(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		UserInfoRE re = new UserInfoRE();
+		try {
+			response.setContentType("text/json;charset=UTF-8");
+			response.setCharacterEncoding("UTF-8");
+			String sessionId = request.getParameter("sessionId");
+			re.setResult(ResultHelper.FAIL);
+			UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+			if(userOpenInfo!=null) {
+				List<UserInfoBean> list =  userInfoService.getAllUserNoAuth();
+				re.setListData(list);
+				re.setResult(ResultHelper.SUCCESS);
+			} else {
+				re.setResult(ResultHelper.SESSION_INVALID);
+			}
+		} catch (Exception e) {
+			re.setResult(ResultHelper.FAIL);
+			e.printStackTrace();
+		} finally {
+			PrintWriter writer = response.getWriter();
+			writer.print(JSON.toJSONString(re));
+			writer.flush();
+		}
+	}
+
+	/**
+	 *  授权访问
+	 */
+	@RequestMapping(value="/authAccess")
+	@ResponseBody
+	public void authAccess(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		UserInfoRE re = new UserInfoRE();
+		try {
+			response.setContentType("text/json;charset=UTF-8");
+			response.setCharacterEncoding("UTF-8");
+			String sessionId = request.getParameter("sessionId");
+			String userId = request.getParameter("userId");
+			re.setResult(ResultHelper.FAIL);
+			UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+			if(userOpenInfo!=null) {
+				List<SurNameBean> surNameBeanList = surNameService.getAllSurName();
+				if(surNameBeanList!=null && surNameBeanList.size()>0){
+					List<String> rights = new ArrayList<String>();
+					for(SurNameBean bean : surNameBeanList){
+						rights.add(bean.getId().toString());
+					}
+					BigInteger rightString = RightsHelper.sumRights(rights);
+					UserInfoBean userInfoBean = new UserInfoBean();
+					userInfoBean.setId(Long.parseLong(userId));
+					userInfoBean.setRights(rightString.toString());
+					userInfoService.updateUserById(userInfoBean);
+				}
+			} else {
+				re.setResult(ResultHelper.SESSION_INVALID);
+			}
+		} catch (Exception e) {
+			re.setResult(ResultHelper.FAIL);
+			e.printStackTrace();
+		} finally {
+			PrintWriter writer = response.getWriter();
+			writer.print(JSON.toJSONString(re));
+			writer.flush();
+		}
+	}
+
 }

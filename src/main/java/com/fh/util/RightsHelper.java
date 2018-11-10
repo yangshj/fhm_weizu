@@ -1,6 +1,7 @@
 package com.fh.util;
 
 import java.math.BigInteger;
+import java.util.List;
 
 /**
  * @author Administrator
@@ -28,6 +29,14 @@ public class RightsHelper {
 		BigInteger num = new BigInteger("0");
 		for(int i=0; i<rights.length; i++){
 			num = num.setBit(Integer.parseInt(rights[i]));
+		}
+		return num;
+	}
+
+	public static BigInteger sumRights(List<String> rights){
+		BigInteger num = new BigInteger("0");
+		for(int i=0; i<rights.size(); i++){
+			num = num.setBit(Integer.parseInt(rights.get(i)));
 		}
 		return num;
 	}

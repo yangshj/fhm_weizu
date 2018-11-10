@@ -28,6 +28,11 @@ public class UserInfoDaoImpl extends DaoSupport implements UserInfoDao{
 	}
 
 	@Override
+	public List<UserInfoBean> getAllUserNoAuth() throws Exception {
+		return (List<UserInfoBean>) this.findForList("com.weizu.user.getAllUserNoAuth", null);
+	}
+
+	@Override
 	public UserInfoBean findUserById(String userId) throws Exception {
 		return (UserInfoBean) this.findForObject("com.weizu.user.findUserById", userId);
 	}
