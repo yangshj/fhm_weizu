@@ -40,13 +40,28 @@
 	<!-- 修改 -->
 	<update id="updateUserByOpenId" parameterType="userInfoBean">
 		update  weizu_user
-			set 
-				avatar_url = #{avatarUrl},
-				city = #{city},
-				province = #{province},
-				country = #{country},
-				nick_name = #{nickName},
-				modify_time = now()
+			set modify_time = now()
+			<if test="avatarUrl != null and avatarUrl != ''">
+				,avatar_url = #{avatarUrl}
+			</if>
+			<if test="city != null and city != ''">
+				,city = #{city}
+			</if>
+			<if test="province != null and province != ''">
+				,province = #{province}
+			</if>
+			<if test="country != null and country != ''">
+				,country = #{country}
+			</if>
+			<if test="nickName != null and nickName != ''">
+				,nick_name = #{nickName}
+			</if>
+			<if test="rights != null and rights != ''">
+				,rights = #{rights}
+			</if>
+			<if test="managerRights != null and managerRights != ''">
+				,manager_rights = #{managerRights}
+			</if>
 			where 
 				open_id = #{openId}
 	</update>
@@ -54,14 +69,28 @@
 	<!-- 修改 -->
 	<update id="updateUserById" parameterType="userInfoBean">
 		update  weizu_user
-			set 
-				avatar_url = #{avatarUrl},
-				city = #{city},
-				province = #{province},
-				country = #{country},
-				nick_name = #{nickName},
-				rights = #{rights},
-				modify_time = now()
+			set modify_time = now()
+			<if test="avatarUrl != null and avatarUrl != ''">
+				,avatar_url = #{avatarUrl}
+			</if>
+			<if test="city != null and city != ''">
+				,city = #{city}
+			</if>
+			<if test="province != null and province != ''">
+				,province = #{province}
+			</if>
+			<if test="country != null and country != ''">
+				,country = #{country}
+			</if>
+			<if test="nickName != null and nickName != ''">
+				,nick_name = #{nickName}
+			</if>
+			<if test="rights != null and rights != ''">
+				,rights = #{rights}
+			</if>
+			<if test="managerRights != null and managerRights != ''">
+				,manager_rights = #{managerRights}
+			</if>
 			where 
 				id = #{id}
 	</update>
@@ -79,7 +108,8 @@
 			 province as province,
 			 open_id as openId,
 			 rights as rights,
-			 manager_rights as managerRights
+			 manager_rights as managerRights,
+			 admin as admin
 		from 
 			weizu_user
 		where 
@@ -99,7 +129,8 @@
 			 province as province,
 			 open_id as openId,
 			 rights as rights,
-			 manager_rights as managerRights
+			 manager_rights as managerRights,
+			 admin as admin
 		from 
 			weizu_user
 		where 
@@ -119,12 +150,34 @@
 			 province as province,
 			 open_id as openId,
 			 rights as rights,
-			 manager_rights as managerRights
+			 manager_rights as managerRights,
+			 admin as admin
 		from
 			weizu_user
 		where nick_name is not null and nick_name!='' and (rights is null or rights='')
 	</select>
-	
+
+
+	<!--获取所有用户-->
+	<select id="getAllUserByCondition" resultType="userInfoBean">
+		select
+			 id as id,
+			 avatar_url as avatarUrl,
+			 city as city,
+			 country as country,
+			 gender as gender,
+			 language as language,
+			 nick_name as nickName,
+			 province as province,
+			 open_id as openId,
+			 rights as rights,
+			 manager_rights as managerRights,
+			 admin as admin
+		from
+			weizu_user
+		where nick_name is not null and nick_name!=''
+	</select>
+
 	<!-- 列表后台查询页面 -->
 	<select id="getAllUserInfolistPage" parameterType="page" resultType="pd">
 		select 

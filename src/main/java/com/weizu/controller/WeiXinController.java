@@ -98,12 +98,10 @@ public class WeiXinController extends BaseController{
 		String nickName = request.getParameter("nickName");
 		String province = request.getParameter("province");
 		System.out.println("code: "+code);
-		// 测试
-//		String customSession = UUIDUtil.getUUID();
-//		if(customSession!=null){
-//			return "{\"sessionId\":\""+customSession+"\"}";
-//		}
+        Long start = System.currentTimeMillis();
 		UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidByCode(code);
+		Long end = System.currentTimeMillis();
+        System.out.println("获取openId耗时: "+(end-start));
 		try {
 			System.out.println("成功……"+userOpenInfo);
 			UserInfoBean exit = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
@@ -136,9 +134,12 @@ public class WeiXinController extends BaseController{
                     System.out.println("更新数据库昵称: "+nickName);
                     userInfoService.updateUserById(bean);
                 }
-                if(StringUtil.isNotEmpty(exit.getManagerRights())){
+                if(StringUtil.isNotEmpty(exit.getManagerRights()) && !exit.getManagerRights().equals("0")){
 					userOpenInfo.setManager(true);
 				}
+				if(exit.getAdmin()!=null && exit.getAdmin().intValue()==1){
+                    userOpenInfo.setAdmin(true);
+                }
             }
 			//return "{sessionId:"+userOpenInfo.getSessionId()+"}";
 		} catch (Exception e) {
@@ -397,6 +398,36 @@ public class WeiXinController extends BaseController{
 		}
 	}
 
+    /**
+     *  获取所有用户
+     */
+    @RequestMapping(value="/getAllUser")
+    @ResponseBody
+    public void getAllUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        UserInfoRE re = new UserInfoRE();
+        try {
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            String sessionId = request.getParameter("sessionId");
+            re.setResult(ResultHelper.FAIL);
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null) {
+                List<UserInfoBean> list =  userInfoService.getAllUserByCondition(null);
+                re.setListData(list);
+                re.setResult(ResultHelper.SUCCESS);
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+        } catch (Exception e) {
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        } finally {
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }
+    }
+
 	/**
 	 *  授权访问
 	 */
@@ -409,6 +440,8 @@ public class WeiXinController extends BaseController{
 			response.setCharacterEncoding("UTF-8");
 			String sessionId = request.getParameter("sessionId");
 			String userId = request.getParameter("userId");
+			String authManager = request.getParameter("authManager");
+			String openAuth = request.getParameter("openAuth");
 			re.setResult(ResultHelper.FAIL);
 			UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
 			if(userOpenInfo!=null) {
@@ -421,14 +454,27 @@ public class WeiXinController extends BaseController{
 					BigInteger rightString = RightsHelper.sumRights(rights);
 					UserInfoBean userInfoBean = new UserInfoBean();
 					userInfoBean.setId(Long.parseLong(userId));
-					userInfoBean.setRights(rightString.toString());
+					if(authManager!=null && authManager.equals("true")){
+					    if(openAuth!=null && openAuth.equals("true")){
+					        re.setMsg("授权成功");
+						    userInfoBean.setManagerRights(rightString.toString());
+                        } else {
+					        // 关闭权限
+                            re.setMsg("解除授权成功");
+                            userInfoBean.setManagerRights("0");
+                        }
+					} else {
+						userInfoBean.setRights(rightString.toString());
+					}
 					userInfoService.updateUserById(userInfoBean);
 				}
+                re.setResult(ResultHelper.SUCCESS);
 			} else {
 				re.setResult(ResultHelper.SESSION_INVALID);
 			}
 		} catch (Exception e) {
 			re.setResult(ResultHelper.FAIL);
+			re.setMsg("授权操作失败");
 			e.printStackTrace();
 		} finally {
 			PrintWriter writer = response.getWriter();

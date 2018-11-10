@@ -32,6 +32,8 @@ public class UserInfoBean implements Serializable{
 	private String rights;
 	/** 管理员权限 */
 	private String managerRights;
+	/** 是否为admin 0否1是 */
+	private Integer admin;
 	/** 创建时间 */
 	private Date createTime;
 	/** 修改时间 */
@@ -116,5 +118,11 @@ public class UserInfoBean implements Serializable{
 	}
 	public void setManagerRights(String managerRights) {
 		this.managerRights = managerRights;
+	}
+	public Integer getAdmin() {
+		return admin;
+	}
+	public void setAdmin(Integer admin) {
+		this.admin = admin;
 	}
 }

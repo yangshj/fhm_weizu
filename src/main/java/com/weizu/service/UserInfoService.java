@@ -25,4 +25,7 @@ public interface UserInfoService {
 
 	/** 获取所有没有访问权限的用户 */
 	List<UserInfoBean> getAllUserNoAuth() throws Exception;
+
+	/** 获取所有用户 */
+	List<UserInfoBean> getAllUserByCondition(UserInfoBean bean) throws Exception;
 }

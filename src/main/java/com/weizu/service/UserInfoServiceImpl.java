@@ -37,6 +37,11 @@ public class UserInfoServiceImpl implements UserInfoService{
 	}
 
 	@Override
+	public List<UserInfoBean> getAllUserByCondition(UserInfoBean bean) throws Exception {
+		return userInfoDao.getAllUserByCondition(bean);
+	}
+
+	@Override
 	public UserInfoBean findUserById(String userId) throws Exception {
 		return userInfoDao.findUserById(userId);
 	}

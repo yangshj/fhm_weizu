@@ -8,6 +8,8 @@ public class UserInfoRE {
     private String result;
     /**  用户位置信息列表  */
     private List<UserInfoBean> listData;
+    /**  消息  */
+    private String msg;
 
     public String getResult() {
         return result;
@@ -20,5 +22,11 @@ public class UserInfoRE {
     }
     public void setListData(List<UserInfoBean> listData) {
         this.listData = listData;
+    }
+    public String getMsg() {
+        return msg;
+    }
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 }
