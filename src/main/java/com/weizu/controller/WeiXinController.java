@@ -97,20 +97,22 @@ public class WeiXinController extends BaseController{
 		String language = request.getParameter("language");
 		String nickName = request.getParameter("nickName");
 		String province = request.getParameter("province");
-		System.out.println("code: "+code);
+		String usrString = "code: "+code +" nickName: "+nickName+" avatarUrl: "+avatarUrl;
+		System.out.println(usrString);
         Long start = System.currentTimeMillis();
 		UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidByCode(code);
 		Long end = System.currentTimeMillis();
         System.out.println("获取openId耗时: "+(end-start));
 		try {
-			System.out.println("成功……"+userOpenInfo);
+			System.out.println("成功……"+userOpenInfo + "usrString: "+usrString);
 			UserInfoBean exit = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+			System.out.println("已经存在: " + "usrString: "+usrString + " " + JSON.toJSONString(exit));
 			if(exit==null){
 				UserInfoBean bean = new UserInfoBean();
 				bean.setAvatarUrl(avatarUrl);
 				bean.setCity(city);
 				bean.setCountry(country);
-				if(StringUtils.isNotEmpty(gender,true)){
+				if(StringUtil.isNotEmpty(gender)){
 					bean.setGender(Integer.parseInt(gender));
 				}
 				bean.setLanguage(language);
@@ -125,7 +127,7 @@ public class WeiXinController extends BaseController{
                     bean.setAvatarUrl(avatarUrl);
                     bean.setCity(city);
                     bean.setCountry(country);
-                    if(StringUtils.isNotEmpty(gender,true)){
+                    if(StringUtil.isNotEmpty(gender)){
                         bean.setGender(Integer.parseInt(gender));
                     }
                     bean.setLanguage(language);
@@ -133,7 +135,9 @@ public class WeiXinController extends BaseController{
                     bean.setProvince(province);
                     System.out.println("更新数据库昵称: "+nickName);
                     userInfoService.updateUserById(bean);
-                }
+                } else {
+					System.out.println("昵称不存在无法更新： "+usrString);
+				}
                 if(StringUtil.isNotEmpty(exit.getManagerRights()) && !exit.getManagerRights().equals("0")){
 					userOpenInfo.setManager(true);
 				}
@@ -143,6 +147,7 @@ public class WeiXinController extends BaseController{
             }
 			//return "{sessionId:"+userOpenInfo.getSessionId()+"}";
 		} catch (Exception e) {
+			System.out.println("获取用户openId异常: "+JSON.toJSONString(e));
 			e.printStackTrace();
 		}
 		return JSON.toJSONString(userOpenInfo);
@@ -150,7 +155,7 @@ public class WeiXinController extends BaseController{
 	
 	@RequestMapping(value="/getAllUserLocations")
 	@ResponseBody
-	public String getAllUserLocations(HttpServletRequest request, HttpServletResponse response){
+	public void getAllUserLocations(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		UserLocationRe re = new UserLocationRe();
 		try{
 			response.setContentType("text/json;charset=UTF-8");
@@ -178,8 +183,11 @@ public class WeiXinController extends BaseController{
 		}catch(Exception e){
 		    e.printStackTrace();
 			re.setResult(ResultHelper.FAIL);
+		} finally {
+			PrintWriter writer = response.getWriter();
+			writer.print(JSON.toJSONString(re));
+			writer.flush();
 		}
-		return JSON.toJSONString(re);
 	}
 	
 	
@@ -317,7 +325,7 @@ public class WeiXinController extends BaseController{
             if(userOpenInfo!=null) {
                 UserInfoBean userInfo = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
                 // 新增
-                if(StringUtil.isEmpty(modifyOrAdd) || modifyOrAdd.equals("add")){
+                if(StringUtil.isEmpty(modifyOrAdd) || StringUtil.isEmpty(manager) || modifyOrAdd.equals("add")){
 					if(userInfo!=null){
 						AddressLookAuthRequestBean bean = new AddressLookAuthRequestBean();
 						bean.setUserId(userInfo.getId());
@@ -328,7 +336,7 @@ public class WeiXinController extends BaseController{
 						addressLookAuthService.insertAuthRequest(bean);
 					}
 					// 管理员
-					if(manager.equals("true")){
+					if(StringUtil.isNotEmpty(manager) && manager.equals("true")){
 						List<SurNameBean> surNameBeanList = surNameService.getAllSurName();
 						SurNameBean surNameBean = null;
 						for(SurNameBean temp : surNameBeanList){
@@ -347,7 +355,7 @@ public class WeiXinController extends BaseController{
 					}
 				}
 				// 修改模式
-				else if(modifyOrAdd.equals("modify")){
+				else if(StringUtil.isNotEmpty(modifyOrAdd) && modifyOrAdd.equals("modify")){
 					Long id = Long.parseLong(modifyId);
 					AddressLookBean param = new AddressLookBean();
 					param.setId(id);
