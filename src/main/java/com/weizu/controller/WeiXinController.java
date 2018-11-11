@@ -365,7 +365,7 @@ public class WeiXinController extends BaseController{
 					AddressLookBean param = new AddressLookBean();
 					param.setId(id);
 					AddressLookBean bean = addressLookService.findAddressLookById(param);
-					if(bean!=null){
+					if(bean!=null && StringUtil.isNotEmpty(userName) && StringUtil.isNotEmpty(mobilePhone)){
 						bean.setUserName(userName);
 						bean.setMobilePhone(mobilePhone);
 						addressLookService.updateAddressLook(bean);
