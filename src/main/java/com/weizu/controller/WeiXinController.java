@@ -98,11 +98,10 @@ public class WeiXinController extends BaseController{
 		String nickName = request.getParameter("nickName");
 		String province = request.getParameter("province");
 		// 特殊符号处理
-		if(StringUtil.isNotEmpty(nickName)){
-		    if(nickName.contains("?")){
-		        nickName = nickName.replaceAll("\\?","");
-            }
-        }
+		nickName = StringUtil.handleSpecial(nickName);
+		country =  StringUtil.handleSpecial(country);
+		province =  StringUtil.handleSpecial(province);
+		city =  StringUtil.handleSpecial(city);
 		String usrString = "code: "+code +" nickName: "+nickName+" avatarUrl: "+avatarUrl;
 		System.out.println(usrString);
         Long start = System.currentTimeMillis();

@@ -44,5 +44,6 @@
         <if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
             and request.create_time &lt;= #{pd.lastLoginEnd}
         </if>
+        order by request.create_time desc
     </select>
 </mapper>
