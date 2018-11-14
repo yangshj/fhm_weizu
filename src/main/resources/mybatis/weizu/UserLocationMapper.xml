@@ -23,12 +23,12 @@
 	<select id="getAllUserLatelyLocaitons" resultType="userLocationMarkerBean">
 		select la.id as id,
 			 la.latitude as latitude,
-			 wu.nick_name as name,
+			 CONCAT(wu.nick_name, DATE_FORMAT(la.create_time,'_%Y-%m-%d-%H:%i:%s')) as name,
 			 la.longitude as longitude,
 			 wu.avatar_url as iconPath 
 		from 
 			weizu_location la left join weizu_user wu on la.user_id=wu.id 
-			where la.id in(select max(id) from weizu_location group by user_id)
+			where la.id in(select max(id) from weizu_location where create_time > date_sub(now(), interval 1 day) group by user_id)
 	</select>
 
 	<!-- 列表后台查询页面 -->
