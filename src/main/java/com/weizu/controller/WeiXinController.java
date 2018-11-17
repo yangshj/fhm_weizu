@@ -631,8 +631,8 @@ public class WeiXinController extends BaseController{
 		// 备份存储
 		if(os.contains("Linux")){
 			String source = fileName;
-			String target = "/usr/local/tomcat/images/"+saveFilePath;
-            System.out.println("图片备份至:"+ fileName);
+			String target = "/usr/local/tomcat/images/"+imgPath;
+            System.out.println("图片备份至:"+ target);
 			fileCopy(source, target);
 		}
 		System.out.println("图片上传至:"+ fileName);
@@ -647,6 +647,12 @@ public class WeiXinController extends BaseController{
 		FileInputStream input = null;
 		FileOutputStream output = null;
 		try {
+            String fileName = target.substring(0, target.lastIndexOf("/"));
+            File fileDir = new File(fileName);
+            if (!fileDir.exists()) {
+                System.out.println("创建目录: "+fileName);
+                fileDir.mkdirs();
+            }
 			input = new FileInputStream(new File(source));
 			output = new FileOutputStream(new File(target));
 			byte[] bt = new byte[1024];
