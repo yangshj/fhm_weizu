@@ -30,6 +30,9 @@ public class LoginHandlerInterceptor extends HandlerInterceptorAdapter{
 		if(path.matches(Const.NO_INTERCEPTOR_PATH)){
 			return true;
 		}else{
+			if(path.contains(Const.uploadHeadImage)){
+				return true;
+			}
 			//shiro管理的session
 			Subject currentUser = SecurityUtils.getSubject();  
 			Session session = currentUser.getSession();

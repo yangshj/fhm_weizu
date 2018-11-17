@@ -87,7 +87,7 @@
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
 								<td>${user.nickName }</td>
 								<td>${user.surname }</td>
-								<td>${user.requestInfo}</td>
+								<td style="width:500px;word-wrap:break-word;word-break:break-all;">${user.requestInfo}</td>
 								<td>
 									<c:if test="${user.gender == '1' }"><span class="label label-important arrowed-in">男</span></c:if>
 									<c:if test="${user.gender == '2' }"><span class="label label-success arrowed">女</span></c:if>

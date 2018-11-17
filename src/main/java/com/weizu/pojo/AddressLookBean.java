@@ -19,10 +19,16 @@ public class AddressLookBean  implements Serializable{
 	private String userName;
 	/** 手机号 */
 	private String mobilePhone;
+	/** 办公电话 */
+	private String officePhone;
+	/** 头像 */
+	private String headImage;
 	/** 性别 */
 	private Integer sex;
 	/** 创建时间 */
 	private Date createTime;
+	/** 备注 */
+	private String remark;
 	/** 所属姓氏 */
 	private Long surnameId;
 	
@@ -61,5 +67,23 @@ public class AddressLookBean  implements Serializable{
 	}
 	public void setSurnameId(Long surnameId) {
 		this.surnameId = surnameId;
+	}
+	public String getOfficePhone() {
+		return officePhone;
+	}
+	public void setOfficePhone(String officePhone) {
+		this.officePhone = officePhone;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	public String getHeadImage() {
+		return headImage;
+	}
+	public void setHeadImage(String headImage) {
+		this.headImage = headImage;
 	}
 }

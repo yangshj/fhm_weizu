@@ -123,6 +123,7 @@
 			<property name="filterChainDefinitions">
 				<value>
 				/weizu/weixin/**			= anon
+				/uploadFiles/**				= anon
 				/static/login/** 			= anon
 				/static/js/myjs/** 			= authc
 				/static/js/** 				= anon

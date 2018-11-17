@@ -1,14 +1,15 @@
 package com.weizu.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fh.util.Const;
 import com.fh.util.RightsHelper;
 import com.fh.util.Tools;
 import com.weizu.common.amap.GisInfo;
@@ -21,12 +22,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.fh.controller.base.BaseController;
 import com.weizu.helper.UserOpenInfo;
 import com.weizu.helper.WeiXinMemoryCacheHelper;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping(value="/weizu/weixin")
@@ -495,5 +498,178 @@ public class WeiXinController extends BaseController{
 			writer.flush();
 		}
 	}
+
+	@RequestMapping("uploadImage")
+	@ResponseBody
+	public void uploadHeadImage(HttpServletRequest request, HttpServletResponse response,
+								@RequestParam(value = "imgFile" , required=false) MultipartFile imageFile) throws IOException {
+        SaveUserInfoRE re = new SaveUserInfoRE();
+		try {
+			re.setResult(ResultHelper.FAIL);
+			String sessionId = request.getParameter("sessionId");
+			String surname =  request.getParameter("surname");
+			String userName =  request.getParameter("userName");
+			String userId =  request.getParameter("userId");
+			String upAvatar =  request.getParameter("upAvatar");
+			String mobilePhone =  request.getParameter("mobilePhone");
+			String officePhone =  request.getParameter("officePhone");
+			String sex =  request.getParameter("sex");
+			String remark =  request.getParameter("remark");
+			UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+			if(userOpenInfo!=null) {
+				UserInfoBean userInfoBean = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+				// 修改
+				if(StringUtil.isNotEmpty(userId)){
+					AddressLookBean param = new AddressLookBean();
+					param.setId(Long.parseLong(userId));
+					AddressLookBean bean = addressLookService.findAddressLookById(param);
+					if(bean!=null){
+						if(StringUtil.isNotEmpty(upAvatar) && upAvatar.equals("true")){
+							String headImage = saveImage(request,userId,imageFile);
+							bean.setHeadImage(headImage);
+						}
+						if(StringUtil.isNotEmpty(userName)) bean.setUserName(userName);
+						if(StringUtil.isNotEmpty(mobilePhone)) bean.setMobilePhone(mobilePhone);
+						if(StringUtil.isNotEmpty(officePhone)) bean.setOfficePhone(officePhone);
+						if(StringUtil.isNotEmpty(sex)) bean.setSex(Integer.parseInt(sex));
+						if(StringUtil.isNotEmpty(remark)) bean.setRemark(remark);
+						addressLookService.updateAddressLook(bean);
+                        // 历史记录
+                        AddressLookAuthRequestBean requestBean = new AddressLookAuthRequestBean();
+                        requestBean.setUserId(userInfoBean.getId());
+                        requestBean.setNickName(userInfoBean.getNickName());
+                        requestBean.setSurname(surname);
+                        requestBean.setRequestInfo("修改: "+JSON.toJSONString(bean));
+                        addressLookAuthService.insertAuthRequest(requestBean);
+                        re.setResult(ResultHelper.SUCCESS);
+					} else {
+						re.setResult(ResultHelper.FAIL);
+					}
+				}
+				// 新增
+				else {
+					List<SurNameBean> surNameBeanList = surNameService.getAllSurName();
+					SurNameBean surNameBean = null;
+					for(SurNameBean temp : surNameBeanList){
+						if(temp.getSurname().equals(surname)){
+							surNameBean = temp;
+							break;
+						}
+					}
+					if(surNameBean!=null){
+						AddressLookBean param = new AddressLookBean();
+						param.setSurnameId(surNameBean.getId());
+						param.setUserName(userName);
+						param.setOfficePhone(officePhone);
+						param.setMobilePhone(mobilePhone);
+						if(StringUtil.isNotEmpty(sex)) param.setSex(Integer.parseInt(sex));
+						param.setRemark(remark);
+						Integer id = addressLookService.inserAddressLook(param);
+						if(StringUtil.isNotEmpty(upAvatar) && upAvatar.equals("true")){
+							String headImage = saveImage(request,id.toString(),imageFile);
+                            param.setHeadImage(headImage);
+                            param.setId(Long.valueOf(id.toString()));
+							addressLookService.updateAddressLook(param);
+						}
+						// 历史记录
+                        AddressLookAuthRequestBean bean = new AddressLookAuthRequestBean();
+                        bean.setUserId(userInfoBean.getId());
+                        bean.setNickName(userInfoBean.getNickName());
+                        bean.setSurname(surname);
+                        bean.setRequestInfo("新增: "+JSON.toJSONString(param));
+                        addressLookAuthService.insertAuthRequest(bean);
+                        re.setAddressLookId(param.getId());
+                        re.setResult(ResultHelper.SUCCESS);
+					} else {
+                        re.setResult(ResultHelper.FAIL);
+                    }
+				}
+				re.setResult(ResultHelper.SUCCESS);
+			} else  {
+				re.setResult(ResultHelper.SESSION_INVALID);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			PrintWriter writer = response.getWriter();
+			writer.print(JSON.toJSONString(re));
+			writer.flush();
+		}
+	}
+
+    /**
+     * 存储图片，返回外界能访问的URL路径。而非磁盘路径
+     * @return
+     * @throws Exception
+     */
+	public String saveImage(HttpServletRequest request,String userId, MultipartFile imageFile) throws Exception {
+		String realPath = request.getSession().getServletContext().getRealPath("/")+ Const.uploadHeadImage;
+		//realPath += userId+"/";
+		// 根据配置文件获取服务器图片存放路径
+		String newFileName = String.valueOf( System.currentTimeMillis());
+		String saveFilePath = userId+"/";
+		/* 构建文件目录 */
+		File fileDir = new File(realPath+saveFilePath);
+		if (!fileDir.exists()) {
+			fileDir.mkdirs();
+		}
+		//上传的文件名
+		String uploadFileName = imageFile.getOriginalFilename();
+		//文件的扩张名
+		String extensionName = uploadFileName.substring(uploadFileName.lastIndexOf(".") + 1);
+		String imgPath = saveFilePath + newFileName + "." +extensionName;
+		String fileName = realPath + imgPath;
+		FileOutputStream out = new FileOutputStream(fileName);
+		// 写入文件
+		out.write(imageFile.getBytes());
+		out.flush();
+		out.close();
+		Properties prop = System.getProperties();
+		String os = prop.getProperty("os.name");
+		System.out.println("os: "+os);
+		// 备份存储
+		if(os.contains("Linux")){
+			String source = fileName;
+			String target = "/usr/local/tomcat/images/"+saveFilePath;
+            System.out.println("图片备份至:"+ fileName);
+			fileCopy(source, target);
+		}
+		System.out.println("图片上传至:"+ fileName);
+        String path = request.getContextPath();
+        String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+        String result = basePath +  Const.uploadHeadImage + imgPath;
+        System.out.println("图片地址转换为外界访问的URL: "+result);
+		return result;
+	}
+
+	public void fileCopy(String source, String target) {
+		FileInputStream input = null;
+		FileOutputStream output = null;
+		try {
+			input = new FileInputStream(new File(source));
+			output = new FileOutputStream(new File(target));
+			byte[] bt = new byte[1024];
+			int realbyte = 0;
+			while ((realbyte = input.read(bt)) > 0) {
+				output.write(bt,0,realbyte);
+			}
+			output.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (input != null) {
+					input.close();
+				}
+				if (output != null) {
+					output.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 
 }

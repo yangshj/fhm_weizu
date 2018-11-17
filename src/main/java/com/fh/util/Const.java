@@ -29,6 +29,7 @@ public class Const {
 	public static final String WEIXIN	= "admin/config/WEIXIN.txt";	//微信配置路径
 	public static final String FILEPATHIMG = "uploadFiles/uploadImgs/";	//图片上传路径
 	public static final String FILEPATHFILE = "uploadFiles/file/";		//文件上传路径
+	public static final String uploadHeadImage = "uploadFiles/uploadHeadImage/";		//头像上传路径
 	public static final String FILEPATHTWODIMENSIONCODE = "uploadFiles/twoDimensionCode/"; //二维码存放路径
 	public static final String NO_INTERCEPTOR_PATH = ".*/((login)|(logout)|(code)|(app)|(weixin)|(static)|(main)|(websocket)).*";	//不对匹配该值的访问路径拦截（正则）
 	

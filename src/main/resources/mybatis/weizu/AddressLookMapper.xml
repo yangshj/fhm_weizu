@@ -4,17 +4,28 @@
 	
 	<!-- 新增-->
 	<insert id="inserAddressLook" parameterType="addressLookBean">
+		<selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
 		insert into weizu_address_book(
 			 user_name,
 			 mobile_phone,
 			 sex,
+			 head_image,
+			 office_phone,
 			 surname_id,
-			 create_time
+			 remark,
+			 create_time,
+			 modify_time
 		) values (
 			#{userName},	
 			#{mobilePhone},	
 			#{sex},
+			#{headImage},
+			#{officePhone},
 			#{surnameId},
+			#{remark},
+			now(),
 			now()
 		)
 	</insert>
@@ -27,11 +38,14 @@
 	<!-- 修改 -->
 	<update id="updateAddressLook" parameterType="addressLookBean">
 		update  weizu_address_book
-			set 
+			set modify_time=now(),
 				user_name = #{userName},
 				mobile_phone = #{mobilePhone},
 				surname_id = #{surnameId},
-				sex = #{sex}
+				sex = #{sex},
+				head_image = #{headImage},
+				office_phone = #{ officePhone},
+				remark = #{remark}
 			where 
 				id = #{id}
 	</update>
@@ -39,13 +53,16 @@
 	<!-- 查找通讯录  -->
 	<select id="findAddressLookById" resultType="addressLookBean" parameterType="addressLookBean">
 		select
-		   id,
-		   user_name as userName,
-		   mobile_phone as mobilePhone,
-		   sex,
-		   surname_id as surnameId,
-		   create_time as createTime
-		from weizu_address_book 
+			bk.id,
+			bk.user_name as userName,
+			bk.mobile_phone as mobilePhone,
+			bk.sex,
+			bk.surname_id as surnameId,
+			bk.head_image as headImage,
+			bk.office_phone as officePhone,
+			bk.remark as remark,
+			bk.create_time as createTime
+		from weizu_address_book as bk
 		where 
 			id = #{id}
 		<if test="userName != null">
@@ -61,6 +78,9 @@
 			bk.mobile_phone as mobilePhone,
 			bk.sex,
 			bk.surname_id as surnameId,
+			bk.head_image as headImage,
+			bk.office_phone as officePhone,
+			bk.remark as remark,
 			bk.create_time as createTime
 		from weizu_address_book bk left
 		join weizu_surname su on bk.surname_id = su.id
@@ -79,13 +99,16 @@
 	<!-- 获取所有通讯录信息 -->
 	<select id="getAllAddressLook" resultType="addressLookBean">
 		select
-		   id,
-		   user_name as userName,
-		   mobile_phone as mobilePhone,
-		   sex,
-		   surname_id as surnameId,
-		   create_time as createTime
-		from weizu_address_book 
+		    bk.id,
+			bk.user_name as userName,
+			bk.mobile_phone as mobilePhone,
+			bk.sex,
+			bk.surname_id as surnameId,
+			bk.head_image as headImage,
+			bk.office_phone as officePhone,
+			bk.remark as remark,
+			bk.create_time as createTime
+		from weizu_address_book as bk
 	</select>
 	
 	<!-- 列表后台查询页面 -->
@@ -96,7 +119,9 @@
 			bk.mobile_phone as mobilePhone,
 			bk.sex,
 			bk.surname_id as surnameId,
-			su.surname as surname,
+			bk.head_image as headImage,
+			bk.office_phone as officePhone,
+			bk.remark as remark,
 			bk.create_time as createTime
 		from weizu_address_book bk left
 		join weizu_surname su on bk.surname_id = su.id
