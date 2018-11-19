@@ -16,6 +16,7 @@ import com.weizu.common.amap.GisInfo;
 import com.weizu.helper.ResultHelper;
 import com.weizu.pojo.*;
 import com.weizu.service.*;
+import com.weizu.util.FileUtil;
 import com.weizu.util.StringUtil;
 import com.weizu.util.StringUtils;
 import net.coobird.thumbnailator.Thumbnails;
@@ -647,11 +648,11 @@ public class WeiXinController extends BaseController{
 			String target = "/usr/local/tomcat/images/"+imgPath;
 			String target_132 = "/usr/local/tomcat/images/"+imgPath_132;
             System.out.println("图片备份至:"+ target);
-			//fileCopy(source, target);
+			FileUtil.fileCopy(source, target);
 			// 其中的scale是可以指定图片的大小，值在0到1之间，1f就是原图大小，0.5就是原图的一半大小，这里的大小是指图片的长宽。
 			// 而outputQuality是图片的质量，值也是在0到1，越接近于1质量越好，越接近于0质量越差。
-			Thumbnails.of(source).scale(1f).outputQuality(1f).toFile(target);
-			Thumbnails.of(source).scale(0.2f).outputQuality(0.2f).toFile(target_132);
+			//Thumbnails.of(source).scale(1f).outputQuality(1f).toFile(target);
+			Thumbnails.of(source).scale(0.2f).outputQuality(0.5f).toFile(target_132);
 		}
 		System.out.println("图片上传至:"+ fileName);
         String path = request.getContextPath();

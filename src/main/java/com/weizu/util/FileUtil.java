@@ -12,7 +12,7 @@ public class FileUtil {
      * @param source 源文件路径
      * @param target 目标文件路径
      */
-    public void fileCopy(String source, String target) {
+    public static void fileCopy(String source, String target) {
         FileInputStream input = null;
         FileOutputStream output = null;
         try {
