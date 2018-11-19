@@ -63,6 +63,7 @@
           <element id="library" level="project" name="Maven: net.sf.json-lib:json-lib:jdk15:2.4" />
           <element id="library" level="project" name="Maven: org.bouncycastle:bcprov-jdk16:1.46" />
           <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.50" />
+          <element id="library" level="project" name="Maven: net.coobird:thumbnailator:0.4.8" />
           <element id="library" level="project" name="Maven: org.mybatis.caches:mybatis-ehcache:1.1.0" />
           <element id="library" level="project" name="Maven: com.belerweb:pinyin4j:2.5.1" />
           <element id="library" level="project" name="Maven: org.apache.poi:poi:3.10.1" />

@@ -38,28 +38,14 @@
 	<!-- 修改 -->
 	<update id="updateAddressLook" parameterType="addressLookBean">
 		update  weizu_address_book
-			set modify_time=now()
-		<if test="userName != null and userName != ''">
-				,user_name = #{userName}
-		</if>
-		<if test="mobilePhone != null and mobilePhone != ''">
-				,mobile_phone = #{mobilePhone}
-		</if>
-		<if test="surnameId != null and surnameId != ''">
-				,surname_id = #{surnameId}
-		</if>
-		<if test="sex != null and sex != ''">
-				,sex = #{sex}
-		</if>
-		<if test="headImage != null and headImage != ''">
-				,head_image = #{headImage}
-		</if>
-		<if test="officePhone != null and officePhone != ''">
-				,office_phone = #{ officePhone}
-		</if>
-		<if test="remark != null and remark != ''">
-				,remark = #{remark}
-		</if>
+			set modify_time=now(),
+				user_name = #{userName},
+				mobile_phone = #{mobilePhone},
+				surname_id = #{surnameId},
+				sex = #{sex},
+				head_image = #{headImage},
+				office_phone = #{ officePhone},
+				remark = #{remark}
 			where 
 				id = #{id}
 	</update>

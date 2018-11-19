@@ -18,6 +18,7 @@ import com.weizu.pojo.*;
 import com.weizu.service.*;
 import com.weizu.util.StringUtil;
 import com.weizu.util.StringUtils;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -600,15 +601,20 @@ public class WeiXinController extends BaseController{
 
     /**
      * 存储图片，返回外界能访问的URL路径。而非磁盘路径
-     * @return
+	 * 1、微信头像有0、46、64、96、132数值可选，0代表132*132正方形头像）
+	 * 2、存储原图，并压缩一份132的图像
+	 * 3、存储路径如：
+	 * http://localhost:8081/FHM/uploadFiles/uploadHeadImage/3/1542459722654/0.png
+	 * http://localhost:8081/FHM/uploadFiles/uploadHeadImage/3/1542459722654/132.png
+     * @return 压缩的132的图像的路径
      * @throws Exception
      */
 	public String saveImage(HttpServletRequest request,String userId, MultipartFile imageFile) throws Exception {
 		String realPath = request.getSession().getServletContext().getRealPath("/")+ Const.uploadHeadImage;
-		//realPath += userId+"/";
 		// 根据配置文件获取服务器图片存放路径
-		String newFileName = String.valueOf( System.currentTimeMillis());
-		String saveFilePath = userId+"/";
+		String newFileName = "0";
+		String newFileName_132 =  "132";
+		String saveFilePath = userId+"/"+String.valueOf( System.currentTimeMillis())+"/";
 		/* 构建文件目录 */
 		File fileDir = new File(realPath+saveFilePath);
 		if (!fileDir.exists()) {
@@ -618,13 +624,20 @@ public class WeiXinController extends BaseController{
 		String uploadFileName = imageFile.getOriginalFilename();
 		//文件的扩张名
 		String extensionName = uploadFileName.substring(uploadFileName.lastIndexOf(".") + 1);
-		String imgPath = saveFilePath + newFileName + "." +extensionName;
+		//String imgPath = saveFilePath + newFileName + "." +extensionName;
+		//原始图像 = 保存路径 + 文件名 + 扩展名
+		String imgPath = saveFilePath + newFileName  + "." +extensionName;
+		//132图像 = 保存路径 + 文件名_132 + 扩展名
+		String imgPath_132 = saveFilePath + newFileName_132+ "." +extensionName;
 		String fileName = realPath + imgPath;
 		FileOutputStream out = new FileOutputStream(fileName);
 		// 写入文件
 		out.write(imageFile.getBytes());
 		out.flush();
 		out.close();
+		// 压缩一份图片
+		Thumbnails.of(fileName).scale(0.2f).outputQuality(0.2f).toFile(realPath + imgPath_132);
+		// 服务器备份开始
 		Properties prop = System.getProperties();
 		String os = prop.getProperty("os.name");
 		System.out.println("os: "+os);
@@ -632,50 +645,23 @@ public class WeiXinController extends BaseController{
 		if(os.contains("Linux")){
 			String source = fileName;
 			String target = "/usr/local/tomcat/images/"+imgPath;
+			String target_132 = "/usr/local/tomcat/images/"+imgPath_132;
             System.out.println("图片备份至:"+ target);
-			fileCopy(source, target);
+			//fileCopy(source, target);
+			// 其中的scale是可以指定图片的大小，值在0到1之间，1f就是原图大小，0.5就是原图的一半大小，这里的大小是指图片的长宽。
+			// 而outputQuality是图片的质量，值也是在0到1，越接近于1质量越好，越接近于0质量越差。
+			Thumbnails.of(source).scale(1f).outputQuality(1f).toFile(target);
+			Thumbnails.of(source).scale(0.2f).outputQuality(0.2f).toFile(target_132);
 		}
 		System.out.println("图片上传至:"+ fileName);
         String path = request.getContextPath();
         String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-        String result = basePath +  Const.uploadHeadImage + imgPath;
+        String result = basePath +  Const.uploadHeadImage + imgPath_132;
         System.out.println("图片地址转换为外界访问的URL: "+result);
 		return result;
 	}
 
-	public void fileCopy(String source, String target) {
-		FileInputStream input = null;
-		FileOutputStream output = null;
-		try {
-            String fileName = target.substring(0, target.lastIndexOf("/"));
-            File fileDir = new File(fileName);
-            if (!fileDir.exists()) {
-                System.out.println("创建目录: "+fileName);
-                fileDir.mkdirs();
-            }
-			input = new FileInputStream(new File(source));
-			output = new FileOutputStream(new File(target));
-			byte[] bt = new byte[1024];
-			int realbyte = 0;
-			while ((realbyte = input.read(bt)) > 0) {
-				output.write(bt,0,realbyte);
-			}
-			output.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (input != null) {
-					input.close();
-				}
-				if (output != null) {
-					output.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+
 
 
 }
