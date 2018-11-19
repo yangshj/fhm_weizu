@@ -119,6 +119,7 @@
 			bk.mobile_phone as mobilePhone,
 			bk.sex,
 			bk.surname_id as surnameId,
+			su.surname as surname,
 			bk.head_image as headImage,
 			bk.office_phone as officePhone,
 			bk.remark as remark,
