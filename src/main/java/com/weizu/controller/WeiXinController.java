@@ -63,15 +63,21 @@ public class WeiXinController extends BaseController{
 			UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
 			if(userOpenInfo!=null){
 				UserInfoBean exit = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
-				if(exit!=null){
+				if(exit!=null) {
 					WeiZuLocationBean bean = new WeiZuLocationBean();
 					bean.setUserId(exit.getId());
 					bean.setLatitude(Double.parseDouble(latitude));
 					bean.setLongitude(Double.parseDouble(longitude));
-					GisInfo gisInfo =  new GisInfo(bean.getLongitude(), bean.getLatitude());
-					String locationInfo = gisInfo.getContent();
-					bean.setLocationInfo(locationInfo);
-					userLocation.insertLocation(bean);
+					// 超过中国经纬度范围（经度范围：73°33′E至135°05′E, 纬度范围：3°51′N至53°33′N
+					if (bean.getLongitude() > 73.55 && bean.getLongitude() < 135.084 && bean.getLatitude() > 3.85 && bean.getLatitude() < 53.55){
+						GisInfo gisInfo =  new GisInfo(bean.getLongitude(), bean.getLatitude());
+						String locationInfo = gisInfo.getContent();
+						bean.setLocationInfo(locationInfo);
+						userLocation.insertLocation(bean);
+					} else {
+						System.out.println("经纬度超出范围: "+JSON.toJSONString(bean));
+
+					}
 					re.setResult(ResultHelper.SUCCESS);
 				}
 			} else {
