@@ -13,6 +13,7 @@ import com.fh.util.Const;
 import com.fh.util.RightsHelper;
 import com.fh.util.Tools;
 import com.weizu.common.amap.GisInfo;
+import com.weizu.dao.AddressLookDao;
 import com.weizu.helper.ResultHelper;
 import com.weizu.pojo.*;
 import com.weizu.service.*;
@@ -48,6 +49,8 @@ public class WeiXinController extends BaseController{
 	private AddressLookService addressLookService;
 	@Autowired
 	private AddressLookAuthService addressLookAuthService;
+	@Autowired
+	private AddressLookDao addressLookDao;
 	
 	@RequestMapping(value="/backLocation")
 	@ResponseBody
@@ -511,6 +514,8 @@ public class WeiXinController extends BaseController{
 	@ResponseBody
 	public void uploadHeadImage(HttpServletRequest request, HttpServletResponse response,
 								@RequestParam(value = "imgFile" , required=false) MultipartFile imageFile) throws IOException {
+		response.setContentType("text/json;charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
         SaveUserInfoRE re = new SaveUserInfoRE();
 		try {
 			re.setResult(ResultHelper.FAIL);
@@ -551,7 +556,9 @@ public class WeiXinController extends BaseController{
                         addressLookAuthService.insertAuthRequest(requestBean);
                         re.setResult(ResultHelper.SUCCESS);
 					} else {
+						re.setMsg("保存失败userId不存在"+userId);
 						re.setResult(ResultHelper.FAIL);
+						return;
 					}
 				}
 				// 新增
@@ -565,6 +572,14 @@ public class WeiXinController extends BaseController{
 						}
 					}
 					if(surNameBean!=null){
+						AddressLookBean query = new AddressLookBean();
+						query.setUserName(userName);
+						List<AddressLookBean> exist = addressLookDao.findAddressLookByCondition(query);
+						if(exist!=null && exist.size()>0){
+							re.setResult(ResultHelper.FAIL);
+							re.setMsg("用户: "+userName +"已经存在");
+							return;
+						}
 						AddressLookBean param = new AddressLookBean();
 						param.setSurnameId(surNameBean.getId());
 						param.setUserName(userName);
@@ -590,13 +605,15 @@ public class WeiXinController extends BaseController{
                         re.setResult(ResultHelper.SUCCESS);
 					} else {
                         re.setResult(ResultHelper.FAIL);
+                        re.setMsg("保存失败"+surname+"不存在");
+                        return;
                     }
 				}
 				re.setResult(ResultHelper.SUCCESS);
+				re.setMsg("保存成功");
 			} else  {
 				re.setResult(ResultHelper.SESSION_INVALID);
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
