@@ -6,6 +6,6 @@
 
 ![image](https://github.com/yangshj/fhm_weizu/images/first.jpg)
 
-![image](https://github.com/yangshj/fhm_weizu/images/dept.jpg)
+![image](https://github.com/yangshj/fhm_weizu/blob/master/images/dept.jpg)
 
 ![image](https://github.com/yangshj/fhm_weizu/images/user.jpg)
