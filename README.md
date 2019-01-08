@@ -4,7 +4,7 @@
 
 ![image](https://github.com/yangshj/fhm_weizu/blob/master/images/login.jpg)
 
-![image]((https://github.com/yangshj/fhm_weizu/blob/master/images/first.jpg)
+![image](https://github.com/yangshj/fhm_weizu/blob/master/images/first.jpg)
 
 ![image](https://github.com/yangshj/fhm_weizu/blob/master/images/dept.jpg)
 
