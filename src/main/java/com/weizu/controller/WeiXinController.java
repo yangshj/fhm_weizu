@@ -574,6 +574,7 @@ public class WeiXinController extends BaseController{
 					if(surNameBean!=null){
 						AddressLookBean query = new AddressLookBean();
 						query.setUserName(userName);
+						query.setMobilePhone(mobilePhone);
 						List<AddressLookBean> exist = addressLookDao.findAddressLookByCondition(query);
 						if(exist!=null && exist.size()>0){
 							re.setResult(ResultHelper.FAIL);
