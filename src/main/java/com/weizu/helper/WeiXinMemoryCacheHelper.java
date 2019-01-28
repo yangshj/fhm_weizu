@@ -74,7 +74,7 @@ public class WeiXinMemoryCacheHelper {
 	 * 获取所有在线用户
 	 * @return
 	 */
-	public static List<UserOpenInfo> getUserOpenInfo(){
+	public static List<UserOpenInfo> getAllUserOpenInfo(){
 		List<UserOpenInfo> valueList = new ArrayList<UserOpenInfo>(sessionOpenIdMap.values());
 		return valueList;
 	}
