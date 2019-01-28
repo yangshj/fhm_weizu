@@ -9,6 +9,11 @@ import com.weizu.util.StringUtil;
 import com.weizu.util.UUIDUtil;
 import com.weizu.util.WXAppletUserInfoUtil;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
 
 /**
  * 避免每次授权，存储10天的openId
@@ -42,6 +47,7 @@ public class WeiXinMemoryCacheHelper {
 			String customSession = UUIDUtil.getUUID();
 			UserOpenInfo userOpenInfo = new UserOpenInfo();
 			userOpenInfo.setOpenId(openId);
+			userOpenInfo.setCreateTime(new Date());
 			userOpenInfo.setSessionId(customSession);
 			setOpenid(customSession, userOpenInfo);
 			return userOpenInfo;
@@ -50,7 +56,11 @@ public class WeiXinMemoryCacheHelper {
 	}
 	
 	public static UserOpenInfo getOpenidBySessionId(String sessionId){
-		return sessionOpenIdMap.get(sessionId);
+		UserOpenInfo userOpenInfo = sessionOpenIdMap.get(sessionId);
+		if(userOpenInfo!=null){
+			userOpenInfo.setUpdateTime(new Date());
+		}
+		return userOpenInfo;
 	}
 
 	public synchronized static void setOpenid(String session, UserOpenInfo userOpenInfo) {
@@ -58,5 +68,14 @@ public class WeiXinMemoryCacheHelper {
 			System.out.println("放进去……"+session);
 			sessionOpenIdMap.put(session, userOpenInfo);
 		}
+	}
+
+	/**
+	 * 获取所有在线用户
+	 * @return
+	 */
+	public static List<UserOpenInfo> getUserOpenInfo(){
+		List<UserOpenInfo> valueList = new ArrayList<UserOpenInfo>(sessionOpenIdMap.values());
+		return valueList;
 	}
 }

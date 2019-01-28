@@ -1,10 +1,18 @@
 package com.weizu.helper;
 
+import java.util.Date;
+
 public class UserOpenInfo {
 	
 	private String sessionId;
 	private String openId;
+	/** 第一次放入的时间 */
+	private Date createTime;
+	/** 最后一次访问的时间 */
+	private Date updateTime;
+	/** 管理员 */
 	private Boolean manager=false;
+	/** 超级管理员 */
 	private Boolean admin = false;
 
 	public String getSessionId() {
@@ -30,5 +38,17 @@ public class UserOpenInfo {
 	}
 	public void setAdmin(Boolean admin) {
 		this.admin = admin;
+	}
+	public Date getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 }
