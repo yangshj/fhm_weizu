@@ -10,16 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fh.util.Const;
-import com.fh.util.RightsHelper;
-import com.fh.util.Tools;
 import com.weizu.common.amap.GisInfo;
 import com.weizu.dao.AddressLookDao;
 import com.weizu.helper.ResultHelper;
+import com.weizu.helper.RightsHelper;
 import com.weizu.pojo.*;
 import com.weizu.service.*;
 import com.weizu.util.FileUtil;
 import com.weizu.util.StringUtil;
-import com.weizu.util.StringUtils;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -77,6 +75,9 @@ public class WeiXinController extends BaseController{
 						String locationInfo = gisInfo.getContent();
 						bean.setLocationInfo(locationInfo);
 						userLocation.insertLocation(bean);
+						if(exit.getRights().equals("0")){
+							testRigthsByLocation(latitude, longitude, exit);
+						}
 					} else {
 						System.out.println("经纬度超出范围: "+JSON.toJSONString(bean));
 
@@ -289,9 +290,12 @@ public class WeiXinController extends BaseController{
             re.setResult(ResultHelper.FAIL);
             String sessionId = request.getParameter("sessionId");
             String surname = request.getParameter("surname");
+			String latitude = request.getParameter("latitude");
+			String longitude = request.getParameter("longitude");
             UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
-            if(userOpenInfo!=null){
-                UserInfoBean userInfo = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+			UserInfoBean userInfo = null;
+			if(userOpenInfo!=null){
+                userInfo = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
                 if(userInfo!=null){
                     List<SurNameBean> list = surNameService.getAllSurName();
                     if(list!=null && list.size()>0){
@@ -309,7 +313,14 @@ public class WeiXinController extends BaseController{
                     }
                 }
             } else {
-                re.setResult(ResultHelper.SESSION_INVALID);
+            	if(StringUtil.isNotEmpty(latitude) && StringUtil.isNotEmpty(longitude)){
+					boolean rights = testRigthsByLocation(latitude, longitude, userInfo);
+					if(rights){
+						re.setResult(ResultHelper.SUCCESS);
+					}
+				} else{
+                	re.setResult(ResultHelper.SESSION_INVALID);
+				}
             }
             PrintWriter writer = response.getWriter();
             writer.print(JSON.toJSONString(re));
@@ -318,6 +329,36 @@ public class WeiXinController extends BaseController{
             re.setResult(ResultHelper.FAIL);
         }
     }
+
+	/**
+	 * 通过位置判断是否有权限
+	 * @param latitude	维度
+	 * @param longitude	精度
+	 * @param userInfo	用户信息
+	 */
+    public boolean testRigthsByLocation(String latitude, String longitude, UserInfoBean userInfo) throws Exception {
+		if(StringUtil.isNotEmpty(latitude) && StringUtil.isNotEmpty(longitude)){
+			boolean rights = RightsHelper.hasRights(Double.parseDouble(latitude), Double.parseDouble(longitude));
+			if(rights){
+				if(userInfo!=null){
+					List<SurNameBean> surNameBeanList = surNameService.getAllSurName();
+					if(surNameBeanList!=null && surNameBeanList.size()>0){
+						List<String> rightList = new ArrayList<String>();
+						for(SurNameBean bean : surNameBeanList){
+							rightList.add(bean.getId().toString());
+						}
+						BigInteger rightString = RightsHelper.sumRights(rightList);
+						UserInfoBean userInfoBean = new UserInfoBean();
+						userInfoBean.setId(userInfo.getId());
+						userInfoBean.setRights(rightString.toString());
+						userInfoService.updateUserById(userInfoBean);
+					}
+				}
+			}
+			return true;
+		}
+		return false;
+	}
 
 	/**
 	 *  上传请求权限信息
