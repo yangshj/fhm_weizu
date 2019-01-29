@@ -142,7 +142,7 @@ public class WeiXinController extends BaseController{
 				userInfoService.inserWeiZuUser(bean);
 			} else {
 			    // 更新数据库昵称和头像为空的数据
-			    if(StringUtil.isEmpty(exit.getNickName()) && StringUtil.isNotEmpty(nickName)){
+			    if(StringUtil.isNotEmpty(avatarUrl) && !avatarUrl.equals(exit.getAvatarUrl())){
                     UserInfoBean bean = exit;
                     bean.setAvatarUrl(avatarUrl);
                     bean.setCity(city);
@@ -156,7 +156,7 @@ public class WeiXinController extends BaseController{
                     System.out.println("更新数据库昵称: "+nickName);
                     userInfoService.updateUserById(bean);
                 } else {
-					System.out.println("昵称不存在无法更新： "+usrString);
+					System.out.println("头像没发生变化不更新： "+usrString);
 				}
                 if(StringUtil.isNotEmpty(exit.getManagerRights()) && !exit.getManagerRights().equals("0")){
 					userOpenInfo.setManager(true);
