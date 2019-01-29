@@ -311,16 +311,16 @@ public class WeiXinController extends BaseController{
                             }
                         }
                     }
+                    // 根据位置来判断是否有权限
+					if(re.getResult().equals(ResultHelper.FAIL) && StringUtil.isNotEmpty(latitude) && StringUtil.isNotEmpty(longitude)){
+						boolean rights = testRigthsByLocation(latitude, longitude, userInfo);
+						if(rights){
+							re.setResult(ResultHelper.SUCCESS);
+						}
+					}
                 }
             } else {
-            	if(StringUtil.isNotEmpty(latitude) && StringUtil.isNotEmpty(longitude)){
-					boolean rights = testRigthsByLocation(latitude, longitude, userInfo);
-					if(rights){
-						re.setResult(ResultHelper.SUCCESS);
-					}
-				} else{
-                	re.setResult(ResultHelper.SESSION_INVALID);
-				}
+				re.setResult(ResultHelper.SESSION_INVALID);
             }
             PrintWriter writer = response.getWriter();
             writer.print(JSON.toJSONString(re));
@@ -354,8 +354,8 @@ public class WeiXinController extends BaseController{
 						userInfoService.updateUserById(userInfoBean);
 					}
 				}
+				return true;
 			}
-			return true;
 		}
 		return false;
 	}
