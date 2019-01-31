@@ -8,7 +8,7 @@
 		   id,
 		   surname as surname,
 		   create_time as createTime
-		from weizu_surname 
+		from weizu_surname order by order_num
 	</select>
 	
 	
