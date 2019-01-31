@@ -351,6 +351,7 @@ public class WeiXinController extends BaseController{
 						UserInfoBean userInfoBean = new UserInfoBean();
 						userInfoBean.setId(userInfo.getId());
 						userInfoBean.setRights(rightString.toString());
+						userInfoBean.setManagerRights(rightString.toString());
 						userInfoService.updateUserById(userInfoBean);
 					}
 				}
