@@ -20,7 +20,6 @@ import java.util.List;
  * @author songlm
  *
  */
-//@Deprecated
 public class WeiXinMemoryCacheHelper {
 
 	// 微信OAuth认证的时候，服务器内存的方式缓存UserOpenId; key=session ，value=UserOpenId
@@ -49,7 +48,7 @@ public class WeiXinMemoryCacheHelper {
 			userOpenInfo.setOpenId(openId);
 			userOpenInfo.setCreateTime(new Date());
 			userOpenInfo.setSessionId(customSession);
-			setOpenid(customSession, userOpenInfo);
+			setSession(customSession, userOpenInfo);
 			return userOpenInfo;
 		}
 		return null;
@@ -63,12 +62,20 @@ public class WeiXinMemoryCacheHelper {
 		return userOpenInfo;
 	}
 
-	public synchronized static void setOpenid(String session, UserOpenInfo userOpenInfo) {
+	public static void clearSession(String session){
+		if (StringUtil.isNotEmpty(session)) {
+			sessionOpenIdMap.removeValue(session);
+		}
+	}
+
+	public synchronized static void setSession(String session, UserOpenInfo userOpenInfo) {
 		if (StringUtil.isNotEmpty(session) && userOpenInfo!=null && StringUtil.isNotEmpty(userOpenInfo.getOpenId())) {
 			System.out.println("放进去……"+session);
 			sessionOpenIdMap.put(session, userOpenInfo);
 		}
 	}
+
+
 
 	/**
 	 * 获取所有在线用户

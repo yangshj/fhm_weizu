@@ -67,4 +67,8 @@ public class TimeOutForCreateDateMap <K,T> extends AbstractMyMap<K, T> implement
 		};
 	}
 
+	@Override
+	public void removeValue(Object key) {
+		super.remove(key);
+	}
 }

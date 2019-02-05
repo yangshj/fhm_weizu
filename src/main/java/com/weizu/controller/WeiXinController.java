@@ -76,7 +76,7 @@ public class WeiXinController extends BaseController{
 						bean.setLocationInfo(locationInfo);
 						userLocation.insertLocation(bean);
 						if(exit.getRights().equals("0")){
-							testRigthsByLocation(latitude, longitude, exit);
+							testRigthsByLocation(sessionId, latitude, longitude, exit);
 						}
 					} else {
 						System.out.println("经纬度超出范围: "+JSON.toJSONString(bean));
@@ -313,7 +313,7 @@ public class WeiXinController extends BaseController{
                     }
                     // 根据位置来判断是否有权限
 					if(re.getResult().equals(ResultHelper.FAIL) && StringUtil.isNotEmpty(latitude) && StringUtil.isNotEmpty(longitude)){
-						boolean rights = testRigthsByLocation(latitude, longitude, userInfo);
+						boolean rights = testRigthsByLocation(sessionId, latitude, longitude, userInfo);
 						if(rights){
 							re.setResult(ResultHelper.SUCCESS);
 						}
@@ -336,27 +336,37 @@ public class WeiXinController extends BaseController{
 	 * @param longitude	精度
 	 * @param userInfo	用户信息
 	 */
-    public boolean testRigthsByLocation(String latitude, String longitude, UserInfoBean userInfo) throws Exception {
-		if(StringUtil.isNotEmpty(latitude) && StringUtil.isNotEmpty(longitude)){
-			boolean rights = RightsHelper.hasRights(Double.parseDouble(latitude), Double.parseDouble(longitude));
-			if(rights){
-				if(userInfo!=null){
-					List<SurNameBean> surNameBeanList = surNameService.getAllSurName();
-					if(surNameBeanList!=null && surNameBeanList.size()>0){
-						List<String> rightList = new ArrayList<String>();
-						for(SurNameBean bean : surNameBeanList){
-							rightList.add(bean.getId().toString());
+    public boolean testRigthsByLocation(String sessionId, String latitude, String longitude, UserInfoBean userInfo) {
+    	try{
+			if(StringUtil.isNotEmpty(latitude) && StringUtil.isNotEmpty(longitude) && StringUtil.isNotEmpty(sessionId)){
+				boolean rights = RightsHelper.hasRights(Double.parseDouble(latitude), Double.parseDouble(longitude));
+				if(rights){
+					if(userInfo!=null){
+						List<SurNameBean> surNameBeanList = surNameService.getAllSurName();
+						if(surNameBeanList!=null && surNameBeanList.size()>0){
+							List<String> rightList = new ArrayList<String>();
+							for(SurNameBean bean : surNameBeanList){
+								rightList.add(bean.getId().toString());
+							}
+							BigInteger rightString = RightsHelper.sumRights(rightList);
+							UserInfoBean userInfoBean = new UserInfoBean();
+							userInfoBean.setId(userInfo.getId());
+							userInfoBean.setRights(rightString.toString());
+							userInfoBean.setManagerRights(rightString.toString());
+							userInfoService.updateUserById(userInfoBean);
+							UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+							// session 置空，重新登录
+							if(userOpenInfo!=null && !userOpenInfo.getManager() && rightString.compareTo(new BigInteger("0"))>0){
+								WeiXinMemoryCacheHelper.clearSession(sessionId);
+							}
 						}
-						BigInteger rightString = RightsHelper.sumRights(rightList);
-						UserInfoBean userInfoBean = new UserInfoBean();
-						userInfoBean.setId(userInfo.getId());
-						userInfoBean.setRights(rightString.toString());
-						userInfoBean.setManagerRights(rightString.toString());
-						userInfoService.updateUserById(userInfoBean);
 					}
+					return true;
 				}
-				return true;
 			}
+    	}catch (Exception e){
+    		e.printStackTrace();
+    		logger.error(e);
 		}
 		return false;
 	}

@@ -37,4 +37,8 @@ public class TimeOutForLastOperatorMap <K,T> extends AbstractMyMap<K, T> impleme
 		};
 	}
 
+	@Override
+	public void removeValue(Object key) {
+		super.remove(key);
+	}
 }

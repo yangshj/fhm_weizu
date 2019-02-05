@@ -37,4 +37,7 @@ public interface ITimeOutMap<K,V> extends Map<K, V>, ITimeOut,IFixedMaxSize{
 		void timeOut(K key, V value);
 	}
 
+	public void removeValue(Object key);
+
+
 }
