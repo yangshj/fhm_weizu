@@ -331,7 +331,7 @@ public class WeiXinController extends BaseController{
     }
 
 	/**
-	 * 通过位置判断是否有权限
+	 * 通过位置判断是否有权限，在西玉曹的自动获取权限
 	 * @param latitude	维度
 	 * @param longitude	精度
 	 * @param userInfo	用户信息

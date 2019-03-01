@@ -89,23 +89,23 @@ public class RightsHelper {
 
 	/**
 	 * 根据经纬度判断是否有权限
-	 * 114.465908,36.387993  东
-	 * 114.443871,36.388321  西
-	 * 114.449085,36.376574  南
-	 * 114.457679,36.396129  北
+	 * 114.469212,36.387543  东
+	 * 114.436865,36.389106  西
+	 * 114.459148,36.368149  南
+	 * 114.457636,36.398847  北
 	 * @return
 	 */
 	public static boolean hasRights(Double latitude, Double longitude){
 		// 在此经纬度范围内，则有权限
-		if(longitude>114.443871 && longitude<114.465908 && latitude>36.376574 && latitude<36.396129){
+		if(longitude>114.436865 && longitude<114.469212 && latitude>36.368149 && latitude<36.398847){
 			return true;
 		}
 		return false;
 	}
 
 	public static void main(String[] args) {
-		double la = 36.384894;
-		double lon = 114.461342;
+		double la = 36.395255;
+		double lon = 114.457722;
 		boolean right = hasRights(la,lon);
 		System.out.println("right: "+right);
 	}
