@@ -4,7 +4,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.util.Const;
 import com.fh.util.PageData;
-import com.weizu.service.AddressLookAuthService;
+import com.weizu.service.addressLockk.AddressLookAuthService;
 import com.weizu.util.StringUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;

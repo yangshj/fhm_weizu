@@ -14,12 +14,13 @@
 		<typeAlias type="com.fh.entity.system.Role" alias="Role"/>
 		<typeAlias type="com.fh.entity.system.Menu" alias="Menu"/>
 		<typeAlias type="com.fh.util.PageData" alias="pd"/>
-		<typeAlias type="com.weizu.pojo.UserInfoBean" alias="userInfoBean"/>
-		<typeAlias type="com.weizu.pojo.WeiZuLocationBean" alias="weiZuLocationBean"/>
-		<typeAlias type="com.weizu.pojo.UserLocationMarkerBean" alias="userLocationMarkerBean"/>
-		<typeAlias type="com.weizu.pojo.AddressLookBean" alias="addressLookBean"/>
-		<typeAlias type="com.weizu.pojo.SurNameBean" alias="surNameBean"/>
-		<typeAlias type="com.weizu.pojo.AddressLookAuthRequestBean" alias="addressLookAuthRequestBean"/>
+		<typeAlias type="com.weizu.pojo.addressBook.UserInfoBean" alias="userInfoBean"/>
+		<typeAlias type="com.weizu.pojo.addressBook.WeiZuLocationBean" alias="weiZuLocationBean"/>
+		<typeAlias type="com.weizu.pojo.addressBook.UserLocationMarkerBean" alias="userLocationMarkerBean"/>
+		<typeAlias type="com.weizu.pojo.addressBook.AddressLookBean" alias="addressLookBean"/>
+		<typeAlias type="com.weizu.pojo.addressBook.SurNameBean" alias="surNameBean"/>
+		<typeAlias type="com.weizu.pojo.addressBook.AddressLookAuthRequestBean" alias="addressLookAuthRequestBean"/>
+		<typeAlias type="com.weizu.pojo.oa.TeamBean" alias="teamBean"/>
 
 		<!-- 分页 -->
 		<typeAlias type="com.fh.entity.Page" alias="Page"/>

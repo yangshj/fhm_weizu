@@ -27,17 +27,15 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.system.Menu;
-import com.fh.entity.system.Role;
 import com.fh.util.Const;
-import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
 import com.fh.util.RightsHelper;
 import com.fh.util.Tools;
-import com.weizu.pojo.SurNameBean;
-import com.weizu.pojo.UserInfoBean;
-import com.weizu.service.AddressLookService;
-import com.weizu.service.SurNameService;
-import com.weizu.service.UserInfoService;
+import com.weizu.pojo.addressBook.SurNameBean;
+import com.weizu.pojo.addressBook.UserInfoBean;
+import com.weizu.service.addressLockk.AddressLookService;
+import com.weizu.service.addressLockk.SurNameService;
+import com.weizu.service.addressLockk.UserInfoService;
 import com.weizu.util.StringUtil;
 
 @Controller

@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.weizu.pojo.SurNameBean;
-import com.weizu.service.SurNameService;
+import com.weizu.pojo.addressBook.SurNameBean;
+import com.weizu.service.addressLockk.SurNameService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -23,15 +23,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.alibaba.fastjson.JSON;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.util.AppUtil;
 import com.fh.util.Const;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
-import com.weizu.pojo.AddressLookBean;
-import com.weizu.service.AddressLookService;
+import com.weizu.pojo.addressBook.AddressLookBean;
+import com.weizu.service.addressLockk.AddressLookService;
 
 @Controller
 @RequestMapping(value="/weizu/addressLook")
