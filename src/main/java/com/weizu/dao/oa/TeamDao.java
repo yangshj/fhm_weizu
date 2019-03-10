@@ -1,6 +1,7 @@
 package com.weizu.dao.oa;
 
 import com.weizu.pojo.addressBook.AddressLookBean;
+import com.weizu.pojo.oa.EmployeeTeamBean;
 import com.weizu.pojo.oa.TeamBean;
 
 import java.util.List;
@@ -24,4 +25,7 @@ public interface TeamDao {
 
     /** 获取所有团队 */
     List<TeamBean> getAllTeam() throws Exception;
+
+    /** 获取用户所属的所有团队 */
+    List<TeamBean> getAllTeamByEmployeeId(EmployeeTeamBean bean) throws Exception;
 }

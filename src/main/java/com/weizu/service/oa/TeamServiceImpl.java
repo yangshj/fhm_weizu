@@ -1,6 +1,7 @@
 package com.weizu.service.oa;
 
 import com.weizu.dao.oa.TeamDao;
+import com.weizu.pojo.oa.EmployeeTeamBean;
 import com.weizu.pojo.oa.TeamBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,5 +42,12 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public List<TeamBean> getAllTeam() throws Exception {
         return teamDao.getAllTeam();
+    }
+
+    @Override
+    public List<TeamBean> getAllTeamByEmployeeId(Long employeeId) throws Exception {
+        EmployeeTeamBean teamBean = new EmployeeTeamBean();
+        teamBean.setEmployeeId(employeeId);
+        return teamDao.getAllTeamByEmployeeId(teamBean);
     }
 }

@@ -3,10 +3,7 @@
 <mapper namespace="com.weizu.oa.employee">
 
     <!-- 新增-->
-    <insert id="insertEmployee" parameterType="employeeBean">
-        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
-            SELECT LAST_INSERT_ID() AS id
-        </selectKey>
+    <insert id="insertEmployee" parameterType="employeeBean" useGeneratedKeys="true" keyProperty="id">
         insert into weizu_oa_employee(
         user_id,
         name,
@@ -16,7 +13,7 @@
         create_time,
         modify_time
         ) values (
-        #{user_id},
+        #{userId},
         #{name},
         #{nickName},
         #{mobile},
@@ -27,12 +24,12 @@
     </insert>
 
     <!-- 删除-->
-    <delete id="deleteTeam" >
+    <delete id="deleteEmployee" >
 		delete from weizu_oa_employee where id = #{id}
 	</delete>
 
     <!-- 修改 -->
-    <update id="updateTeam" parameterType="employeeBean">
+    <update id="updateEmployee" parameterType="employeeBean">
 		update  weizu_oa_employee
 			set modify_time=now(),
 				name = #{name},
@@ -44,8 +41,8 @@
 				id = #{id}
 	</update>
 
-    <!-- 查找通讯录  -->
-    <select id="findTeamById" resultType="employeeBean" parameterType="employeeBean">
+    <!-- 查找员工  -->
+    <select id="findEmployeeById" resultType="employeeBean" parameterType="employeeBean">
         select
         t.id,
         t.name as name,
@@ -61,10 +58,13 @@
         <if test="name != null">
             and name = #{name}
         </if>
+        <if test="userId != null">
+            and user_id = #{userId}
+        </if>
     </select>
 
-    <!-- 查找通讯录  -->
-    <select id="findTeamByCondition" resultType="employeeBean" parameterType="employeeBean">
+    <!-- 查找员工  -->
+    <select id="findEmployeeByCondition" resultType="employeeBean" parameterType="employeeBean">
         select
         t.id,
         t.name as name,
@@ -74,15 +74,17 @@
         t.user_id as userId,
         t.create_time as createTime,
         t.modify_time as modifyTime
-        from weizu_oa_employee as t
         from weizu_oa_employee as t where 1=1
         <if test="name != null">
             and t.name = #{name}
         </if>
+        <if test="userId != null">
+            and t.user_id = #{userId}
+        </if>
     </select>
 
-    <!-- 获取所有通讯录信息 -->
-    <select id="getAllTeam" resultType="employeeBean">
+    <!-- 获取所有员工信息 -->
+    <select id="getAllEmployee" resultType="employeeBean">
 		select
 		   t.id,
             t.name as name,

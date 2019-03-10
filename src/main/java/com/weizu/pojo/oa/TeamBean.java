@@ -33,6 +33,8 @@ public class TeamBean implements Serializable {
     private Date createTime;
     /** 修改时间 */
     private Date modifyTime;
+    /** 是否选中--不对应数据库 */
+    private Integer checked;
 
     public Long getId() {
         return id;
@@ -99,5 +101,11 @@ public class TeamBean implements Serializable {
     }
     public void setTeamInfo(String teamInfo) {
         this.teamInfo = teamInfo;
+    }
+    public Integer getChecked() {
+        return checked;
+    }
+    public void setChecked(Integer checked) {
+        this.checked = checked;
     }
 }

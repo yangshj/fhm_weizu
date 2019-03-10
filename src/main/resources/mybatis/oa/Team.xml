@@ -96,6 +96,30 @@
     </select>
 
     <!-- 获取所有通讯录信息 -->
+    <select id="getAllTeamByEmployeeId" parameterType="employeeTeamBean" resultType="teamBean">
+		select
+		    t.id,
+            t.name as name,
+            t.invitation_code as invitationCode,
+            t.team_info as teamInfo,
+            t.address as address,
+            t.latitude as latitude,
+            t.longitude as longitude,
+            t.contact as contact,
+            t.contact_phone contactPhone,
+            t.create_time as createTime,
+            t.modify_time as modifyTime,
+            et.checked as checked
+		from weizu_oa_team as t
+		left join weizu_oa_employee_team et on t.id=et.team_id
+		where 1=1
+        <if test="employeeId != null">
+            and et.employee_id = #{employeeId}
+        </if>
+	</select>
+
+
+    <!-- 获取所有通讯录信息 -->
     <select id="getAllTeam" resultType="teamBean">
 		select
 		    t.id,

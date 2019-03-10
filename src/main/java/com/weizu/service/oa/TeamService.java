@@ -23,4 +23,7 @@ public interface TeamService {
 
     /** 获取所有团队 */
     List<TeamBean> getAllTeam() throws Exception;
+
+    /** 获取用户所属的所有团队 */
+    List<TeamBean> getAllTeamByEmployeeId(Long employeeId) throws Exception;
 }
