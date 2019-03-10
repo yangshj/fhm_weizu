@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weizu.oa.employee">
+
+    <!-- 新增-->
+    <insert id="insertEmployee" parameterType="employeeBean">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        insert into weizu_oa_employee(
+        user_id,
+        name,
+        nick_name,
+        mobile,
+        remark,
+        create_time,
+        modify_time
+        ) values (
+        #{user_id},
+        #{name},
+        #{nickName},
+        #{mobile},
+        #{remark},
+        now(),
+        now()
+        )
+    </insert>
+
+    <!-- 删除-->
+    <delete id="deleteTeam" >
+		delete from weizu_oa_employee where id = #{id}
+	</delete>
+
+    <!-- 修改 -->
+    <update id="updateTeam" parameterType="employeeBean">
+		update  weizu_oa_employee
+			set modify_time=now(),
+				name = #{name},
+				nick_name = #{nickName},
+				latitude = #{latitude},
+				mobile = #{ mobile},
+				remark = #{remark}
+			where
+				id = #{id}
+	</update>
+
+    <!-- 查找通讯录  -->
+    <select id="findTeamById" resultType="employeeBean" parameterType="employeeBean">
+        select
+        t.id,
+        t.name as name,
+        t.nick_name as nickName,
+        t.mobile as mobile,
+        t.remark as remark,
+        t.user_id as userId,
+        t.create_time as createTime,
+        t.modify_time as modifyTime
+        from weizu_oa_employee as t
+        where
+        id = #{id}
+        <if test="name != null">
+            and name = #{name}
+        </if>
+    </select>
+
+    <!-- 查找通讯录  -->
+    <select id="findTeamByCondition" resultType="employeeBean" parameterType="employeeBean">
+        select
+        t.id,
+        t.name as name,
+        t.nick_name as nickName,
+        t.mobile as mobile,
+        t.remark as remark,
+        t.user_id as userId,
+        t.create_time as createTime,
+        t.modify_time as modifyTime
+        from weizu_oa_employee as t
+        from weizu_oa_employee as t where 1=1
+        <if test="name != null">
+            and t.name = #{name}
+        </if>
+    </select>
+
+    <!-- 获取所有通讯录信息 -->
+    <select id="getAllTeam" resultType="employeeBean">
+		select
+		   t.id,
+            t.name as name,
+            t.nick_name as nickName,
+            t.mobile as mobile,
+            t.remark as remark,
+            t.user_id as userId,
+            t.create_time as createTime,
+            t.modify_time as modifyTime
+		from weizu_oa_employee as t
+	</select>
+
+    <!-- 列表后台查询页面 -->
+    <select id="getAllTeamlistPage" parameterType="page" resultType="pd">
+        select
+            t.id,
+            t.name as name,
+            t.nick_name as nickName,
+            t.mobile as mobile,
+            t.remark as remark,
+            t.user_id as userId,
+            t.create_time as createTime,
+            t.modify_time as modifyTime
+        from weizu_oa_employee
+        <if test="pd.name != null and pd.name != ''"><!-- 用户名检索 -->
+            and t.name LIKE CONCAT(CONCAT('%', #{pd.name}),'%')
+        </if>
+        <if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 到期时间检索 -->
+            and t.create_time &gt;= #{pd.lastLoginStart}
+        </if>
+        <if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
+            and t.create_time &lt;= #{pd.lastLoginEnd}
+        </if>
+    </select>
+
+</mapper>

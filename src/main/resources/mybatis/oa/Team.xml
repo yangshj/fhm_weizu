@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.weizu.oa.team.">
+<mapper namespace="com.weizu.oa.team">
 
     <!-- 新增-->
-    <insert id="insertTeam" parameterType="teamBean">
-        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
-            SELECT LAST_INSERT_ID() AS id
-        </selectKey>
+    <insert id="insertTeam" parameterType="teamBean" useGeneratedKeys="true" keyProperty="id">
         insert into weizu_oa_team(
-        id,
-        name,
-        invitation_code,
-        describe,
-        address,
-        latitude,
-        longitude,
-        create_time,
-        modify_time
+            name,
+            invitation_code,
+            team_info,
+            address,
+            latitude,
+            longitude,
+            contact,
+            contact_phone,
+            create_time,
+            modify_time
         ) values (
-        #{id},
-        #{name},
-        #{invitationCode},
-        #{describe},
-        #{latitude},
-        #{longitude},
-        now(),
-        now()
+            #{name},
+            #{invitationCode},
+            #{teamInfo},
+            #{address},
+            #{latitude},
+            #{longitude},
+            #{contact},
+            #{contactPhone},
+            now(),
+            now()
         )
+        <!--<selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">-->
+            <!--SELECT LAST_INSERT_ID()-->
+        <!--</selectKey>-->
     </insert>
 
     <!-- 删除-->
@@ -40,10 +43,12 @@
 			set modify_time=now(),
 				name = #{name},
 				invitation_code = #{invitationCode},
-				describe = #{describe},
+				team_info = #{teamInfo},
 				address = #{address},
 				latitude = #{latitude},
-				longitude = #{ longitude}
+				longitude = #{ longitude},
+				contact = #{contact},
+				contact_phone = #{contactPhone}
 			where
 				id = #{id}
 	</update>
@@ -54,11 +59,12 @@
         t.id,
         t.name as name,
         t.invitation_code as invitationCode,
-        t.describe as describe,
-        t.surname_id as surnameId,
+        t.team_info as teamInfo,
         t.address as address,
         t.latitude as latitude,
         t.longitude as longitude,
+        t.contact as contact,
+        t.contact_phone contactPhone,
         t.create_time as createTime,
         t.modify_time as modifyTime
         from weizu_oa_team as t
@@ -75,11 +81,12 @@
         t.id,
         t.name as name,
         t.invitation_code as invitationCode,
-        t.describe as describe,
-        t.surname_id as surnameId,
+        t.team_info as teamInfo,
         t.address as address,
         t.latitude as latitude,
         t.longitude as longitude,
+        t.contact as contact,
+        t.contact_phone contactPhone,
         t.create_time as createTime,
         t.modify_time as modifyTime
         from weizu_oa_team as t where 1=1
@@ -94,11 +101,12 @@
 		    t.id,
             t.name as name,
             t.invitation_code as invitationCode,
-            t.describe as describe,
-            t.surname_id as surnameId,
+            t.team_info as teamInfo,
             t.address as address,
             t.latitude as latitude,
             t.longitude as longitude,
+            t.contact as contact,
+            t.contact_phone contactPhone,
             t.create_time as createTime,
             t.modify_time as modifyTime
 		from weizu_oa_team as t
@@ -110,11 +118,12 @@
             t.id,
             t.name as name,
             t.invitation_code as invitationCode,
-            t.describe as describe,
-            t.surname_id as surnameId,
+            t.team_info as teamInfo,
             t.address as address,
             t.latitude as latitude,
             t.longitude as longitude,
+            t.contact as contact,
+            t.contact_phone contactPhone,
             t.create_time as createTime,
             t.modify_time as modifyTime
         from weizu_oa_team

@@ -1,6 +1,4 @@
-package com.weizu.dao.oa;
-
-import com.weizu.pojo.oa.TeamBean;
+package com.weizu.pojo.oa;
 
 import java.util.List;
 

@@ -18,13 +18,17 @@ public class TeamBean implements Serializable {
     /** 邀请码 */
     private String  invitationCode;
     /** 团队描述 */
-    private String describe;
+    private String teamInfo;
     /** 地址 */
     private String address;
     /** 维度 */
     private Double latitude;
     /** 精度 */
     private Double longitude;
+    /** 联系人 */
+    private String contact;
+    /** 联系电话 */
+    private String contactPhone;
     /** 创建时间 */
     private Date createTime;
     /** 修改时间 */
@@ -47,12 +51,6 @@ public class TeamBean implements Serializable {
     }
     public void setInvitationCode(String invitationCode) {
         this.invitationCode = invitationCode;
-    }
-    public String getDescribe() {
-        return describe;
-    }
-    public void setDescribe(String describe) {
-        this.describe = describe;
     }
     public String getAddress() {
         return address;
@@ -83,5 +81,23 @@ public class TeamBean implements Serializable {
     }
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+    public String getContact() {
+        return contact;
+    }
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+    public String getContactPhone() {
+        return contactPhone;
+    }
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+    }
+    public String getTeamInfo() {
+        return teamInfo;
+    }
+    public void setTeamInfo(String teamInfo) {
+        this.teamInfo = teamInfo;
     }
 }
