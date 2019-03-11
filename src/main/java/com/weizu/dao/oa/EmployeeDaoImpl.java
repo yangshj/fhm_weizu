@@ -2,6 +2,9 @@ package com.weizu.dao.oa;
 
 import com.fh.dao.DaoSupport;
 import com.weizu.pojo.oa.EmployeeBean;
+import com.weizu.pojo.oa.EmployeeInfo;
+import com.weizu.pojo.oa.EmployeeTeamBean;
+import com.weizu.pojo.oa.TeamBean;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -38,5 +41,10 @@ public class EmployeeDaoImpl extends DaoSupport implements EmployeeDao {
     @Override
     public List<EmployeeBean> getAllEmployee() throws Exception {
         return (List<EmployeeBean>) this.findForList("com.weizu.oa.employee.getAllEmployee",null);
+    }
+
+    @Override
+    public List<EmployeeInfo> getEmployeeInfoByTeam(EmployeeTeamBean bean) throws Exception {
+        return (List<EmployeeInfo>) this.findForList("com.weizu.oa.employee.getEmployeeInfoByTeam",bean);
     }
 }

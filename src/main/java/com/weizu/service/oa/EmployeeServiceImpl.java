@@ -3,6 +3,9 @@ package com.weizu.service.oa;
 import com.weizu.dao.oa.EmployeeDao;
 import com.weizu.dao.oa.TeamDao;
 import com.weizu.pojo.oa.EmployeeBean;
+import com.weizu.pojo.oa.EmployeeInfo;
+import com.weizu.pojo.oa.EmployeeTeamBean;
+import com.weizu.pojo.oa.TeamBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,5 +45,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeBean> getAllEmployee() throws Exception {
         return employeeDao.getAllEmployee();
+    }
+
+    @Override
+    public List<EmployeeInfo> getEmployeeInfoByTeam(EmployeeTeamBean bean) throws Exception {
+        return employeeDao.getEmployeeInfoByTeam(bean);
     }
 }

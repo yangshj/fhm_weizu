@@ -97,6 +97,23 @@
 		from weizu_oa_employee as t
 	</select>
 
+
+    <!-- 获取所有员工信息 -->
+    <select id="getEmployeeInfoByTeam" resultType="employeeInfo" parameterType="employeeTeamBean">
+		select
+		    t.id as employeeId,
+            t.name as userName,
+            t.nick_name as nickName,
+            t.mobile as mobile,
+            t.remark as remark,
+            t.user_id as userId,
+            wu.avatar_url as headImage
+		from weizu_oa_employee as t
+		inner join weizu_oa_employee_team as et on t.id = et.employee_id
+		left join weizu_user as wu on t.user_id = wu.id
+		where et.team_id = #{teamId}
+	</select>
+
     <!-- 列表后台查询页面 -->
     <select id="getAllTeamlistPage" parameterType="page" resultType="pd">
         select

@@ -249,4 +249,162 @@ public class WeiXinOAController extends BaseController {
             writer.flush();
         }
     }
+
+    // 邀请新人加入团队
+    @RequestMapping(value="/joinTeam")
+    public void joinTeam(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        BaseRE re = new BaseRE();
+        try{
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String teamId = request.getParameter("teamId");
+            String invitationCode = request.getParameter("invitationCode");
+            String userName = request.getParameter("userName");
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                TeamBean queryTeam = new TeamBean();
+                queryTeam.setId(Long.parseLong(teamId));
+                // 校验邀请码
+                TeamBean teamBean = teamService.findTeamById(queryTeam);
+                if(teamBean!=null){
+                    if(!teamBean.getInvitationCode().equals(invitationCode)){
+                        re.setMsg("邀请码错误");
+                        return;
+                    }
+                } else {
+                    return;
+                }
+                UserInfoBean userInfoBean = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+                EmployeeBean query = new EmployeeBean();
+                query.setUserId(userInfoBean.getId());
+                List<EmployeeBean> employeeBeanList =  employeeService.findEmployeeByCondition(query);
+                Long employeeId = null;
+                // 用户已经存在
+                if(employeeBeanList!=null && employeeBeanList.size()>0){
+                    employeeId = employeeBeanList.get(0).getId();
+                    EmployeeTeamBean bean = new EmployeeTeamBean();
+                    bean.setTeamId(Long.parseLong(teamId));
+                    bean.setEmployeeId(employeeId);
+                    List<EmployeeTeamBean> exits = employeeTeamService.findEmployeeTeamByCondition(bean);
+                    if(exits!=null && exits.size()>0){
+                        re.setMsg("已经加入该团队");
+                        return;
+                    }
+                }
+                // 创建用户
+                else {
+                    EmployeeBean bean = new EmployeeBean();
+                    bean.setUserId(userInfoBean.getId());
+                    bean.setName(userName);
+                    bean.setNickName(userInfoBean.getNickName());
+                    employeeService.insertEmployee(bean);
+                    employeeId = bean.getId();
+                }
+                // 加入团队
+                EmployeeTeamBean bean = new EmployeeTeamBean();
+                bean.setEmployeeId(employeeId);
+                List<EmployeeTeamBean> exits = employeeTeamService.findEmployeeTeamByCondition(bean);
+                EmployeeTeamBean join = new EmployeeTeamBean();
+                join.setTeamId(Long.parseLong(teamId));
+                join.setEmployeeId(employeeId);
+                // 第一次加入团队，默认选中
+                if(exits!=null && exits.size()>0){
+                    join.setChecked(0);
+                } else {
+                    join.setChecked(1);
+                }
+                employeeTeamService.insertEmployeeTeam(join);
+                re.setResult(ResultHelper.SUCCESS);
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+        }catch(Exception e){
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        } finally {
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }
+    }
+
+    /**
+     * 是否已经加入团队
+     * success: 未加入
+     * false: 已经加入
+     */
+    @RequestMapping(value="/alreadyJoinTeam")
+    public void alreadyJoinTeam(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        BaseRE re = new BaseRE();
+        try{
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String teamId = request.getParameter("teamId");
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                UserInfoBean userInfoBean = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+                EmployeeBean query = new EmployeeBean();
+                query.setUserId(userInfoBean.getId());
+                List<EmployeeBean> employeeBeanList =  employeeService.findEmployeeByCondition(query);
+                Long employeeId = null;
+                // 用户已经存在
+                if(employeeBeanList!=null && employeeBeanList.size()>0){
+                    employeeId = employeeBeanList.get(0).getId();
+                    EmployeeTeamBean bean = new EmployeeTeamBean();
+                    bean.setTeamId(Long.parseLong(teamId));
+                    bean.setEmployeeId(employeeId);
+                    List<EmployeeTeamBean> exits = employeeTeamService.findEmployeeTeamByCondition(bean);
+                    if(exits!=null && exits.size()>0){
+                        // 已经加入该团队
+                        return;
+                    }
+                }
+                re.setResult(ResultHelper.SUCCESS);
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+        }catch(Exception e){
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        } finally {
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }
+    }
+
+    // 获取团队下的员工列表
+    @RequestMapping(value="/getEmployeeListByTeam")
+    public void getEmployeeListByTeam(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        GetEmployeeListByTeamRE re = new GetEmployeeListByTeamRE();
+        try{
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String teamId = request.getParameter("teamId");
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                EmployeeTeamBean query = new EmployeeTeamBean();
+                query.setTeamId(Long.parseLong(teamId));
+                List<EmployeeInfo> employeeBeanList =  employeeService.getEmployeeInfoByTeam(query);
+                re.setListData(employeeBeanList);
+                re.setResult(ResultHelper.SUCCESS);
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+        }catch(Exception e){
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        } finally {
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }
+    }
+
 }

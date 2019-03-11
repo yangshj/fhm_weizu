@@ -23,6 +23,7 @@
 		<typeAlias type="com.weizu.pojo.oa.TeamBean" alias="teamBean"/>
 		<typeAlias type="com.weizu.pojo.oa.EmployeeBean" alias="employeeBean"/>
 		<typeAlias type="com.weizu.pojo.oa.EmployeeTeamBean" alias="employeeTeamBean"/>
+		<typeAlias type="com.weizu.pojo.oa.EmployeeInfo" alias="employeeInfo"/>
 
 
 		<!-- 分页 -->

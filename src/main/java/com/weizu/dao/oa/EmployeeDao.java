@@ -1,6 +1,9 @@
 package com.weizu.dao.oa;
 
 import com.weizu.pojo.oa.EmployeeBean;
+import com.weizu.pojo.oa.EmployeeInfo;
+import com.weizu.pojo.oa.EmployeeTeamBean;
+import com.weizu.pojo.oa.TeamBean;
 
 import java.util.List;
 
@@ -23,4 +26,7 @@ public interface EmployeeDao {
 
     /** 获取所有员工 */
     List<EmployeeBean> getAllEmployee() throws Exception;
+
+    /** 获取团队下的员工列表 */
+    List<EmployeeInfo> getEmployeeInfoByTeam(EmployeeTeamBean bean) throws Exception;
 }
