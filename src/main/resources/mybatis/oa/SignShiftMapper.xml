@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weizu.oa.signShift">
+
+    <!-- 新增-->
+    <insert id="insertSignShift" parameterType="signShiftBean" useGeneratedKeys="true" keyProperty="id">
+        insert into weizu_oa_sign_shift(
+            name,
+            team_id,
+            start_time,
+            work_hour,
+            end_time,
+            start_limit,
+            end_limit,
+            create_time
+        ) values (
+            #{name},
+            #{teamId},
+            #{startTime},
+            #{workHour},
+            #{endTime},
+            #{startLimit},
+            #{endLimit},
+            now()
+        )
+    </insert>
+
+    <!-- 删除-->
+    <delete id="deleteSignShift" >
+		delete from weizu_oa_sign_shift where id = #{id}
+	</delete>
+
+    <!-- 修改 -->
+    <update id="updateSignShift" parameterType="signShiftBean">
+		update  weizu_oa_sign_shift
+			set modify_time=now(),
+			    name = #{name},
+				team_id = #{teamId},
+				start_time = #{startTime},
+				work_hour = #{workHour},
+				end_time = #{endTime},
+				start_limit = #{startLimit},
+				end_limit = #{endLimit},
+				modify_time = #{modifyTime}
+			where
+				id = #{id}
+	</update>
+
+    <!-- 查找  -->
+    <select id="findSignShiftById" resultType="signShiftBean" parameterType="signShiftBean">
+        select
+            t.id,
+            t.name as name,
+            t.team_id as teamId,
+            t.start_time as startTime,
+            t.work_hour as workHour,
+            t.end_time as endTime,
+            t.start_limit as startLimit,
+            t.end_limit as endLimit,
+            t.create_time as createTime,
+            t.modify_time as modifyTime
+        from weizu_oa_sign_shift as t where id = #{id}
+    </select>
+
+    <!-- 查找  -->
+    <select id="findSignShiftByCondition" resultType="signShiftBean" parameterType="signShiftBean">
+        select
+            t.id,
+            t.name as name,
+            t.team_id as teamId,
+            t.start_time as startTime,
+            t.work_hour as workHour,
+            t.end_time as endTime,
+            t.start_limit as startLimit,
+            t.end_limit as endLimit,
+            t.create_time as createTime,
+            t.modify_time as modifyTime
+        from weizu_oa_sign_shift as t where 1=1
+        <if test="employeeId != null">
+            and employee_id = #{employeeId}
+        </if>
+        <if test="teamId != null">
+            and team_id = #{teamId}
+        </if>
+    </select>
+
+
+    <!-- 列表后台查询页面 -->
+    <select id="getAllSignShiftlistPage" parameterType="page" resultType="pd">
+        select
+        t.id,
+        t.name as name,
+        t.team_id as teamId,
+        t.start_time as startTime,
+        t.work_hour as workHour,
+        t.end_time as endTime,
+        t.start_limit as startLimit,
+        t.end_limit as endLimit,
+        t.create_time as createTime,
+        t.modify_time as modifyTime
+        from weizu_oa_sign_shift as t where 1=1
+        <if test="pd.name != null and pd.name != ''"><!-- 用户名检索 -->
+            and t.name LIKE CONCAT(CONCAT('%', #{pd.name}),'%')
+        </if>
+        <if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 到期时间检索 -->
+            and t.create_time &gt;= #{pd.lastLoginStart}
+        </if>
+        <if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
+            and t.create_time &lt;= #{pd.lastLoginEnd}
+        </if>
+    </select>
+
+</mapper>

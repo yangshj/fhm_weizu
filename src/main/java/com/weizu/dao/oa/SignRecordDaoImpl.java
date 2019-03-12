@@ -8,28 +8,29 @@ import java.util.List;
 
 @Repository("signRecordDaoImpl")
 public class SignRecordDaoImpl extends DaoSupport implements SignRecordDao {
+
     @Override
     public SignRecordBean findSignRecordById(SignRecordBean bean) throws Exception {
-        return null;
+        return (SignRecordBean) this.findForObject("com.weizu.oa.signRecord.findSignRecordById", bean);
     }
 
     @Override
     public List<SignRecordBean> findSignRecordByCondition(SignRecordBean bean) throws Exception {
-        return null;
+        return (List<SignRecordBean>) this.findForList("com.weizu.oa.signRecord.findSignRecordByCondition", bean);
     }
 
     @Override
     public Integer insertSignRecord(SignRecordBean bean) throws Exception {
-        return null;
+        return (Integer) this.save("com.weizu.oa.signRecord.insertSignRecord", bean);
     }
 
     @Override
     public Integer updateSignRecord(SignRecordBean bean) throws Exception {
-        return null;
+        return (Integer) this.update("com.weizu.oa.signRecord.updateSignRecord", bean);
     }
 
     @Override
     public void deleteSignRecord(SignRecordBean bean) throws Exception {
-
+        this.delete("com.weizu.oa.signRecord.deleteSignRecord", bean);
     }
 }

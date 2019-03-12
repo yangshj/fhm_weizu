@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weizu.oa.signScheme">
+
+    <!-- 新增-->
+    <insert id="insertSignScheme" parameterType="signSchemeBean" useGeneratedKeys="true" keyProperty="id">
+        insert into weizu_oa_sign_scheme(
+            name,
+            team_id,
+            latitude,
+            longitude,
+            sign_address,
+            distance_limit,
+            monday,
+            tuesday,
+            wednesday,
+            thursday,
+            friday,
+            saturday,
+            sunday,
+            create_time
+        ) values (
+            #{name},
+            #{teamId},
+            #{latitude},
+            #{longitude},
+            #{signAddress},
+            #{distanceLimit},
+            #{monday},
+            #{tuesday},
+            #{wednesday},
+            #{thursday},
+            #{friday},
+            #{saturday},
+            #{sunday},
+            now()
+        )
+    </insert>
+
+    <!-- 删除-->
+    <delete id="deleteSignScheme" >
+		delete from weizu_oa_sign_scheme where id = #{id}
+	</delete>
+
+    <!-- 修改 -->
+    <update id="updateSignScheme" parameterType="signSchemeBean">
+		update  weizu_oa_sign_scheme
+			set modify_time=now(),
+			    name = #{name},
+				latitude = #{latitude},
+				longitude = #{longitude},
+				sign_address = #{signAddress},
+				distance_limit = #{distanceLimit},
+				monday = #{monday},
+				tuesday = #{tuesday},
+				wednesday = #{wednesday},
+				thursday = #{thursday},
+				friday = #{friday},
+				saturday = #{saturday},
+				sunday = #{sunday}
+			where
+				id = #{id}
+	</update>
+
+    <!-- 查找  -->
+    <select id="findSignSchemeById" resultType="signSchemeBean" parameterType="signSchemeBean">
+        select
+        t.id,
+        t.name as name,
+        t.team_id as teamId,
+        t.latitude as latitude,
+        t.longitude as longitude,
+        t.sign_address as signAddress,
+        t.distance_limit as distanceLimit,
+        t.monday as monday,
+        t.tuesday as tuesday,
+        t.wednesday as wednesday,
+        t.thursday as thursday,
+        t.friday as friday,
+        t.saturday as saturday,
+        t.sunday as sunday,
+        t.create_time as createTime,
+        t.modify_time as modify_time
+        from weizu_oa_sign_scheme as t where id = #{id}
+    </select>
+
+    <!-- 查找  -->
+    <select id="findSignSchemeByCondition" resultType="signSchemeBean" parameterType="signSchemeBean">
+        select
+        t.id,
+        t.name as name,
+        t.team_id as teamId,
+        t.latitude as latitude,
+        t.longitude as longitude,
+        t.sign_address as signAddress,
+        t.distance_limit as distanceLimit,
+        t.monday as monday,
+        t.tuesday as tuesday,
+        t.wednesday as wednesday,
+        t.thursday as thursday,
+        t.friday as friday,
+        t.saturday as saturday,
+        t.sunday as sunday,
+        t.create_time as createTime,
+        t.modify_time as modify_time
+        from weizu_oa_sign_scheme as t where 1=1
+        <if test="employeeId != null">
+            and employee_id = #{employeeId}
+        </if>
+        <if test="teamId != null">
+            and team_id = #{teamId}
+        </if>
+    </select>
+
+
+    <!-- 列表后台查询页面 -->
+    <select id="getAllSignSchemelistPage" parameterType="page" resultType="pd">
+        select
+        t.id,
+        t.name as name,
+        t.team_id as teamId,
+        t.latitude as latitude,
+        t.longitude as longitude,
+        t.sign_address as signAddress,
+        t.distance_limit as distanceLimit,
+        t.monday as monday,
+        t.tuesday as tuesday,
+        t.wednesday as wednesday,
+        t.thursday as thursday,
+        t.friday as friday,
+        t.saturday as saturday,
+        t.sunday as sunday,
+        t.create_time as createTime,
+        t.modify_time as modify_time
+        from weizu_oa_sign_scheme as t where 1=1
+        <if test="pd.name != null and pd.name != ''"><!-- 用户名检索 -->
+            and t.name LIKE CONCAT(CONCAT('%', #{pd.name}),'%')
+        </if>
+        <if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 到期时间检索 -->
+            and t.create_time &gt;= #{pd.lastLoginStart}
+        </if>
+        <if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
+            and t.create_time &lt;= #{pd.lastLoginEnd}
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weizu.oa.signRecord">
+
+    <!-- 新增-->
+    <insert id="insertSignRecord" parameterType="signRecordBean" useGeneratedKeys="true" keyProperty="id">
+        insert into weizu_oa_sign_record(
+            employee_id,
+            team_id,
+            latitude,
+            longitude,
+            location_info,
+            sign_type,
+            sign_result,
+            create_time
+        ) values (
+            #{employeeId},
+            #{teamId},
+            #{latitude},
+            #{longitude},
+            #{locationInfo},
+            #{signType},
+            #{signResult},
+            now()
+        )
+    </insert>
+
+    <!-- 删除-->
+    <delete id="deleteSignRecord" >
+		delete from weizu_oa_sign_record where id = #{id}
+	</delete>
+
+    <!-- 修改 -->
+    <update id="updateSignRecord" parameterType="signRecordBean">
+		update  weizu_oa_sign_record
+			set modify_time=now(),
+				latitude = #{latitude},
+				longitude = #{longitude},
+				location_info = #{locationInfo},
+				sign_type = #{signType},
+				sign_result = #{signResult}
+			where
+				id = #{id}
+	</update>
+
+    <!-- 查找  -->
+    <select id="findSignRecordById" resultType="signRecordBean" parameterType="signRecordBean">
+        select
+        t.id,
+        t.employee_id as employeeId,
+        t.team_id as teamId,
+        t.latitude as latitude,
+        t.longitude as longitude,
+        t.location_info as locationInfo,
+        t.sign_type as signType,
+        t.sign_result as signResult,
+        t.create_time as createTime
+        from weizu_oa_sign_record as t
+        where
+        id = #{id}
+
+    </select>
+
+    <!-- 查找  -->
+    <select id="findSignRecordByCondition" resultType="signRecordBean" parameterType="signRecordBean">
+        select
+        t.id,
+        t.employee_id as employeeId,
+        t.team_id as teamId,
+        t.latitude as latitude,
+        t.longitude as longitude,
+        t.location_info as locationInfo,
+        t.sign_type as signType,
+        t.sign_result as signResult,
+        t.create_time as createTime
+        from weizu_oa_sign_record as t where 1=1
+        <if test="employeeId != null">
+            and employee_id = #{employeeId}
+        </if>
+        <if test="teamId != null">
+            and team_id = #{teamId}
+        </if>
+    </select>
+
+
+    <!-- 列表后台查询页面 -->
+    <select id="getAllSignRecordlistPage" parameterType="page" resultType="pd">
+        select
+        t.id,
+        t.employee_id as employeeId,
+        t.team_id as teamId,
+        t.latitude as latitude,
+        t.longitude as longitude,
+        t.location_info as locationInfo,
+        t.sign_type as signType,
+        t.sign_result as signResult,
+        t.create_time as createTime
+        from weizu_oa_sign_record as t where 1=1
+        <if test="pd.name != null and pd.name != ''"><!-- 用户名检索 -->
+            and t.location_info LIKE CONCAT(CONCAT('%', #{pd.name}),'%')
+        </if>
+        <if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 到期时间检索 -->
+            and t.create_time &gt;= #{pd.lastLoginStart}
+        </if>
+        <if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
+            and t.create_time &lt;= #{pd.lastLoginEnd}
+        </if>
+    </select>
+
+</mapper>
