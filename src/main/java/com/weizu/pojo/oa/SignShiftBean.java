@@ -22,7 +22,7 @@ public class SignShiftBean implements Serializable {
     /** 下班时间 */
     private Date endTime;
     /** 工作时长 */
-    private Date workHour;
+    private Integer workHour;
     /** 上班打卡限制 */
     private Date startLimit;
     /** 下班打卡限制 */
@@ -63,10 +63,10 @@ public class SignShiftBean implements Serializable {
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
-    public Date getWorkHour() {
+    public Integer getWorkHour() {
         return workHour;
     }
-    public void setWorkHour(Date workHour) {
+    public void setWorkHour(Integer workHour) {
         this.workHour = workHour;
     }
     public Date getStartLimit() {

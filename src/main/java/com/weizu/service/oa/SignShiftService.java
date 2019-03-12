@@ -20,4 +20,7 @@ public interface SignShiftService {
 
     /** 删除签到班次 */
     void deleteSignShift(SignShiftBean bean) throws Exception;
+
+    /** 删除团队下的所有签到班次 */
+    void deleteByTeamId(Long teamId) throws Exception;
 }

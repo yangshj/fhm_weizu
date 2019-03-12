@@ -33,4 +33,9 @@ public class SignShiftDaoImpl extends DaoSupport implements SignShiftDao {
     public void deleteSignShift(SignShiftBean bean) throws Exception {
         this.delete("com.weizu.oa.signShift.deleteSignShift", bean);
     }
+
+    @Override
+    public void deleteByTeamId(Long teamId) throws Exception {
+        this.delete("com.weizu.oa.signShift.deleteSignShiftByTeamId", teamId);
+    }
 }

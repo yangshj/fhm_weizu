@@ -37,4 +37,9 @@ public class SignSchemeServiceImpl implements SignSchemeService {
     public void deleteSignScheme(SignSchemeBean bean) throws Exception {
         signSchemeDao.deleteSignScheme(bean);
     }
+
+    @Override
+    public void deleteByTeamId(Long teamId) throws Exception {
+        signSchemeDao.deleteByTeamId(teamId);
+    }
 }

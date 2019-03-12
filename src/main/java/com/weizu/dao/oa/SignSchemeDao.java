@@ -20,4 +20,7 @@ public interface SignSchemeDao {
 
     /** 删除签到方案 */
     void deleteSignScheme(SignSchemeBean bean) throws Exception;
+
+    /** 删除团队下的所有签到方案 */
+    void deleteByTeamId(Long teamId) throws Exception;
 }

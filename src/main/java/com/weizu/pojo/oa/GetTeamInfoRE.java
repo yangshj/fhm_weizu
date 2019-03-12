@@ -1,6 +1,6 @@
 package com.weizu.pojo.oa;
 
-public class GetTeamInfo extends BaseRE {
+public class GetTeamInfoRE extends BaseRE {
 
     private TeamBean teamBean;
 

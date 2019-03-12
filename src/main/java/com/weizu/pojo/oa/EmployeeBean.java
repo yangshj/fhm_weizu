@@ -21,6 +21,8 @@ public class EmployeeBean implements Serializable {
     private String name;
     /** 电话 */
     private String mobile;
+    /** 管理员权限 */
+    private String managerRights;
     /** 备注 */
     private String remark;
     /** 创建时间 */
@@ -76,5 +78,11 @@ public class EmployeeBean implements Serializable {
     }
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+    public String getManagerRights() {
+        return managerRights;
+    }
+    public void setManagerRights(String managerRights) {
+        this.managerRights = managerRights;
     }
 }

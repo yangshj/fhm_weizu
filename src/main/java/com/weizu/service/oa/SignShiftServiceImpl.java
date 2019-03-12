@@ -37,4 +37,9 @@ public class SignShiftServiceImpl implements SignShiftService {
     public void deleteSignShift(SignShiftBean bean) throws Exception {
         signShiftDao.deleteSignShift(bean);
     }
+
+    @Override
+    public void deleteByTeamId(Long teamId) throws Exception {
+        signShiftDao.deleteByTeamId(teamId);
+    }
 }

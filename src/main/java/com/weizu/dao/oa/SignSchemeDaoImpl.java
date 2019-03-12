@@ -33,4 +33,9 @@ public class SignSchemeDaoImpl extends DaoSupport implements SignSchemeDao {
     public void deleteSignScheme(SignSchemeBean bean) throws Exception {
         this.delete("com.weizu.oa.signScheme.deleteSignScheme", bean);
     }
+
+    @Override
+    public void deleteByTeamId(Long teamId) throws Exception {
+        this.delete("com.weizu.oa.signScheme.deleteSignSchemeByTeamId", teamId);
+    }
 }

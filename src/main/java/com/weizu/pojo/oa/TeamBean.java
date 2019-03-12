@@ -29,6 +29,8 @@ public class TeamBean implements Serializable {
     private String contact;
     /** 联系电话 */
     private String contactPhone;
+    /** 创建人 */
+    private Long createEmp;
     /** 创建时间 */
     private Date createTime;
     /** 修改时间 */
@@ -107,5 +109,11 @@ public class TeamBean implements Serializable {
     }
     public void setChecked(Integer checked) {
         this.checked = checked;
+    }
+    public Long getCreateEmp() {
+        return createEmp;
+    }
+    public void setCreateEmp(Long createEmp) {
+        this.createEmp = createEmp;
     }
 }

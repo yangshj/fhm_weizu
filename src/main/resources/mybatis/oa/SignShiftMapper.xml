@@ -30,6 +30,11 @@
 		delete from weizu_oa_sign_shift where id = #{id}
 	</delete>
 
+    <!-- 删除-->
+    <delete id="deleteSignShiftByTeamId" >
+		delete from weizu_oa_sign_shift where team_id = #{teamId}
+	</delete>
+
     <!-- 修改 -->
     <update id="updateSignShift" parameterType="signShiftBean">
 		update  weizu_oa_sign_shift
@@ -76,9 +81,6 @@
             t.create_time as createTime,
             t.modify_time as modifyTime
         from weizu_oa_sign_shift as t where 1=1
-        <if test="employeeId != null">
-            and employee_id = #{employeeId}
-        </if>
         <if test="teamId != null">
             and team_id = #{teamId}
         </if>

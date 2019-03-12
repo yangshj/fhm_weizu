@@ -3,6 +3,7 @@ package com.weizu.helper;
 import com.fh.util.Tools;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,6 +41,12 @@ public class RightsHelper {
 		for(int i=0; i<rights.size(); i++){
 			num = num.setBit(Integer.parseInt(rights.get(i)));
 		}
+		return num;
+	}
+
+	public static BigInteger getRights(int rights){
+		BigInteger num = new BigInteger("0");
+		num = num.setBit(rights);
 		return num;
 	}
 	
@@ -104,9 +111,9 @@ public class RightsHelper {
 	}
 
 	public static void main(String[] args) {
-		double la = 36.395255;
-		double lon = 114.457722;
-		boolean right = hasRights(la,lon);
-		System.out.println("right: "+right);
+		String t = getRights(29).toString();
+		System.out.println("t: "+t);
+//		List<String> list = new ArrayList<String>();
+//		list.add
 	}
 }

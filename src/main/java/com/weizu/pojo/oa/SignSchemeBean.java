@@ -25,6 +25,8 @@ public class SignSchemeBean implements Serializable {
     private Long teamId;
     /** 距离限制 */
     private Integer distanceLimit;
+    /** 是否选中 */
+    private Integer checked;
     /** 星期一 */
     private Long monday;
     /** 星期二*/
@@ -139,5 +141,11 @@ public class SignSchemeBean implements Serializable {
     }
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+    public Integer getChecked() {
+        return checked;
+    }
+    public void setChecked(Integer checked) {
+        this.checked = checked;
     }
 }

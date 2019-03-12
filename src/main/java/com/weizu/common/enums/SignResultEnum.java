@@ -18,31 +18,26 @@ public enum SignResultEnum {
     }
 
     public static SignResultEnum getEnumByIndex(Integer index) {
-        SignResultEnum[] arr$ = values();
-        int len$ = arr$.length;
-
-        for(int i$ = 0; i$ < len$; ++i$) {
-            SignResultEnum itemEnum = arr$[i$];
+        SignResultEnum[] arr = values();
+        int len = arr.length;
+        for(int i = 0; i < len; ++i) {
+            SignResultEnum itemEnum = arr[i];
             if (itemEnum.getIndex().equals(index)) {
                 return itemEnum;
             }
         }
-
         return null;
     }
 
     public Integer getIndex() {
         return this.index;
     }
-
     public void setIndex(Integer index) {
         this.index = index;
     }
-
     public String getDesc() {
         return this.desc;
     }
-
     public void setDesc(String desc) {
         this.desc = desc;
     }
