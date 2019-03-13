@@ -54,7 +54,9 @@
 		update  weizu_oa_sign_scheme
 			set modify_time=now(),
 			    name = #{name},
-			    checked = #{checked},
+                <if test="checked != null">
+                    checked = #{checked},
+                </if>
 				latitude = #{latitude},
 				longitude = #{longitude},
 				sign_address = #{signAddress},
@@ -69,6 +71,21 @@
 			where
 				id = #{id}
 	</update>
+
+
+    <!-- 修改 -->
+    <update id="batchUpdateCheckedByCondition" parameterType="signSchemeBean">
+        update  weizu_oa_sign_scheme
+        set modify_time=now(),
+        checked = #{checked}
+        where 1=1
+        <if test="teamId != null">
+            and team_id = #{teamId}
+        </if>
+        <if test="id != null">
+            and id = #{id}
+        </if>
+    </update>
 
     <!-- 查找  -->
     <select id="findSignSchemeById" resultType="signSchemeBean" parameterType="signSchemeBean">

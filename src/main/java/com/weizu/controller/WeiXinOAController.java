@@ -113,22 +113,21 @@ public class WeiXinOAController extends BaseController {
                     }
                     employeeTeamService.insertEmployeeTeam(employeeTeamBean);
                     // 第一次自动创建打卡班次
-                    SimpleDateFormat format = new SimpleDateFormat("HH:mm");
                     // 正常上班
                     SignShiftBean work = new SignShiftBean();
                     work.setTeamId(teamId);
                     work.setName("正常上班");
-                    work.setStartTime(format.parse("09:00"));
+                    work.setStartTime("09:00");
                     work.setWorkHour(9);
-                    work.setEndTime(format.parse("18:00"));
+                    work.setEndTime("18:00");
                     signShiftService.insertSignShift(work);
                     // 休息
                     SignShiftBean rest = new SignShiftBean();
                     rest.setTeamId(teamId);
                     rest.setName("休息");
-                    rest.setStartTime(format.parse("00:00"));
+                    rest.setStartTime("00:00");
                     rest.setWorkHour(0);
-                    rest.setEndTime(format.parse("00:00"));
+                    rest.setEndTime("00:00");
                     signShiftService.insertSignShift(rest);
                     // 第一次自动创建打卡方案
                     SignSchemeBean signScheme = new SignSchemeBean();
@@ -164,6 +163,131 @@ public class WeiXinOAController extends BaseController {
         }
         return JSON.toJSONString(re);
     }
+
+    @RequestMapping(value="/createOrEditScheme")
+    @ResponseBody
+    public void createOrEditScheme(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        CreateOrEditTeamRE re = new CreateOrEditTeamRE();
+        try {
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String teamId = request.getParameter("teamId");
+            String id = request.getParameter("id");
+            String name = request.getParameter("name");
+            String distanceLimit = request.getParameter("distanceLimit");
+            String signAddress = request.getParameter("signAddress");
+            String latitude = request.getParameter("latitude");
+            String longitude = request.getParameter("longitude");
+            String monday = request.getParameter("monday");
+            String tuesday = request.getParameter("tuesday");
+            String wednesday = request.getParameter("wednesday");
+            String thursday = request.getParameter("thursday");
+            String friday = request.getParameter("friday");
+            String saturday = request.getParameter("saturday");
+            String sunday = request.getParameter("sunday");
+            if(teamId==null){
+                re.setResult(ResultHelper.FAIL);
+                re.setMsg("尚未选择团队");
+                return;
+            }
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                UserInfoBean userInfoBean = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+                SignSchemeBean bean = new SignSchemeBean();
+                bean.setName(name);
+                bean.setTeamId(Long.parseLong(teamId));
+                bean.setDistanceLimit(Integer.parseInt(distanceLimit));
+                bean.setSignAddress(signAddress);
+                bean.setLatitude(Double.parseDouble(latitude));
+                bean.setLongitude(Double.parseDouble(longitude));
+                bean.setMonday(Long.parseLong(monday));
+                bean.setTuesday(Long.parseLong(tuesday));
+                bean.setWednesday(Long.parseLong(wednesday));
+                bean.setThursday(Long.parseLong(thursday));
+                bean.setFriday(Long.parseLong(friday));
+                bean.setSaturday(Long.parseLong(saturday));
+                bean.setSunday(Long.parseLong(sunday));
+                // 创建
+                if(StringUtil.isEmpty(id)){
+                    signSchemeService.insertSignScheme(bean);
+                }
+                // 修改
+                else {
+                    bean.setId(Long.parseLong(id));
+                    signSchemeService.updateSignScheme(bean);
+                }
+                re.setResult(ResultHelper.SUCCESS);
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+            System.out.println("成功……");
+        } catch (Exception e) {
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        } finally {
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }
+    }
+
+    @RequestMapping(value="/createOrEditShifts")
+    @ResponseBody
+    public void createOrEditShifts(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        CreateOrEditTeamRE re = new CreateOrEditTeamRE();
+        try {
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String teamId = request.getParameter("teamId");
+            String id = request.getParameter("id");
+            String name = request.getParameter("name");
+            String startTime = request.getParameter("startTime");
+            String endTime = request.getParameter("endTime");
+            String workHour = request.getParameter("workHour");
+            String startLimit = request.getParameter("startLimit");
+            String endLimit = request.getParameter("endLimit");
+            if(teamId==null){
+                re.setResult(ResultHelper.FAIL);
+                re.setMsg("尚未选择团队");
+                return;
+            }
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                UserInfoBean userInfoBean = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+                SignShiftBean bean = new SignShiftBean();
+                bean.setName(name);
+                bean.setTeamId(Long.parseLong(teamId));
+                bean.setStartTime(startTime);
+                bean.setEndTime(endTime);
+                bean.setWorkHour(Integer.parseInt(workHour));
+                // 创建
+                if(StringUtil.isEmpty(id)){
+                    signShiftService.insertSignShift(bean);
+                }
+                // 修改
+                else {
+                    bean.setId(Long.parseLong(id));
+                    signShiftService.updateSignShift(bean);
+                }
+                re.setResult(ResultHelper.SUCCESS);
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+            System.out.println("成功……");
+        } catch (Exception e) {
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        } finally {
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }
+    }
+
 
     @RequestMapping(value="/getTeamInfo")
     @ResponseBody
@@ -227,9 +351,44 @@ public class WeiXinOAController extends BaseController {
 
     }
 
-    @RequestMapping(value="/getSignShifts")
+    @RequestMapping(value="/getShiftsInfo")
     @ResponseBody
-    public void getSignShifts(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void getShiftsInfo(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        GetShiftsInfoRE re = new GetShiftsInfoRE();
+        try {
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String id = request.getParameter("id");
+            if(StringUtil.isEmpty(id)){
+                re.setMsg("缺少id");
+                return;
+            }
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                SignShiftBean query = new SignShiftBean();
+                query.setId(Long.parseLong(id));
+                re.setSignShiftBean(signShiftService.findSignShiftById(query));
+                re.setResult(ResultHelper.SUCCESS);
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+            System.out.println("成功……");
+        } catch (Exception e) {
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        } finally {
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }
+
+    }
+
+    @RequestMapping(value="/getSignShiftsByTeamId")
+    @ResponseBody
+    public void getSignShiftsByTeamId(HttpServletRequest request, HttpServletResponse response) throws IOException {
         GetSignShiftsRE re = new GetSignShiftsRE();
         try {
             response.setContentType("text/json;charset=UTF-8");
@@ -289,6 +448,65 @@ public class WeiXinOAController extends BaseController {
                     signShiftService.deleteByTeamId(teamId);
                 }
                 re.setResult(ResultHelper.SUCCESS);
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+            System.out.println("成功……");
+        } catch (Exception e) {
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        }
+        return JSON.toJSONString(re);
+    }
+
+    @RequestMapping(value="/deleteScheme")
+    @ResponseBody
+    public String deleteScheme(HttpServletRequest request, HttpServletResponse response){
+        BaseRE re = new BaseRE();
+        try {
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String id = request.getParameter("id");
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                if(StringUtil.isNotEmpty(id)){
+                    SignSchemeBean bean = new SignSchemeBean();
+                    bean.setId(Long.parseLong(id));
+                    signSchemeService.deleteSignScheme(bean);
+                    re.setResult(ResultHelper.SUCCESS);
+                }
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+            System.out.println("成功……");
+        } catch (Exception e) {
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        }
+        return JSON.toJSONString(re);
+    }
+
+
+    @RequestMapping(value="/deleteShifts")
+    @ResponseBody
+    public String deleteShifts(HttpServletRequest request, HttpServletResponse response){
+        BaseRE re = new BaseRE();
+        try {
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String id = request.getParameter("id");
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                if(StringUtil.isNotEmpty(id)){
+                    SignShiftBean bean = new SignShiftBean();
+                    bean.setId(Long.parseLong(id));
+                    signShiftService.deleteSignShift(bean);
+                    re.setResult(ResultHelper.SUCCESS);
+                }
             } else {
                 re.setResult(ResultHelper.SESSION_INVALID);
             }
@@ -366,6 +584,35 @@ public class WeiXinOAController extends BaseController {
         }
     }
 
+    @RequestMapping(value="/getAllShifts")
+    public void getAllShifts(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        GetAllShiftsRE re = new GetAllShiftsRE();
+        try{
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String teamId = request.getParameter("teamId");
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                SignShiftBean query = new SignShiftBean();
+                query.setTeamId(Long.parseLong(teamId));
+                List<SignShiftBean> list = signShiftService.findSignShiftByCondition(query);
+                re.setListData(list);
+                re.setResult(ResultHelper.SUCCESS);
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+        }catch(Exception e){
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        } finally {
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }
+    }
+
     @RequestMapping(value="/switchTeam")
     public void switchTeam(HttpServletRequest request, HttpServletResponse response) throws IOException {
         BaseRE re = new BaseRE();
@@ -393,6 +640,47 @@ public class WeiXinOAController extends BaseController {
                     re.setResult(ResultHelper.SUCCESS);
                 }
 
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+        }catch(Exception e){
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        } finally {
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }
+    }
+
+    @RequestMapping(value="/switchScheme")
+    public void switchScheme(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        BaseRE re = new BaseRE();
+        try{
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String schemeId = request.getParameter("schemeId");
+            String teamId = request.getParameter("teamId");
+            if(StringUtil.isEmpty(teamId) || StringUtil.isEmpty(schemeId)){
+                return;
+            }
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                UserInfoBean userInfoBean = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+                EmployeeBean query = new EmployeeBean();
+                query.setUserId(userInfoBean.getId());
+                SignSchemeBean bean = new SignSchemeBean();
+                bean.setTeamId(Long.parseLong(teamId));
+                bean.setChecked(0);
+                // 全部取消选中
+                signSchemeService.batchUpdateCheckedByCondition(bean);
+                bean.setChecked(1);
+                bean.setId(Long.parseLong(schemeId));
+                // 更新选中
+                signSchemeService.batchUpdateCheckedByCondition(bean);
+                re.setResult(ResultHelper.SUCCESS);
             } else {
                 re.setResult(ResultHelper.SESSION_INVALID);
             }

@@ -23,4 +23,7 @@ public interface SignSchemeService {
 
     /** 删除团队下的所有签到方案 */
     void deleteByTeamId(Long teamId) throws Exception;
+
+    /** 批量更新选中状态 */
+    void batchUpdateCheckedByCondition(SignSchemeBean bean) throws Exception;
 }

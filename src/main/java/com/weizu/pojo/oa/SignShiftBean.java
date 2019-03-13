@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 签到方案
+ * 签到班次
  */
 @Alias("signShiftBean")
 public class SignShiftBean implements Serializable {
@@ -18,9 +18,9 @@ public class SignShiftBean implements Serializable {
     /** 团队id */
     private Long teamId;
     /** 上班时间 */
-    private Date startTime;
+    private String startTime;
     /** 下班时间 */
-    private Date endTime;
+    private String endTime;
     /** 工作时长 */
     private Integer workHour;
     /** 上班打卡限制 */
@@ -51,16 +51,16 @@ public class SignShiftBean implements Serializable {
     public void setTeamId(Long teamId) {
         this.teamId = teamId;
     }
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
     public Integer getWorkHour() {

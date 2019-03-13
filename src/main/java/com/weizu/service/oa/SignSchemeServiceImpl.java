@@ -42,4 +42,9 @@ public class SignSchemeServiceImpl implements SignSchemeService {
     public void deleteByTeamId(Long teamId) throws Exception {
         signSchemeDao.deleteByTeamId(teamId);
     }
+
+    @Override
+    public void batchUpdateCheckedByCondition(SignSchemeBean bean) throws Exception {
+        signSchemeDao.batchUpdateCheckedByCondition(bean);
+    }
 }
