@@ -4,6 +4,7 @@ package com.weizu.controller;
 import com.alibaba.fastjson.JSON;
 import com.fh.controller.base.BaseController;
 import com.weizu.common.enums.CheckedEnum;
+import com.weizu.common.enums.SignTypeEnum;
 import com.weizu.helper.RightsHelper;
 import com.weizu.pojo.addressBook.UserInfoBean;
 import com.weizu.pojo.oa.*;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -919,6 +921,29 @@ public class WeiXinOAController extends BaseController {
             PrintWriter writer = response.getWriter();
             writer.print(JSON.toJSONString(re));
             writer.flush();
+        }
+    }
+
+    // 计算签到结果
+    private void signResult(SignRecordBean bean, SignSchemeBean scheme){
+        // 签到
+        if(bean.getSignType().equals(SignTypeEnum.SIGN_IN.getIndex())){
+//            SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+//            Date begin = df.parse(scheme.get);
+//            Date end = df.parse("22:00");
+//            Calendar nowTime = Calendar.getInstance();
+//            nowTime.setTime(now);
+//            Calendar beginTime = Calendar.getInstance();
+//            beginTime.setTime(begin);
+//            Calendar endTime = Calendar.getInstance();
+//            endTime.setTime(end);
+//            if (nowTime.before(endTime) && nowTime.after(beginTime)) {
+//            } else {
+//            }
+        }
+        // 签退
+        if(bean.getSignType().equals(SignTypeEnum.SIGN_IN.getIndex())){
+
         }
     }
 
