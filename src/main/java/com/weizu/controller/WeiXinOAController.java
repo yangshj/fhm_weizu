@@ -12,6 +12,7 @@ import com.weizu.helper.UserOpenInfo;
 import com.weizu.helper.WeiXinMemoryCacheHelper;
 import com.weizu.service.addressLockk.UserInfoService;
 import com.weizu.service.oa.*;
+import com.weizu.util.DistanceUtil;
 import com.weizu.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -41,6 +43,8 @@ public class WeiXinOAController extends BaseController {
     private SignSchemeService signSchemeService;
     @Autowired
     private SignShiftService signShiftService;
+    @Autowired
+    private SignRecordService signRecordService;
 
     @RequestMapping(value="/createOrEditTeam")
     @ResponseBody
@@ -838,6 +842,73 @@ public class WeiXinOAController extends BaseController {
                 List<EmployeeInfo> employeeBeanList =  employeeService.getEmployeeInfoByTeam(query);
                 re.setListData(employeeBeanList);
                 re.setResult(ResultHelper.SUCCESS);
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+        }catch(Exception e){
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        } finally {
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }
+    }
+
+    // 签到
+    @RequestMapping(value="/signSubmit")
+    public void signSubmit(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        GetEmployeeListByTeamRE re = new GetEmployeeListByTeamRE();
+        try{
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String teamId = request.getParameter("teamId");
+            String signType = request.getParameter("signType");
+            String locationInfo = request.getParameter("locationInfo");
+            String signTime = request.getParameter("signTime");
+            String latitude = request.getParameter("latitude");
+            String longitude = request.getParameter("longitude");
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                // 距离校验
+                SignSchemeBean schemeQuery = new SignSchemeBean();
+                schemeQuery.setChecked(CheckedEnum.CHECKED.getIndex());
+                schemeQuery.setTeamId(Long.parseLong(teamId));
+                List<SignSchemeBean> listScheme = signSchemeService.findSignSchemeByCondition(schemeQuery);
+                if(listScheme==null || listScheme.size()==0){
+                    re.setResult(ResultHelper.FAIL);
+                    re.setMsg("您还没有创建打卡方案哦");
+                    return;
+                }
+                SignSchemeBean scheme = listScheme.get(0);
+                Integer distanceLimit = scheme.getDistanceLimit();
+                Double distance = DistanceUtil.getDistance(Double.parseDouble(longitude), Double.parseDouble(latitude), scheme.getLongitude(), scheme.getLatitude());
+                if(distance.intValue()>distanceLimit){
+                    re.setResult(ResultHelper.FAIL);
+                    re.setMsg("您当前位置无效，超过"+distanceLimit+"米");
+                    return;
+                }
+                UserInfoBean userInfoBean = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+                EmployeeBean query = new EmployeeBean();
+                query.setUserId(userInfoBean.getId());
+                List<EmployeeBean> employeeBeanList =  employeeService.findEmployeeByCondition(query);
+                Long employeeId = null;
+                // 用户已经存在
+                if(employeeBeanList!=null && employeeBeanList.size()>0){
+                    employeeId = employeeBeanList.get(0).getId();
+                    SignRecordBean bean = new SignRecordBean();
+                    bean.setEmployeeId(employeeId);
+                    bean.setSignTime(new Date());
+                    bean.setTeamId(Long.parseLong(teamId));
+                    bean.setSignType(Integer.parseInt(signType));
+                    bean.setLocationInfo(locationInfo);
+                    bean.setLatitude(Double.parseDouble(latitude));
+                    bean.setLongitude(Double.parseDouble(longitude));
+                    signRecordService.insertSignRecord(bean);
+                    re.setResult(ResultHelper.SUCCESS);
+                }
             } else {
                 re.setResult(ResultHelper.SESSION_INVALID);
             }

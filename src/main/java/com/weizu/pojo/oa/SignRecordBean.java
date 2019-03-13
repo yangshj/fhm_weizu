@@ -27,6 +27,8 @@ public class SignRecordBean implements Serializable {
     private Integer signType;
     /** 签到结果 1正常 2迟到 3早退 */
     private Integer signResult;
+    /** 签到时间 */
+    private Date signTime;
     /** 创建时间 */
     private Date createTime;
 
@@ -84,5 +86,11 @@ public class SignRecordBean implements Serializable {
     }
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+    public Date getSignTime() {
+        return signTime;
+    }
+    public void setSignTime(Date signTime) {
+        this.signTime = signTime;
     }
 }

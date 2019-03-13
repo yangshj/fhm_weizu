@@ -12,6 +12,7 @@
             location_info,
             sign_type,
             sign_result,
+            sign_time,
             create_time
         ) values (
             #{employeeId},
@@ -21,6 +22,7 @@
             #{locationInfo},
             #{signType},
             #{signResult},
+            now(),
             now()
         )
     </insert>
@@ -54,6 +56,7 @@
         t.location_info as locationInfo,
         t.sign_type as signType,
         t.sign_result as signResult,
+        t.sign_time as signTime,
         t.create_time as createTime
         from weizu_oa_sign_record as t
         where
@@ -72,6 +75,7 @@
         t.location_info as locationInfo,
         t.sign_type as signType,
         t.sign_result as signResult,
+        t.sign_time as signTime,
         t.create_time as createTime
         from weizu_oa_sign_record as t where 1=1
         <if test="employeeId != null">
@@ -94,6 +98,7 @@
         t.location_info as locationInfo,
         t.sign_type as signType,
         t.sign_result as signResult,
+        t.sign_time as signTime,
         t.create_time as createTime
         from weizu_oa_sign_record as t where 1=1
         <if test="pd.name != null and pd.name != ''"><!-- 用户名检索 -->
