@@ -26,9 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping(value="/weizu/weixin/oa/")
@@ -295,6 +293,65 @@ public class WeiXinOAController extends BaseController {
         }
     }
 
+    @RequestMapping(value="/saveOrEditEmployee")
+    @ResponseBody
+    public void saveOrEditEmployee(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        CreateOrEditTeamRE re = new CreateOrEditTeamRE();
+        try {
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String id = request.getParameter("id");
+            String name = request.getParameter("name");
+            String mobile = request.getParameter("mobile");
+            String email = request.getParameter("email");
+            String sex = request.getParameter("sex");
+            String remark = request.getParameter("remark");
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                EmployeeBean bean = null;
+                if(StringUtil.isNotEmpty(id)){
+                    EmployeeBean query = new EmployeeBean();
+                    query.setId(Long.parseLong(id));
+                    bean = employeeService.findEmployeeById(query);
+                } else {
+                    UserInfoBean userInfoBean = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+                    EmployeeBean query = new EmployeeBean();
+                    query.setUserId(userInfoBean.getId());
+                    List<EmployeeBean> employeeBeanList =  employeeService.findEmployeeByCondition(query);
+                    if(employeeBeanList!=null && employeeBeanList.size()>0){
+                        bean = employeeBeanList.get(0);
+                    } else {
+                        bean = new EmployeeBean();
+                    }
+                    bean.setUserId(userInfoBean.getId());
+                }
+                bean.setName(name);
+                bean.setMobile(mobile);
+                bean.setEmail(email);
+                bean.setSex(Integer.parseInt(sex));
+                bean.setRemark(remark);
+                if(bean.getId()==null){
+                    employeeService.insertEmployee(bean);
+                } else {
+                    employeeService.updateEmployee(bean);
+                }
+                re.setResult(ResultHelper.SUCCESS);
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+            System.out.println("成功……");
+        } catch (Exception e) {
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        } finally {
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }
+    }
+
 
     @RequestMapping(value="/getTeamInfo")
     @ResponseBody
@@ -390,7 +447,47 @@ public class WeiXinOAController extends BaseController {
             writer.print(JSON.toJSONString(re));
             writer.flush();
         }
+    }
 
+    @RequestMapping(value="/getEmployeeInfo")
+    @ResponseBody
+    public void getEmployeeInfo(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        GetEmployeeInfoRE re = new GetEmployeeInfoRE();
+        try {
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String employeeId = request.getParameter("employeeId");
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                if(StringUtil.isNotEmpty(employeeId)){
+                    EmployeeBean query = new EmployeeBean();
+                    query.setId(Long.parseLong(employeeId));
+                    re.setEmployeeBean(employeeService.findEmployeeById(query));
+                    re.setResult(ResultHelper.SUCCESS);
+                } else {
+                    UserInfoBean userInfoBean = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+                    EmployeeBean query = new EmployeeBean();
+                    query.setUserId(userInfoBean.getId());
+                    List<EmployeeBean> employeeBeanList =  employeeService.findEmployeeByCondition(query);
+                    if(employeeBeanList!=null && employeeBeanList.size()>0){
+                        re.setEmployeeBean(employeeBeanList.get(0));
+                    }
+                    re.setResult(ResultHelper.SUCCESS);
+                }
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+            System.out.println("成功……");
+        } catch (Exception e) {
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        } finally {
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }
     }
 
     @RequestMapping(value="/getSignShiftsByTeamId")
@@ -545,8 +642,8 @@ public class WeiXinOAController extends BaseController {
                     Long employeeId = employeeBeanList.get(0).getId();
                     List<TeamBean> list = teamService.getAllTeamByEmployeeId(employeeId);
                     re.setListData(list);
-                    re.setResult(ResultHelper.SUCCESS);
                 }
+                re.setResult(ResultHelper.SUCCESS);
 
             } else {
                 re.setResult(ResultHelper.SESSION_INVALID);
@@ -858,6 +955,88 @@ public class WeiXinOAController extends BaseController {
         }
     }
 
+    // 获取打卡记录
+    @RequestMapping(value="/queryRecord")
+    public void queryRecord(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        QueryRecordRE re = new QueryRecordRE();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try{
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String teamId = request.getParameter("teamId");
+            String startDate = request.getParameter("startDate");
+            String endDate = request.getParameter("endDate");
+            if(StringUtil.isEmpty(teamId)){
+                re.setMsg("缺少teamId");
+                return;
+            }
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                UserInfoBean userInfoBean = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+                EmployeeBean query = new EmployeeBean();
+                query.setUserId(userInfoBean.getId());
+                List<EmployeeBean> employeeBeanList =  employeeService.findEmployeeByCondition(query);
+                if(employeeBeanList!=null && employeeBeanList.size()>0){
+                    Long employeeId = employeeBeanList.get(0).getId();
+                    SignRecordBean signRecordBean = new SignRecordBean();
+                    signRecordBean.setEmployeeId(employeeId);
+                    signRecordBean.setTeamId(Long.parseLong(teamId));
+                    signRecordBean.setQueryStartTime(format.parse(startDate));
+                    signRecordBean.setQueryEndTime(format.parse(endDate));
+                    List<SignRecordBean> signRecordBeanList = signRecordService.findSignRecordByCondition(signRecordBean);
+                    List<SignRecordBean> resultList = new ArrayList<SignRecordBean>();
+                    // 用来去除map
+                    Map<String, SignRecordBean> map = new HashMap<String, SignRecordBean>();
+                    if(signRecordBeanList!=null && signRecordBeanList.size()>0){
+                        for(SignRecordBean bean : signRecordBeanList){
+                            String key = bean.getSignDay() + bean.getSignType();
+                            if(!map.containsKey(key)){
+                                map.put(key, bean);
+                            } else {
+                                SignRecordBean exit =  map.get(key);
+                                // 签到
+                                if(exit.getSignType().equals(SignTypeEnum.SIGN_IN.getIndex())){
+                                    if(exit.getSignTime().getTime()>bean.getSignTime().getTime()){
+                                        map.put(key, bean);
+                                    }
+                                }
+                                // 签退
+                                if(exit.getSignType().equals(SignTypeEnum.SIGN_OUT.getIndex())){
+                                    if(exit.getSignTime().getTime()<bean.getSignTime().getTime()){
+                                        map.put(key, bean);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    format = new SimpleDateFormat("MM-dd HH:mm");
+                    // map转list
+                    Iterator<Map.Entry<String, SignRecordBean>> iter = map.entrySet().iterator();
+                    while (iter.hasNext()) {
+                        Map.Entry<String, SignRecordBean> entry = iter.next();
+                        SignRecordBean signRecordBean1 = entry.getValue();
+                        signRecordBean1.setSignTimeStr(format.format(signRecordBean1.getSignTime()));
+                        resultList.add(signRecordBean1);
+                    }
+                    re.setListData(resultList);
+                }
+                re.setResult(ResultHelper.SUCCESS);
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+        }catch(Exception e){
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        } finally {
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }
+    }
+
+
     // 签到
     @RequestMapping(value="/signSubmit")
     public void signSubmit(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -909,6 +1088,7 @@ public class WeiXinOAController extends BaseController {
                     bean.setTeamId(Long.parseLong(teamId));
                     bean.setSignType(Integer.parseInt(signType));
                     bean.setLocationInfo(locationInfo);
+                    bean.setDistance(distance);
                     bean.setLatitude(Double.parseDouble(latitude));
                     bean.setLongitude(Double.parseDouble(longitude));
                     signResult(bean, scheme); // 计算签到结果
@@ -973,12 +1153,12 @@ public class WeiXinOAController extends BaseController {
                 // 上班时间 小时
                 String startTime = shiftBean.getStartTime();
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                signRecord.setSignDay(format.format(new Date()));
                 String startDate = format.format(signRecord.getSignTime());
                 // 拼装时间
                 String signTime = startDate + " " + startTime + ":00";
                 format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date signDate = format.parse(signTime);
-
                 if(signRecord.getSignTime().getTime() < signDate.getTime()){
                     signRecord.setSignResult(SignResultEnum.NORMAL.getIndex());
                 } else {
@@ -993,12 +1173,12 @@ public class WeiXinOAController extends BaseController {
                 // 下班时间 小时
                 String endTime = shiftBean.getEndTime();
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                signRecord.setSignDay(format.format(new Date()));
                 String startDate = format.format(signRecord.getSignTime());
                 // 拼装时间
                 String signTime = startDate + " " + endTime + ":00";
                 format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date signDate = format.parse(signTime);
-
                 if(signRecord.getSignTime().getTime() > signDate.getTime()){
                     signRecord.setSignResult(SignResultEnum.NORMAL.getIndex());
                 } else {

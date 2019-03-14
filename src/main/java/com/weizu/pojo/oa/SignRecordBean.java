@@ -21,16 +21,27 @@ public class SignRecordBean implements Serializable {
     private Double latitude;
     /** 精度 */
     private Double longitude;
+    /** 距离 */
+    private Double distance;
     /** 位置信息 */
     private String locationInfo;
     /** 签到类型 1签到 2签退 */
     private Integer signType;
     /** 签到结果 1正常 2迟到 3早退 */
     private Integer signResult;
+    /** 签到天 */
+    private String signDay;
     /** 签到时间 */
     private Date signTime;
     /** 创建时间 */
     private Date createTime;
+
+    /** 查询参数不对应数据库 */
+    private Date queryStartTime;
+    private Date queryEndTime;
+
+    /** 打卡时间对应页面显示  MM-dd HH:mm */
+    private String signTimeStr;
 
 
     public Long getId() {
@@ -92,5 +103,35 @@ public class SignRecordBean implements Serializable {
     }
     public void setSignTime(Date signTime) {
         this.signTime = signTime;
+    }
+    public String getSignDay() {
+        return signDay;
+    }
+    public void setSignDay(String signDay) {
+        this.signDay = signDay;
+    }
+    public Date getQueryStartTime() {
+        return queryStartTime;
+    }
+    public void setQueryStartTime(Date queryStartTime) {
+        this.queryStartTime = queryStartTime;
+    }
+    public Date getQueryEndTime() {
+        return queryEndTime;
+    }
+    public void setQueryEndTime(Date queryEndTime) {
+        this.queryEndTime = queryEndTime;
+    }
+    public String getSignTimeStr() {
+        return signTimeStr;
+    }
+    public void setSignTimeStr(String signTimeStr) {
+        this.signTimeStr = signTimeStr;
+    }
+    public Double getDistance() {
+        return distance;
+    }
+    public void setDistance(Double distance) {
+        this.distance = distance;
     }
 }

@@ -21,6 +21,10 @@ public class EmployeeBean implements Serializable {
     private String name;
     /** 电话 */
     private String mobile;
+    /** 邮箱 */
+    private String email;
+    /** 性别 */
+    private Integer sex;
     /** 管理员权限 */
     private String managerRights;
     /** 备注 */
@@ -84,5 +88,17 @@ public class EmployeeBean implements Serializable {
     }
     public void setManagerRights(String managerRights) {
         this.managerRights = managerRights;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public Integer getSex() {
+        return sex;
+    }
+    public void setSex(Integer sex) {
+        this.sex = sex;
     }
 }
