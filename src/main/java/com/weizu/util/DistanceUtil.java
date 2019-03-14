@@ -32,9 +32,10 @@ public class DistanceUtil {
         return d * Math.PI / 180.0;
     }
 
-    public static void main(String[] args)
-    {
-        System.out.println(DistanceUtil.getDistance(116.322802,40.101448 , 116.322356,40.103246));
+    public static void main(String[] args){
+        double la1 = 39.96961208767361;
+        double lng1 = 116.33464816623264;
+        System.out.println(DistanceUtil.getDistance(lng1,la1 , 116.334885,39.969566));
     }
 
 }

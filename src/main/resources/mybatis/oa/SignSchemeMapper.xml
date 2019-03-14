@@ -134,6 +134,9 @@
         <if test="teamId != null">
             and team_id = #{teamId}
         </if>
+        <if test="checked != null">
+            and checked = #{checked}
+        </if>
     </select>
 
 

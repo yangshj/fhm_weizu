@@ -874,6 +874,7 @@ public class WeiXinOAController extends BaseController {
             String longitude = request.getParameter("longitude");
             UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
             if(userOpenInfo!=null){
+                UserInfoBean userInfoBean = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
                 // 距离校验
                 SignSchemeBean schemeQuery = new SignSchemeBean();
                 schemeQuery.setChecked(CheckedEnum.CHECKED.getIndex());
@@ -886,13 +887,14 @@ public class WeiXinOAController extends BaseController {
                 }
                 SignSchemeBean scheme = listScheme.get(0);
                 Integer distanceLimit = scheme.getDistanceLimit();
+                logger.info(userInfoBean.getNickName()+"签到---"+JSON.toJSONString(scheme));
+                logger.info(userInfoBean.getNickName()+"签到---latitude: "+Double.parseDouble(latitude)+" longitude:"+Double.parseDouble(longitude));
                 Double distance = DistanceUtil.getDistance(Double.parseDouble(longitude), Double.parseDouble(latitude), scheme.getLongitude(), scheme.getLatitude());
                 if(distance.intValue()>distanceLimit){
                     re.setResult(ResultHelper.FAIL);
-                    re.setMsg("您当前位置无效，超过"+distanceLimit+"米");
+                    re.setMsg("位置无效……超过"+distanceLimit+"米, 实际距离:"+distance+"米");
                     return;
                 }
-                UserInfoBean userInfoBean = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
                 EmployeeBean query = new EmployeeBean();
                 query.setUserId(userInfoBean.getId());
                 List<EmployeeBean> employeeBeanList =  employeeService.findEmployeeByCondition(query);
@@ -918,6 +920,7 @@ public class WeiXinOAController extends BaseController {
             re.setResult(ResultHelper.FAIL);
             e.printStackTrace();
         } finally {
+            logger.info(JSON.toJSONString(re));
             PrintWriter writer = response.getWriter();
             writer.print(JSON.toJSONString(re));
             writer.flush();
