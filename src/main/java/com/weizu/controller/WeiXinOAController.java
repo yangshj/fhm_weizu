@@ -988,7 +988,7 @@ public class WeiXinOAController extends BaseController {
 
         }
         // 签退
-        if(signRecord.getSignType().equals(SignTypeEnum.SIGN_IN.getIndex())){
+        if(signRecord.getSignType().equals(SignTypeEnum.SIGN_OUT.getIndex())){
             if(shiftBean!=null){
                 // 下班时间 小时
                 String endTime = shiftBean.getEndTime();
