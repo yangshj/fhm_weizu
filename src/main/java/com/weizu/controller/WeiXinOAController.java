@@ -4,6 +4,7 @@ package com.weizu.controller;
 import com.alibaba.fastjson.JSON;
 import com.fh.controller.base.BaseController;
 import com.weizu.common.enums.CheckedEnum;
+import com.weizu.common.enums.SignResultEnum;
 import com.weizu.common.enums.SignTypeEnum;
 import com.weizu.helper.RightsHelper;
 import com.weizu.pojo.addressBook.UserInfoBean;
@@ -910,6 +911,7 @@ public class WeiXinOAController extends BaseController {
                     bean.setLocationInfo(locationInfo);
                     bean.setLatitude(Double.parseDouble(latitude));
                     bean.setLongitude(Double.parseDouble(longitude));
+                    signResult(bean, scheme); // 计算签到结果
                     signRecordService.insertSignRecord(bean);
                     re.setResult(ResultHelper.SUCCESS);
                 }
@@ -928,26 +930,94 @@ public class WeiXinOAController extends BaseController {
     }
 
     // 计算签到结果
-    private void signResult(SignRecordBean bean, SignSchemeBean scheme){
-        // 签到
-        if(bean.getSignType().equals(SignTypeEnum.SIGN_IN.getIndex())){
-//            SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-//            Date begin = df.parse(scheme.get);
-//            Date end = df.parse("22:00");
-//            Calendar nowTime = Calendar.getInstance();
-//            nowTime.setTime(now);
-//            Calendar beginTime = Calendar.getInstance();
-//            beginTime.setTime(begin);
-//            Calendar endTime = Calendar.getInstance();
-//            endTime.setTime(end);
-//            if (nowTime.before(endTime) && nowTime.after(beginTime)) {
-//            } else {
-//            }
+    private void signResult(SignRecordBean signRecord, SignSchemeBean scheme) throws Exception {
+        SignShiftBean query = new SignShiftBean();
+        List<SignShiftBean> signShiftBeanList = signShiftService.findSignShiftByCondition(query);
+        // 获取星期几
+        Calendar c = Calendar.getInstance();
+        Date today = new Date();
+        c.setTime(today);
+        int weekday = c.get(Calendar.DAY_OF_WEEK);
+        SignShiftBean shiftBean = null;
+        // 周日
+        if(weekday==1){
+            shiftBean = getShift(signShiftBeanList, scheme.getMonday());
         }
-        // 签退
-        if(bean.getSignType().equals(SignTypeEnum.SIGN_IN.getIndex())){
+        // 周一
+        else if(weekday==2){
+            shiftBean = getShift(signShiftBeanList, scheme.getMonday());
+        }
+        // 周二
+        else if(weekday==3){
+            shiftBean = getShift(signShiftBeanList, scheme.getWednesday());
+        }
+        // 周三
+        else if(weekday==4){
+            shiftBean = getShift(signShiftBeanList, scheme.getTuesday());
+        }
+        // 周四
+        else if(weekday==5){
+            shiftBean = getShift(signShiftBeanList, scheme.getThursday());
+        }
+        // 周五
+        else if(weekday==6){
+            shiftBean = getShift(signShiftBeanList, scheme.getFriday());
+        }
+        // 周六
+        else if(weekday==7){
+            shiftBean = getShift(signShiftBeanList, scheme.getSaturday());
+        }
+        // 签到
+        if(signRecord.getSignType().equals(SignTypeEnum.SIGN_IN.getIndex())){
+            if(shiftBean!=null){
+                // 上班时间 小时
+                String startTime = shiftBean.getStartTime();
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                String startDate = format.format(signRecord.getSignTime());
+                // 拼装时间
+                String signTime = startDate + " " + startTime + ":00";
+                format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date signDate = format.parse(signTime);
+
+                if(signRecord.getSignTime().getTime() < signDate.getTime()){
+                    signRecord.setSignResult(SignResultEnum.NORMAL.getIndex());
+                } else {
+                    signRecord.setSignResult(SignResultEnum.LATE.getIndex());
+                }
+            }
 
         }
+        // 签退
+        if(signRecord.getSignType().equals(SignTypeEnum.SIGN_IN.getIndex())){
+            if(shiftBean!=null){
+                // 下班时间 小时
+                String endTime = shiftBean.getEndTime();
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                String startDate = format.format(signRecord.getSignTime());
+                // 拼装时间
+                String signTime = startDate + " " + endTime + ":00";
+                format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date signDate = format.parse(signTime);
+
+                if(signRecord.getSignTime().getTime() > signDate.getTime()){
+                    signRecord.setSignResult(SignResultEnum.NORMAL.getIndex());
+                } else {
+                    signRecord.setSignResult(SignResultEnum.LEAVE_EARLY.getIndex());
+                }
+            }
+
+        }
+    }
+
+    private SignShiftBean getShift(List<SignShiftBean> signShiftBeanList, Long shiftId){
+        if(signShiftBeanList!=null && signShiftBeanList.size()>0){
+            for(SignShiftBean bean : signShiftBeanList){
+                if(bean.getId().equals(shiftId)){
+                    return bean;
+                }
+            }
+        }
+        return null;
     }
 
 }
