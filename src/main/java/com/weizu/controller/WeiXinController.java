@@ -369,6 +369,13 @@ public class WeiXinController extends BaseController{
                                     Boolean hasRights = RightsHelper.testRights(rights, surNameBean.getId().intValue());
                                     if(hasRights){
                                         re.setResult(ResultHelper.SUCCESS);
+										// session 置空，重新登录
+										if(userOpenInfo!=null && !userOpenInfo.getManager() && StringUtil.isNotEmpty(userInfo.getManagerRights())){
+											Boolean hasManagerRights = RightsHelper.testRights(userInfo.getManagerRights(), surNameBean.getId().intValue());
+											if(hasManagerRights){
+												WeiXinMemoryCacheHelper.clearSession(sessionId);
+											}
+										}
                                     }
                                 }
                             }
