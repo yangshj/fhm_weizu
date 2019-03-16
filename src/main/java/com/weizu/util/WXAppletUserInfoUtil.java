@@ -11,6 +11,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
@@ -31,15 +32,15 @@ public class WXAppletUserInfoUtil {
 	 *            调用微信登陆返回的Code
 	 * @return
 	 */
-	public static JSONObject getSessionKeyOropenid(String code) {
+	public static JSONObject getSessionKeyOropenid(WeChatAPPBean weChatAPPBean,String code) {
 		// 微信端登录code值
 		String wxCode = code;
 		ResourceBundle resource = ResourceBundle.getBundle("weixin"); // 读取属性文件
 		String requestUrl = resource.getString("url"); // 请求地址
 														// https://api.weixin.qq.com/sns/jscode2session
 		Map<String, String> requestUrlParam = new HashMap<String, String>();
-		requestUrlParam.put("appid", resource.getString("appId")); // 开发者设置中的appId
-		requestUrlParam.put("secret", resource.getString("appSecret")); // 开发者设置中的appSecret
+		requestUrlParam.put("appid", weChatAPPBean.getAppId()); // 开发者设置中的appId
+		requestUrlParam.put("secret", weChatAPPBean.getAppSecret()); // 开发者设置中的appSecret
 		requestUrlParam.put("js_code", wxCode); // 小程序调用wx.login返回的code
 		requestUrlParam.put("grant_type", "authorization_code"); // 默认参数
 

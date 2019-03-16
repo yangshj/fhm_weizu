@@ -1,8 +1,10 @@
 package com.weizu.helper;
 
+import com.weizu.pojo.oa.BaseRE;
+
 import java.util.Date;
 
-public class UserOpenInfo {
+public class UserOpenInfo extends BaseRE {
 	
 	private String sessionId;
 	private String openId;
@@ -14,6 +16,8 @@ public class UserOpenInfo {
 	private Boolean manager=false;
 	/** 超级管理员 */
 	private Boolean admin = false;
+
+
 
 	public String getSessionId() {
 		return sessionId;

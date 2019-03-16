@@ -5,6 +5,7 @@ import com.fh.util.UuidUtil;
 import com.weizu.core.queue.ITimeOutMap;
 import com.weizu.core.queue.ITimeOutMap.ITimeOutHandler;
 import com.weizu.core.queue.TimeOutForCreateDateMap;
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 import com.weizu.util.StringUtil;
 import com.weizu.util.UUIDUtil;
 import com.weizu.util.WXAppletUserInfoUtil;
@@ -36,9 +37,9 @@ public class WeiXinMemoryCacheHelper {
 	}
 
 	// 处理openid缓存
-	public synchronized static UserOpenInfo getOpenidByCode(String code) {
+	public synchronized static UserOpenInfo getOpenidByCode(WeChatAPPBean weChatAPPBean, String code) {
 		if (StringUtil.isNotEmpty(code)) {
-			JSONObject jsonObject = WXAppletUserInfoUtil.getSessionKeyOropenid(code);
+			JSONObject jsonObject = WXAppletUserInfoUtil.getSessionKeyOropenid(weChatAPPBean, code);
 			String openId = (String)jsonObject.get("openid");
 			String sessionkey = (String)jsonObject.get("session_key");
 			System.out.println("微信返回原始session:"+sessionkey);

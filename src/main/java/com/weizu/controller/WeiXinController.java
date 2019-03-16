@@ -120,6 +120,7 @@ public class WeiXinController extends BaseController{
 	@RequestMapping(value="/getSessionIdAndSaveUserInfo", method = {RequestMethod.POST})
 	@ResponseBody
 	public String getOpenIdAndSaveUserInfo(HttpServletRequest request, HttpServletResponse response){
+		UserOpenInfo userOpenInfo = new UserOpenInfo();
 		String code = request.getParameter("code");
 		String avatarUrl = request.getParameter("avatarUrl");
 		String city = request.getParameter("city");
@@ -136,16 +137,16 @@ public class WeiXinController extends BaseController{
 		String usrString = "code: "+code +" nickName: "+nickName+" avatarUrl: "+avatarUrl;
 		System.out.println(usrString);
         Long start = System.currentTimeMillis();
-		UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidByCode(code);
 		Long end = System.currentTimeMillis();
         System.out.println("获取openId耗时: "+(end-start));
 		try {
 			String appId = request.getParameter("appId");
 			WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
 			if(weChatAPPBean==null){
-				// TODO 待优化
-				return null;
+				userOpenInfo.setResult(ResultHelper.FAIL);
+				return JSON.toJSONString(userOpenInfo);
 			}
+			userOpenInfo = WeiXinMemoryCacheHelper.getOpenidByCode(weChatAPPBean,code);
 			System.out.println("成功……"+userOpenInfo + "usrString: "+usrString);
 			UserInfoBean query = new UserInfoBean();
 			query.setAppId(weChatAPPBean.getId());
