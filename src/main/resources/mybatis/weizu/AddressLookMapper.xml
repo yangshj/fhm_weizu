@@ -15,6 +15,7 @@
 			 office_phone,
 			 surname_id,
 			 remark,
+			 app_id,
 			 create_time,
 			 modify_time
 		) values (
@@ -25,6 +26,7 @@
 			#{officePhone},
 			#{surnameId},
 			#{remark},
+		    #{appId},
 			now(),
 			now()
 		)
@@ -61,6 +63,7 @@
 			bk.head_image as headImage,
 			bk.office_phone as officePhone,
 			bk.remark as remark,
+            bk.app_id as appId,
 			bk.create_time as createTime
 		from weizu_address_book as bk
 		where 
@@ -68,6 +71,9 @@
 		<if test="userName != null">
 			and user_name = #{userName}
 		</if>
+        <if test="appId != null">
+            and bk.app_id = #{appId}
+        </if>
 	</select>
 	
 	<!-- 查找通讯录  -->
@@ -81,6 +87,7 @@
 			bk.head_image as headImage,
 			bk.office_phone as officePhone,
 			bk.remark as remark,
+            bk.app_id as appId,
 			bk.create_time as createTime
 		from weizu_address_book bk left
 		join weizu_surname su on bk.surname_id = su.id
@@ -94,10 +101,13 @@
 		<if test="mobilePhone != null">
 			and bk.mobile_phone = #{mobilePhone}
 		</if>
+        <if test="appId != null">
+            and bk.app_id = #{appId}
+        </if>
 	</select>
 	
 	<!-- 获取所有通讯录信息 -->
-	<select id="getAllAddressLook" resultType="addressLookBean">
+	<select id="getAllAddressLook" resultType="addressLookBean" parameterType="weChatAPPBean">
 		select
 		    bk.id,
 			bk.user_name as userName,
@@ -107,8 +117,9 @@
 			bk.head_image as headImage,
 			bk.office_phone as officePhone,
 			bk.remark as remark,
+			bk.app_id as appId,
 			bk.create_time as createTime
-		from weizu_address_book as bk
+		from weizu_address_book as bk where app_id = #{id}
 	</select>
 	
 	<!-- 列表后台查询页面 -->
@@ -123,6 +134,7 @@
 			bk.head_image as headImage,
 			bk.office_phone as officePhone,
 			bk.remark as remark,
+            bk.app_id as appId,
 			bk.create_time as createTime
 		from weizu_address_book bk left
 		join weizu_surname su on bk.surname_id = su.id
@@ -136,6 +148,9 @@
 		<if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
 			and bk.create_time &lt;= #{pd.lastLoginEnd}
 		</if>
+        <if test="pd.appId!=null and pd.appId!=''"><!-- appId -->
+            and bk.app_id = #{pd.appId}
+        </if>
 	</select>
 	
 </mapper>

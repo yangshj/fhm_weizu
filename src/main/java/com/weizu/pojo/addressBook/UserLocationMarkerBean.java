@@ -24,9 +24,17 @@ public class UserLocationMarkerBean implements Serializable{
     private String name;
     /** 用户头像 */
     private String iconPath;
-    
-    
-    
+	/** 小程序Id */
+	private Long appId;
+
+
+
+	public Long getAppId() {
+		return appId;
+	}
+	public void setAppId(Long appId) {
+		this.appId = appId;
+	}
 	public Long getId() {
 		return id;
 	}

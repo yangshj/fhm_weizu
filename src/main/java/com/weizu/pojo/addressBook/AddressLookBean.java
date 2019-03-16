@@ -31,7 +31,17 @@ public class AddressLookBean  implements Serializable{
 	private String remark;
 	/** 所属姓氏 */
 	private Long surnameId;
-	
+	/** 小程序Id */
+	private Long appId;
+
+
+
+	public Long getAppId() {
+		return appId;
+	}
+	public void setAppId(Long appId) {
+		this.appId = appId;
+	}
 	public Long getId() {
 		return id;
 	}

@@ -18,9 +18,17 @@ public class WeiZuLocationBean implements Serializable{
 	private Double  longitude ;
 	/** 位置信息描述  */
 	private String locationInfo;
-	
-	
-	
+	/** 小程序Id */
+	private Long appId;
+
+
+
+	public Long getAppId() {
+		return appId;
+	}
+	public void setAppId(Long appId) {
+		this.appId = appId;
+	}
 	public Long getUserId() {
 		return userId;
 	}

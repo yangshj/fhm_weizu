@@ -5,6 +5,7 @@ import java.util.List;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 import com.weizu.pojo.addressBook.AddressLookBean;
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 
 public interface AddressLookDao {
 	
@@ -23,7 +24,7 @@ public interface AddressLookDao {
 	void deleteAddressLook(AddressLookBean bean) throws Exception;
 	
 	/** 获取所有通讯录信息 */
-	List<AddressLookBean> getAllAddressLook() throws Exception;
+	List<AddressLookBean> getAllAddressLook(WeChatAPPBean bean) throws Exception;
 	
 	/** 获取所有通讯录信息 */
 	List<PageData> getAllAddressLookListPage(Page page) throws Exception;

@@ -27,6 +27,7 @@
 		<typeAlias type="com.weizu.pojo.oa.SignRecordBean" alias="signRecordBean"/>
 		<typeAlias type="com.weizu.pojo.oa.SignSchemeBean" alias="signSchemeBean"/>
 		<typeAlias type="com.weizu.pojo.oa.SignShiftBean" alias="signShiftBean"/>
+		<typeAlias type="com.weizu.pojo.addressBook.WeChatAPPBean" alias="weChatAPPBean"/>
 
 		<!-- 分页 -->
 		<typeAlias type="com.fh.entity.Page" alias="Page"/>

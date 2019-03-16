@@ -9,6 +9,7 @@
 			 request_info,
 			 surname,
 			 status,
+			 app_id,
 			 create_time
 		) values (
 			#{userId},
@@ -16,6 +17,7 @@
 			#{requestInfo},
 			#{surname},
 			0,
+			#{appId},
 			now()
 		)
 	</insert>
@@ -31,6 +33,7 @@
         request.request_info as requestInfo,
         us.avatar_url as avatarUrl,
         request.status as status,
+        request.app_id as appId,
         request.create_time as createTime
         from weizu_address_book_request request
         left join weizu_user us on request.user_id = us.id
@@ -43,6 +46,9 @@
         </if>
         <if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
             and request.create_time &lt;= #{pd.lastLoginEnd}
+        </if>
+        <if test="pd.appId!=null and pd.appId!=''"><!-- appId -->
+            and request.app_id = #{pd.appId}
         </if>
         order by request.create_time desc
     </select>

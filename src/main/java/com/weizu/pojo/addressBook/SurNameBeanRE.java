@@ -1,8 +1,10 @@
 package com.weizu.pojo.addressBook;
 
+import com.weizu.pojo.oa.BaseRE;
+
 import java.util.List;
 
-public class SurNameBeanRE {
+public class SurNameBeanRE extends BaseRE{
 
     /** success/fail */
     private String result;

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weizu.weChatApp">
+
+    <!-- 获取小程序 -->
+    <select id="getAllWeChatApp" resultType="weChatAPPBean">
+        select
+        id,
+        name as name,
+        app_id as appId,
+        app_secret as appSecret,
+        create_time as createTime
+        from weizu_wechat_app order by id
+    </select>
+
+
+</mapper>

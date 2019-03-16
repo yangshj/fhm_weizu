@@ -45,7 +45,17 @@ public class SignSchemeBean implements Serializable {
     private Date createTime;
     /** 修改时间 */
     private Date modifyTime;
+    /** 小程序Id */
+    private Long appId;
 
+
+
+    public Long getAppId() {
+        return appId;
+    }
+    public void setAppId(Long appId) {
+        this.appId = appId;
+    }
     public Long getId() {
         return id;
     }

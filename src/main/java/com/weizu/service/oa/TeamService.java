@@ -1,5 +1,6 @@
 package com.weizu.service.oa;
 
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 import com.weizu.pojo.oa.TeamBean;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public interface TeamService {
     void deleteTeam(TeamBean bean) throws Exception;
 
     /** 获取所有团队 */
-    List<TeamBean> getAllTeam() throws Exception;
+    List<TeamBean> getAllTeam(WeChatAPPBean bean) throws Exception;
 
     /** 获取用户所属的所有团队 */
     List<TeamBean> getAllTeamByEmployeeId(Long employeeId) throws Exception;

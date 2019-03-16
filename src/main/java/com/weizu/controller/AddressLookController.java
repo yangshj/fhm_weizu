@@ -9,7 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.weizu.helper.ResultHelper;
+import com.weizu.helper.WeChatAppHelper;
 import com.weizu.pojo.addressBook.SurNameBean;
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 import com.weizu.service.addressLockk.SurNameService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -53,10 +56,16 @@ public class AddressLookController extends BaseController{
 		try {
 			if(pd.get("id")!=null){
 				Long id = Long.parseLong((String) pd.get("id"));
+				String appId = (String) pd.get("appId");
+				WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+				if(weChatAPPBean==null){
+					weChatAPPBean = WeChatAppHelper.getFirst();
+					logger.info("默认");
+				}
 				AddressLookBean param = new AddressLookBean();
 				param.setId(id);
 				AddressLookBean bean = addressLookService.findAddressLookById(param);
-				List<SurNameBean> surNameBeanList = surNameService.getAllSurName();
+				List<SurNameBean> surNameBeanList = surNameService.getAllSurName(weChatAPPBean);
 				mv.addObject("surNameBeanList",surNameBeanList);
 				mv.addObject("bean", bean);
 			}
@@ -77,7 +86,13 @@ public class AddressLookController extends BaseController{
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		try {
-			List<SurNameBean> surNameBeanList = surNameService.getAllSurName();
+			String appId = (String) pd.get("appId");
+			WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+			if(weChatAPPBean==null){
+				weChatAPPBean = WeChatAppHelper.getFirst();
+				logger.info("默认");
+			}
+			List<SurNameBean> surNameBeanList = surNameService.getAllSurName(weChatAPPBean);
 			mv.addObject("surNameBeanList",surNameBeanList);
 			mv.setViewName("weizu/addressLook/edit");
 			mv.addObject("path", "save");

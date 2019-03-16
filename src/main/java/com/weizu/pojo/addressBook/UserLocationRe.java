@@ -1,5 +1,7 @@
 package com.weizu.pojo.addressBook;
 
+import com.weizu.pojo.oa.BaseRE;
+
 import java.util.List;
 
 /**
@@ -7,19 +9,13 @@ import java.util.List;
  * @author yangshj
  *
  */
-public class UserLocationRe {
+public class UserLocationRe extends BaseRE{
 	
-	/** success/fail */
-	private String result;
+
 	/**  用户位置信息列表  */
 	private List<UserLocationMarkerBean> markers;
 	
-	public String getResult() {
-		return result;
-	}
-	public void setResult(String result) {
-		this.result = result;
-	}
+
 	public List<UserLocationMarkerBean> getMarkers() {
 		return markers;
 	}

@@ -3,12 +3,13 @@
 <mapper namespace="com.weizu.surName">
 	
 	<!-- 获取所有姓氏 -->
-	<select id="getAllSurName" resultType="surNameBean">
+	<select id="getAllSurName" resultType="surNameBean" parameterType="weChatAPPBean">
 		select
 		   id,
 		   surname as surname,
 		   create_time as createTime
-		from weizu_surname order by order_num
+		from weizu_surname where 1=1
+		and app_id = #{id} order by order_num
 	</select>
 	
 	

@@ -1,6 +1,7 @@
 package com.weizu.dao.oa;
 
 import com.fh.dao.DaoSupport;
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 import com.weizu.pojo.oa.EmployeeBean;
 import com.weizu.pojo.oa.EmployeeInfo;
 import com.weizu.pojo.oa.EmployeeTeamBean;
@@ -39,8 +40,8 @@ public class EmployeeDaoImpl extends DaoSupport implements EmployeeDao {
     }
 
     @Override
-    public List<EmployeeBean> getAllEmployee() throws Exception {
-        return (List<EmployeeBean>) this.findForList("com.weizu.oa.employee.getAllEmployee",null);
+    public List<EmployeeBean> getAllEmployee(WeChatAPPBean weChatAPPBean) throws Exception {
+        return (List<EmployeeBean>) this.findForList("com.weizu.oa.employee.getAllEmployee",weChatAPPBean);
     }
 
     @Override

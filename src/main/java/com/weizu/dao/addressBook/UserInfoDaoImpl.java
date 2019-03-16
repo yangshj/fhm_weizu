@@ -2,6 +2,7 @@ package com.weizu.dao.addressBook;
 
 import java.util.List;
 
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 import org.springframework.stereotype.Repository;
 
 import com.fh.dao.DaoSupport;
@@ -13,8 +14,8 @@ import com.weizu.pojo.addressBook.UserInfoBean;
 public class UserInfoDaoImpl extends DaoSupport implements UserInfoDao{
 
 	@Override
-	public UserInfoBean findUserByOpenId(String openId) throws Exception {
-		return (UserInfoBean) this.findForObject("com.weizu.user.findUserByOpenId", openId);
+	public UserInfoBean findUserByOpenId(UserInfoBean bean) throws Exception {
+		return (UserInfoBean) this.findForObject("com.weizu.user.findUserByOpenId", bean);
 	}
 
 	@Override
@@ -28,8 +29,8 @@ public class UserInfoDaoImpl extends DaoSupport implements UserInfoDao{
 	}
 
 	@Override
-	public List<UserInfoBean> getAllUserNoAuth() throws Exception {
-		return (List<UserInfoBean>) this.findForList("com.weizu.user.getAllUserNoAuth", null);
+	public List<UserInfoBean> getAllUserNoAuth(WeChatAPPBean bean) throws Exception {
+		return (List<UserInfoBean>) this.findForList("com.weizu.user.getAllUserNoAuth", bean);
 	}
 
 	@Override

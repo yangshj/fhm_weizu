@@ -8,12 +8,14 @@
         employee_id,
         team_id,
         checked,
+        app_id,
         create_time,
         modify_time
         ) values (
         #{employeeId},
         #{teamId},
         #{checked},
+        #{appId},
         now(),
         now()
         )
@@ -62,6 +64,9 @@
         <if test="teamId != null">
             and team_id = #{teamId}
         </if>
+        <if test="appId != null">
+            and app_id = #{appId}
+        </if>
     </update>
 
     <!-- 查找  -->
@@ -93,6 +98,9 @@
         </if>
         <if test="teamId != null">
             and t.team_id = #{teamId}
+        </if>
+        <if test="appId != null">
+            and t.app_id = #{appId}
         </if>
     </select>
 

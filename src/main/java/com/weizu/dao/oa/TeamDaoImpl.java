@@ -1,6 +1,7 @@
 package com.weizu.dao.oa;
 
 import com.fh.dao.DaoSupport;
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 import com.weizu.pojo.oa.EmployeeTeamBean;
 import com.weizu.pojo.oa.TeamBean;
 import org.springframework.stereotype.Repository;
@@ -36,8 +37,8 @@ public class TeamDaoImpl extends DaoSupport implements TeamDao {
     }
 
     @Override
-    public List<TeamBean> getAllTeam() throws Exception {
-        return (List<TeamBean>) this.findForList("com.weizu.oa.team.getAllTeam", null);
+    public List<TeamBean> getAllTeam(WeChatAPPBean bean) throws Exception {
+        return (List<TeamBean>) this.findForList("com.weizu.oa.team.getAllTeam", bean);
     }
 
     @Override

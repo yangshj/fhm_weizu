@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fh.entity.Page;
 import com.fh.util.PageData;
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 import org.springframework.stereotype.Repository;
 
 import com.fh.dao.DaoSupport;
@@ -19,8 +20,8 @@ public class UserLocationDaoImpl extends DaoSupport implements UserLocationDao{
 	}
 
 	@Override
-	public List<UserLocationMarkerBean> getAllUserLatelyLocaitons() throws Exception {
-		return (List<UserLocationMarkerBean>) this.findForList("com.weizu.userLocation.getAllUserLatelyLocaitons", null);
+	public List<UserLocationMarkerBean> getAllUserLatelyLocaitons(WeChatAPPBean bean) throws Exception {
+		return (List<UserLocationMarkerBean>) this.findForList("com.weizu.userLocation.getAllUserLatelyLocaitons", bean);
 	}
 
 	@Override

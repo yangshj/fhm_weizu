@@ -2,6 +2,7 @@ package com.weizu.service.addressLockk;
 
 import java.util.List;
 
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +18,8 @@ public class UserInfoServiceImpl implements UserInfoService{
 	private UserInfoDao userInfoDao;
 	
 	@Override
-	public UserInfoBean findUserByOpenId(String openId) throws Exception {
-		return userInfoDao.findUserByOpenId(openId);
+	public UserInfoBean findUserByOpenId(UserInfoBean bean) throws Exception {
+		return userInfoDao.findUserByOpenId(bean);
 	}
 
 	@Override
@@ -32,8 +33,8 @@ public class UserInfoServiceImpl implements UserInfoService{
 	}
 
 	@Override
-	public List<UserInfoBean> getAllUserNoAuth() throws Exception {
-		return userInfoDao.getAllUserNoAuth();
+	public List<UserInfoBean> getAllUserNoAuth(WeChatAPPBean bean) throws Exception {
+		return userInfoDao.getAllUserNoAuth(bean);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package com.weizu.service.oa;
 
 import com.weizu.dao.oa.TeamDao;
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 import com.weizu.pojo.oa.EmployeeTeamBean;
 import com.weizu.pojo.oa.TeamBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +41,8 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public List<TeamBean> getAllTeam() throws Exception {
-        return teamDao.getAllTeam();
+    public List<TeamBean> getAllTeam(WeChatAPPBean bean) throws Exception {
+        return teamDao.getAllTeam(bean);
     }
 
     @Override

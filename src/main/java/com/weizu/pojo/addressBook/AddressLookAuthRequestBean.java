@@ -25,7 +25,17 @@ public class AddressLookAuthRequestBean  implements Serializable {
     private Date createTime;
     /** 修改日期 */
     private Date modifyTime;
+    /** 小程序Id */
+    private Long appId;
 
+
+
+    public Long getAppId() {
+        return appId;
+    }
+    public void setAppId(Long appId) {
+        this.appId = appId;
+    }
     public Long getUserId() {
         return userId;
     }

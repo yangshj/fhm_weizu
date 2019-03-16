@@ -9,18 +9,20 @@
 			 latitude,
 			 longitude,
 			 location_info,
+			 app_id,
 			 create_time
 		) values (
 			#{userId},	
 			#{latitude},	
 			#{longitude},
 			#{locationInfo},
+			#{appId},
 			now()		
 		)
 	</insert>
 	
 	<!-- 获取所有用户最近的位置信息 -->
-	<select id="getAllUserLatelyLocaitons" resultType="userLocationMarkerBean">
+	<select id="getAllUserLatelyLocaitons" resultType="userLocationMarkerBean" parameterType="weChatAPPBean">
 		select la.id as id,
 			 la.latitude as latitude,
 			 CONCAT(wu.nick_name, DATE_FORMAT(la.create_time,'_%Y-%m-%d-%H:%i:%s')) as name,
@@ -29,6 +31,7 @@
 		from 
 			weizu_location la left join weizu_user wu on la.user_id=wu.id 
 			where la.id in(select max(id) from weizu_location where create_time > date_sub(now(), interval 1 day) group by user_id)
+			and la.app_id = #{id}
 	</select>
 
 	<!-- 列表后台查询页面 -->
@@ -52,6 +55,9 @@
 		</if>
 		<if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
 			and la.create_time &lt;= #{pd.lastLoginEnd}
+		</if>
+		<if test="pd.appId!=null and pd.appId!=''"><!-- appId -->
+			and la.app_id = #{pd.appId}
 		</if>
 	</select>
 </mapper>

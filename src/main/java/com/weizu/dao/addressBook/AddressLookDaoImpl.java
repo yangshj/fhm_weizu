@@ -2,6 +2,7 @@ package com.weizu.dao.addressBook;
 
 import java.util.List;
 
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 import org.springframework.stereotype.Repository;
 
 import com.fh.dao.DaoSupport;
@@ -33,8 +34,8 @@ public class AddressLookDaoImpl  extends DaoSupport implements AddressLookDao{
 	}
 
 	@Override
-	public List<AddressLookBean> getAllAddressLook() throws Exception {
-		return (List<AddressLookBean>) this.findForList("com.weizu.addressLook.getAllAddressLook", null);
+	public List<AddressLookBean> getAllAddressLook(WeChatAPPBean bean) throws Exception {
+		return (List<AddressLookBean>) this.findForList("com.weizu.addressLook.getAllAddressLook", bean);
 	}
 
 	@Override

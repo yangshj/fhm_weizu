@@ -18,8 +18,17 @@ public class EmployeeTeamBean implements Serializable {
     private Long teamId;
     /** 是否选中 0未选中 1选中 */
     private Integer checked;
+    /** 小程序Id */
+    private Long appId;
 
 
+
+    public Long getAppId() {
+        return appId;
+    }
+    public void setAppId(Long appId) {
+        this.appId = appId;
+    }
     public Long getId() {
         return id;
     }

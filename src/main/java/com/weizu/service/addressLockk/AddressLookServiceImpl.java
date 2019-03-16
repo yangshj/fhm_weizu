@@ -2,6 +2,7 @@ package com.weizu.service.addressLockk;
 
 import java.util.List;
 
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,8 +38,8 @@ public class AddressLookServiceImpl implements AddressLookService{
 	}
 
 	@Override
-	public List<AddressLookBean> getAllAddressLook() throws Exception {
-		return addressLookDao.getAllAddressLook();
+	public List<AddressLookBean> getAllAddressLook(WeChatAPPBean bean) throws Exception {
+		return addressLookDao.getAllAddressLook(bean);
 	}
 
 	@Override

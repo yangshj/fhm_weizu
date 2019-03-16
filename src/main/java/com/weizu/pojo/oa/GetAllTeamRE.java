@@ -2,7 +2,7 @@ package com.weizu.pojo.oa;
 
 import java.util.List;
 
-public class GetAllTeamRE {
+public class GetAllTeamRE extends BaseRE{
 
     /** success/fail */
     private String result;

@@ -16,8 +16,17 @@ public class SurNameBean implements Serializable{
 	private String surname;
 	/** 创建时间 */
 	private Date createTime;
-	
-	
+	/** 小程序Id */
+	private Long appId;
+
+
+
+	public Long getAppId() {
+		return appId;
+	}
+	public void setAppId(Long appId) {
+		this.appId = appId;
+	}
 	public Long getId() {
 		return id;
 	}

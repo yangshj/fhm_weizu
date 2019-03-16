@@ -1,5 +1,6 @@
 package com.weizu.service.oa;
 
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 import com.weizu.pojo.oa.EmployeeBean;
 import com.weizu.pojo.oa.EmployeeInfo;
 import com.weizu.pojo.oa.EmployeeTeamBean;
@@ -25,7 +26,7 @@ public interface EmployeeService {
     void deleteEmployee(EmployeeBean bean) throws Exception;
 
     /** 获取所有员工 */
-    List<EmployeeBean> getAllEmployee() throws Exception;
+    List<EmployeeBean> getAllEmployee(WeChatAPPBean weChatAPPBean) throws Exception;
 
     /** 获取团队下的员工列表 */
     List<EmployeeInfo> getEmployeeInfoByTeam(EmployeeTeamBean bean) throws Exception;

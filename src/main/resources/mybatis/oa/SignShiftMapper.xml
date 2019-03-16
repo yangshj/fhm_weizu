@@ -12,6 +12,7 @@
             end_time,
             start_limit,
             end_limit,
+            app_id,
             create_time
         ) values (
             #{name},
@@ -21,6 +22,7 @@
             #{endTime},
             #{startLimit},
             #{endLimit},
+            #{appId},
             now()
         )
     </insert>
@@ -62,6 +64,7 @@
             t.end_time as endTime,
             t.start_limit as startLimit,
             t.end_limit as endLimit,
+            t.app_id as appId,
             t.create_time as createTime,
             t.modify_time as modifyTime
         from weizu_oa_sign_shift as t where id = #{id}
@@ -78,11 +81,15 @@
             t.end_time as endTime,
             t.start_limit as startLimit,
             t.end_limit as endLimit,
+            t.app_id as appId,
             t.create_time as createTime,
             t.modify_time as modifyTime
         from weizu_oa_sign_shift as t where 1=1
         <if test="teamId != null">
-            and team_id = #{teamId}
+            and t.team_id = #{teamId}
+        </if>
+        <if test="appId != null">
+            and t.app_id = #{appId}
         </if>
     </select>
 
@@ -109,6 +116,9 @@
         </if>
         <if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
             and t.create_time &lt;= #{pd.lastLoginEnd}
+        </if>
+        <if test="pd.appId!=null and pd.appId!=''"><!-- appId -->
+            and t.app_id = #{pd.appId}
         </if>
     </select>
 

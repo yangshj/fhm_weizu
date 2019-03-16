@@ -1,6 +1,7 @@
 package com.weizu.dao.oa;
 
 import com.weizu.pojo.addressBook.AddressLookBean;
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 import com.weizu.pojo.oa.EmployeeTeamBean;
 import com.weizu.pojo.oa.TeamBean;
 
@@ -24,7 +25,7 @@ public interface TeamDao {
     void deleteTeam(TeamBean bean) throws Exception;
 
     /** 获取所有团队 */
-    List<TeamBean> getAllTeam() throws Exception;
+    List<TeamBean> getAllTeam(WeChatAPPBean bean) throws Exception;
 
     /** 获取用户所属的所有团队 */
     List<TeamBean> getAllTeamByEmployeeId(EmployeeTeamBean bean) throws Exception;

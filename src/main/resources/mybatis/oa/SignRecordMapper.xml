@@ -14,6 +14,7 @@
             sign_type,
             sign_result,
             sign_day,
+            app_id,
             sign_time,
             create_time
         ) values (
@@ -26,6 +27,7 @@
             #{signType},
             #{signResult},
             #{signDay},
+            #{appId},
             now(),
             now()
         )
@@ -94,6 +96,9 @@
         <if test="teamId != null">
             and team_id = #{teamId}
         </if>
+        <if test="appId != null">
+            and app_id = #{appId}
+        </if>
         <if test="queryStartTime != null">
             and sign_time > #{queryStartTime}
         </if>
@@ -128,6 +133,9 @@
         </if>
         <if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
             and t.create_time &lt;= #{pd.lastLoginEnd}
+        </if>
+        <if test="pd.appId!=null and pd.appId!=''"><!-- appId -->
+            and app_id = #{pd.appId}
         </if>
     </select>
 

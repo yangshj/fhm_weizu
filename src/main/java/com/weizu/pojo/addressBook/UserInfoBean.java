@@ -38,9 +38,20 @@ public class UserInfoBean implements Serializable{
 	private Date createTime;
 	/** 修改时间 */
 	private Date modifyTime;
+	/** 小程序Id */
+	private Long appId;
+
+
+
 	/**  审批权限页面用--不对应数据库 */
-	
-	
+
+
+	public Long getAppId() {
+		return appId;
+	}
+	public void setAppId(Long appId) {
+		this.appId = appId;
+	}
 	public Long getId() {
 		return id;
 	}

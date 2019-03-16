@@ -2,6 +2,7 @@ package com.weizu.service.oa;
 
 import com.weizu.dao.oa.EmployeeDao;
 import com.weizu.dao.oa.TeamDao;
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 import com.weizu.pojo.oa.EmployeeBean;
 import com.weizu.pojo.oa.EmployeeInfo;
 import com.weizu.pojo.oa.EmployeeTeamBean;
@@ -43,8 +44,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeBean> getAllEmployee() throws Exception {
-        return employeeDao.getAllEmployee();
+    public List<EmployeeBean> getAllEmployee(WeChatAPPBean weChatAPPBean) throws Exception {
+        return employeeDao.getAllEmployee(weChatAPPBean);
     }
 
     @Override

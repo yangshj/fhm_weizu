@@ -14,7 +14,9 @@ import com.weizu.common.amap.GisInfo;
 import com.weizu.dao.addressBook.AddressLookDao;
 import com.weizu.helper.ResultHelper;
 import com.weizu.helper.RightsHelper;
+import com.weizu.helper.WeChatAppHelper;
 import com.weizu.pojo.addressBook.*;
+import com.weizu.pojo.oa.BaseRE;
 import com.weizu.service.addressLockk.*;
 import com.weizu.util.FileUtil;
 import com.weizu.util.StringUtil;
@@ -52,8 +54,8 @@ public class WeiXinController extends BaseController{
 	
 	@RequestMapping(value="/backLocation")
 	@ResponseBody
-	 public String backLocation(HttpServletRequest request, HttpServletResponse response){
-		BackLocationRe re = new BackLocationRe();
+	 public void backLocation(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		BaseRE re = new BaseRE();
 		try {
 			response.setContentType("text/json;charset=UTF-8");
 			response.setCharacterEncoding("UTF-8");
@@ -61,12 +63,23 @@ public class WeiXinController extends BaseController{
 			String sessionId = request.getParameter("sessionId");
 			String latitude = request.getParameter("latitude");
 			String longitude = request.getParameter("longitude");
+			String appId = request.getParameter("appId");
 			UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
 			if(userOpenInfo!=null){
-				UserInfoBean exit = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+				WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+				if(weChatAPPBean==null){
+					re.setResult(ResultHelper.FAIL);
+					re.setMsg("无效的appId");
+					return;
+				}
+				UserInfoBean query = new UserInfoBean();
+				query.setAppId(weChatAPPBean.getId());
+				query.setOpenId(userOpenInfo.getOpenId());
+				UserInfoBean exit = userInfoService.findUserByOpenId(query);
 				if(exit!=null) {
 					WeiZuLocationBean bean = new WeiZuLocationBean();
 					bean.setUserId(exit.getId());
+					bean.setAppId(weChatAPPBean.getId());
 					bean.setLatitude(Double.parseDouble(latitude));
 					bean.setLongitude(Double.parseDouble(longitude));
 					// 超过中国经纬度范围（经度范围：73°33′E至135°05′E, 纬度范围：3°51′N至53°33′N
@@ -76,7 +89,7 @@ public class WeiXinController extends BaseController{
 						bean.setLocationInfo(locationInfo);
 						userLocation.insertLocation(bean);
 						if(exit.getRights().equals("0")){
-							testRigthsByLocation(sessionId, latitude, longitude, exit);
+							testRigthsByLocation(sessionId, latitude, longitude, exit, weChatAPPBean);
 						}
 					} else {
 						System.out.println("经纬度超出范围: "+JSON.toJSONString(bean));
@@ -91,8 +104,11 @@ public class WeiXinController extends BaseController{
 		} catch (Exception e) {
 			re.setResult(ResultHelper.FAIL);
 			e.printStackTrace();
+		} finally {
+			PrintWriter writer = response.getWriter();
+			writer.print(JSON.toJSONString(re));
+			writer.flush();
 		}
-		return JSON.toJSONString(re);
 	}
 	
 	/**
@@ -124,8 +140,17 @@ public class WeiXinController extends BaseController{
 		Long end = System.currentTimeMillis();
         System.out.println("获取openId耗时: "+(end-start));
 		try {
+			String appId = request.getParameter("appId");
+			WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+			if(weChatAPPBean==null){
+				// TODO 待优化
+				return null;
+			}
 			System.out.println("成功……"+userOpenInfo + "usrString: "+usrString);
-			UserInfoBean exit = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+			UserInfoBean query = new UserInfoBean();
+			query.setAppId(weChatAPPBean.getId());
+			query.setOpenId(userOpenInfo.getOpenId());
+			UserInfoBean exit = userInfoService.findUserByOpenId(query);
 			System.out.println("已经存在: " + "usrString: "+usrString + " " + JSON.toJSONString(exit));
 			if(exit==null){
 				UserInfoBean bean = new UserInfoBean();
@@ -139,6 +164,7 @@ public class WeiXinController extends BaseController{
 				bean.setNickName(nickName);
 				bean.setOpenId(userOpenInfo.getOpenId());
 				bean.setProvince(province);
+				bean.setAppId(weChatAPPBean.getId());
 				userInfoService.inserWeiZuUser(bean);
 			} else {
 			    // 更新数据库昵称和头像为空的数据
@@ -153,6 +179,7 @@ public class WeiXinController extends BaseController{
                     bean.setLanguage(language);
                     bean.setNickName(nickName);
                     bean.setProvince(province);
+					bean.setAppId(weChatAPPBean.getId());
                     System.out.println("更新数据库昵称: "+nickName);
                     userInfoService.updateUserById(bean);
                 } else {
@@ -182,9 +209,16 @@ public class WeiXinController extends BaseController{
 			response.setCharacterEncoding("UTF-8");
 			re.setResult("fail");
 			String sessionId = request.getParameter("sessionId");
+			String appId = request.getParameter("appId");
 			UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
 			if(userOpenInfo!=null){
-				List<UserLocationMarkerBean> list = userLocation.getAllUserLatelyLocaitons();
+				WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+				if(weChatAPPBean==null){
+					re.setResult(ResultHelper.FAIL);
+					re.setMsg("无效的appId");
+					return;
+				}
+				List<UserLocationMarkerBean> list = userLocation.getAllUserLatelyLocaitons(weChatAPPBean);
 				if(list!=null && list.size()>0){
 					for(UserLocationMarkerBean marker : list){
 					    if(StringUtil.isEmpty(marker.getIconPath())) continue;
@@ -220,11 +254,21 @@ public class WeiXinController extends BaseController{
 			re.setResult(ResultHelper.FAIL);
 			String sessionId = request.getParameter("sessionId");
 			String surname = request.getParameter("surname");
+			String appId = request.getParameter("appId");
 			UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
 			if(userOpenInfo!=null){
-				UserInfoBean userInfoBean = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+				WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+				if(weChatAPPBean==null){
+					re.setResult(ResultHelper.FAIL);
+					re.setMsg("无效的appId");
+					return;
+				}
+				UserInfoBean query =  new UserInfoBean();
+				query.setAppId(weChatAPPBean.getId());
+				query.setOpenId(userOpenInfo.getOpenId());
+				UserInfoBean userInfoBean = userInfoService.findUserByOpenId(query);
 			    SurNameBean surNameBean = null;
-			    List<SurNameBean> surnameList = surNameService.getAllSurName();
+			    List<SurNameBean> surnameList = surNameService.getAllSurName(weChatAPPBean);
                 for(SurNameBean bean : surnameList){
                     if(bean.getSurname().equals(surname)){
                         surNameBean = bean;
@@ -238,6 +282,7 @@ public class WeiXinController extends BaseController{
 					}
                     AddressLookBean param = new AddressLookBean();
                     param.setSurnameId(surNameBean.getId());
+                    param.setAppId(weChatAPPBean.getId());
                     List<AddressLookBean> list = addressLookService.findAddressLookByCondition(param);
                     if(list!=null && list.size()>0){
                         re.setListData(list);
@@ -264,9 +309,16 @@ public class WeiXinController extends BaseController{
             response.setCharacterEncoding("UTF-8");
             re.setResult(ResultHelper.FAIL);
             String sessionId = request.getParameter("sessionId");
+			String appId = request.getParameter("appId");
             UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
             if(userOpenInfo!=null){
-                List<SurNameBean> list = surNameService.getAllSurName();
+				WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+				if(weChatAPPBean==null){
+					re.setResult(ResultHelper.FAIL);
+					re.setMsg("无效的appId");
+					return;
+				}
+                List<SurNameBean> list = surNameService.getAllSurName(weChatAPPBean);
                 re.setListData(list);
                 re.setResult(ResultHelper.SUCCESS);
             } else {
@@ -292,12 +344,22 @@ public class WeiXinController extends BaseController{
             String surname = request.getParameter("surname");
 			String latitude = request.getParameter("latitude");
 			String longitude = request.getParameter("longitude");
+			String appId = request.getParameter("appId");
             UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
 			UserInfoBean userInfo = null;
 			if(userOpenInfo!=null){
-                userInfo = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+				WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+				if(weChatAPPBean==null){
+					re.setResult(ResultHelper.FAIL);
+					re.setMsg("无效的appId");
+					return;
+				}
+				UserInfoBean query = new UserInfoBean();
+				query.setOpenId(userOpenInfo.getOpenId());
+				query.setAppId(weChatAPPBean.getId());
+                userInfo = userInfoService.findUserByOpenId(query);
                 if(userInfo!=null){
-                    List<SurNameBean> list = surNameService.getAllSurName();
+                    List<SurNameBean> list = surNameService.getAllSurName(weChatAPPBean);
                     if(list!=null && list.size()>0){
                         for(SurNameBean surNameBean: list){
                             if(surNameBean.getSurname().equals(surname)){
@@ -313,7 +375,7 @@ public class WeiXinController extends BaseController{
                     }
                     // 根据位置来判断是否有权限
 					if(re.getResult().equals(ResultHelper.FAIL) && StringUtil.isNotEmpty(latitude) && StringUtil.isNotEmpty(longitude)){
-						boolean rights = testRigthsByLocation(sessionId, latitude, longitude, userInfo);
+						boolean rights = testRigthsByLocation(sessionId, latitude, longitude, userInfo, weChatAPPBean);
 						if(rights){
 							re.setResult(ResultHelper.SUCCESS);
 						}
@@ -336,13 +398,13 @@ public class WeiXinController extends BaseController{
 	 * @param longitude	精度
 	 * @param userInfo	用户信息
 	 */
-    public boolean testRigthsByLocation(String sessionId, String latitude, String longitude, UserInfoBean userInfo) {
+    public boolean testRigthsByLocation(String sessionId, String latitude, String longitude, UserInfoBean userInfo, WeChatAPPBean weChatAPPBean) {
     	try{
 			if(StringUtil.isNotEmpty(latitude) && StringUtil.isNotEmpty(longitude) && StringUtil.isNotEmpty(sessionId)){
 				boolean rights = RightsHelper.hasRights(Double.parseDouble(latitude), Double.parseDouble(longitude));
 				if(rights){
 					if(userInfo!=null){
-						List<SurNameBean> surNameBeanList = surNameService.getAllSurName();
+						List<SurNameBean> surNameBeanList = surNameService.getAllSurName(weChatAPPBean);
 						if(surNameBeanList!=null && surNameBeanList.size()>0){
 							List<String> rightList = new ArrayList<String>();
 							for(SurNameBean bean : surNameBeanList){
@@ -377,7 +439,7 @@ public class WeiXinController extends BaseController{
 	 */
 	@RequestMapping(value="/uploadAuthRequest")
 	@ResponseBody
-	public String uploadAuthRequest(HttpServletRequest request, HttpServletResponse response){
+	public void uploadAuthRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         AddressLookRE re = new AddressLookRE();
 		String sessionId = request.getParameter("sessionId");
 		String requestInfo = request.getParameter("requestInfo");
@@ -388,27 +450,38 @@ public class WeiXinController extends BaseController{
 		String userName = request.getParameter("userName");
 		String mobilePhone = request.getParameter("mobilePhone");
 		String manager = request.getParameter("manager");
+		String appId = request.getParameter("appId");
 		try {
 			response.setContentType("text/json;charset=UTF-8");
 			response.setCharacterEncoding("UTF-8");
             re.setResult(ResultHelper.FAIL);
             UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
             if(userOpenInfo!=null) {
-                UserInfoBean userInfo = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+				WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+				if(weChatAPPBean==null){
+					re.setResult(ResultHelper.FAIL);
+					re.setMsg("无效的appId");
+					return;
+				}
+				UserInfoBean params = new UserInfoBean();
+				params.setOpenId(userOpenInfo.getOpenId());
+				params.setAppId(Long.parseLong(appId));
+                UserInfoBean userInfoBean = userInfoService.findUserByOpenId(params);
                 // 新增
                 if(StringUtil.isEmpty(modifyOrAdd) || StringUtil.isEmpty(manager) || modifyOrAdd.equals("add")){
-					if(userInfo!=null){
+					if(userInfoBean!=null){
 						AddressLookAuthRequestBean bean = new AddressLookAuthRequestBean();
-						bean.setUserId(userInfo.getId());
+						bean.setUserId(userInfoBean.getId());
 						bean.setNickName(nickName);
 						bean.setSurname(surname);
 						bean.setRequestInfo(requestInfo);
+						bean.setAppId(weChatAPPBean.getId());
 						re.setResult(ResultHelper.SUCCESS);
 						addressLookAuthService.insertAuthRequest(bean);
 					}
 					// 管理员
 					if(StringUtil.isNotEmpty(manager) && manager.equals("true")){
-						List<SurNameBean> surNameBeanList = surNameService.getAllSurName();
+						List<SurNameBean> surNameBeanList = surNameService.getAllSurName(weChatAPPBean);
 						SurNameBean surNameBean = null;
 						for(SurNameBean temp : surNameBeanList){
 							if(temp.getSurname().equals(surname)){
@@ -421,6 +494,7 @@ public class WeiXinController extends BaseController{
 							param.setSurnameId(surNameBean.getId());
 							param.setMobilePhone(mobilePhone);
 							param.setUserName(userName);
+							param.setAppId(weChatAPPBean.getId());
 							addressLookService.inserAddressLook(param);
 						}
 					}
@@ -443,8 +517,11 @@ public class WeiXinController extends BaseController{
             }
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			PrintWriter writer = response.getWriter();
+			writer.print(JSON.toJSONString(re));
+			writer.flush();
 		}
-		return JSON.toJSONString(re);
 	}
 
 	/**
@@ -458,10 +535,17 @@ public class WeiXinController extends BaseController{
 			response.setContentType("text/json;charset=UTF-8");
 			response.setCharacterEncoding("UTF-8");
 			String sessionId = request.getParameter("sessionId");
+			String appId = request.getParameter("appId");
 			re.setResult(ResultHelper.FAIL);
 			UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
 			if(userOpenInfo!=null) {
-				List<UserInfoBean> list =  userInfoService.getAllUserNoAuth();
+				WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+				if(weChatAPPBean==null){
+					re.setResult(ResultHelper.FAIL);
+					re.setMsg("无效的appId");
+					return;
+				}
+				List<UserInfoBean> list =  userInfoService.getAllUserNoAuth(weChatAPPBean);
 				re.setListData(list);
 				re.setResult(ResultHelper.SUCCESS);
 			} else {
@@ -488,9 +572,18 @@ public class WeiXinController extends BaseController{
             response.setContentType("text/json;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
             String sessionId = request.getParameter("sessionId");
+			String appId = request.getParameter("appId");
             re.setResult(ResultHelper.FAIL);
             UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
             if(userOpenInfo!=null) {
+				WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+				if(weChatAPPBean==null){
+					re.setResult(ResultHelper.FAIL);
+					re.setMsg("无效的appId");
+					return;
+				}
+				UserInfoBean bean = new UserInfoBean();
+				bean.setAppId(weChatAPPBean.getId());
                 List<UserInfoBean> list =  userInfoService.getAllUserByCondition(null);
                 re.setListData(list);
                 re.setResult(ResultHelper.SUCCESS);
@@ -521,10 +614,17 @@ public class WeiXinController extends BaseController{
 			String userId = request.getParameter("userId");
 			String authManager = request.getParameter("authManager");
 			String openAuth = request.getParameter("openAuth");
+			String appId = request.getParameter("appId");
 			re.setResult(ResultHelper.FAIL);
 			UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
 			if(userOpenInfo!=null) {
-				List<SurNameBean> surNameBeanList = surNameService.getAllSurName();
+				WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+				if(weChatAPPBean==null){
+					re.setResult(ResultHelper.FAIL);
+					re.setMsg("无效的appId");
+					return;
+				}
+				List<SurNameBean> surNameBeanList = surNameService.getAllSurName(weChatAPPBean);
 				if(surNameBeanList!=null && surNameBeanList.size()>0){
 					List<String> rights = new ArrayList<String>();
 					for(SurNameBean bean : surNameBeanList){
@@ -580,9 +680,19 @@ public class WeiXinController extends BaseController{
 			String officePhone =  request.getParameter("officePhone");
 			String sex =  request.getParameter("sex");
 			String remark =  request.getParameter("remark");
+			String appId = request.getParameter("appId");
 			UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
 			if(userOpenInfo!=null) {
-				UserInfoBean userInfoBean = userInfoService.findUserByOpenId(userOpenInfo.getOpenId());
+				WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+				if(weChatAPPBean==null){
+					re.setResult(ResultHelper.FAIL);
+					re.setMsg("无效的appId");
+					return;
+				}
+				UserInfoBean query1 = new UserInfoBean();
+				query1.setAppId(weChatAPPBean.getId());
+				query1.setOpenId(userOpenInfo.getOpenId());
+				UserInfoBean userInfoBean = userInfoService.findUserByOpenId(query1);
 				// 修改
 				if(StringUtil.isNotEmpty(userId)){
 					AddressLookBean param = new AddressLookBean();
@@ -605,6 +715,7 @@ public class WeiXinController extends BaseController{
                         requestBean.setNickName(userInfoBean.getNickName());
                         requestBean.setSurname(surname);
                         requestBean.setRequestInfo("修改: "+JSON.toJSONString(bean));
+                        requestBean.setAppId(weChatAPPBean.getId());
                         addressLookAuthService.insertAuthRequest(requestBean);
                         re.setResult(ResultHelper.SUCCESS);
 					} else {
@@ -615,7 +726,7 @@ public class WeiXinController extends BaseController{
 				}
 				// 新增
 				else {
-					List<SurNameBean> surNameBeanList = surNameService.getAllSurName();
+					List<SurNameBean> surNameBeanList = surNameService.getAllSurName(weChatAPPBean);
 					SurNameBean surNameBean = null;
 					for(SurNameBean temp : surNameBeanList){
 						if(temp.getSurname().equals(surname)){
@@ -627,6 +738,7 @@ public class WeiXinController extends BaseController{
 						AddressLookBean query = new AddressLookBean();
 						query.setUserName(userName);
 						query.setMobilePhone(mobilePhone);
+						query.setAppId(weChatAPPBean.getId());
 						List<AddressLookBean> exist = addressLookDao.findAddressLookByCondition(query);
 						if(exist!=null && exist.size()>0){
 							re.setResult(ResultHelper.FAIL);
@@ -638,6 +750,7 @@ public class WeiXinController extends BaseController{
 						param.setUserName(userName);
 						param.setOfficePhone(officePhone);
 						param.setMobilePhone(mobilePhone);
+						param.setAppId(weChatAPPBean.getId());
 						if(StringUtil.isNotEmpty(sex)) param.setSex(Integer.parseInt(sex));
 						param.setRemark(remark);
 						Integer id = addressLookService.inserAddressLook(param);
@@ -653,6 +766,7 @@ public class WeiXinController extends BaseController{
                         bean.setNickName(userInfoBean.getNickName());
                         bean.setSurname(surname);
                         bean.setRequestInfo("新增: "+JSON.toJSONString(param));
+                        bean.setAppId(weChatAPPBean.getId());
                         addressLookAuthService.insertAuthRequest(bean);
                         re.setAddressLookId(param.getId());
                         re.setResult(ResultHelper.SUCCESS);

@@ -2,6 +2,7 @@ package com.weizu.service.addressLockk;
 
 import java.util.List;
 
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ public class SurNameServiceImpl implements SurNameService{
 	private SurNameDao surNameDao;
 	
 	@Override
-	public List<SurNameBean> getAllSurName() throws Exception {
-		return surNameDao.getAllSurName();
+	public List<SurNameBean> getAllSurName(WeChatAPPBean bean) throws Exception {
+		return surNameDao.getAllSurName(bean);
 	}
 }

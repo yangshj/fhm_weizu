@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fh.entity.Page;
 import com.fh.util.PageData;
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,8 @@ public class UserLocationServiceImpl implements UserLocationService{
 	}
 
 	@Override
-	public List<UserLocationMarkerBean> getAllUserLatelyLocaitons() throws Exception {
-		return userLocationDao.getAllUserLatelyLocaitons();
+	public List<UserLocationMarkerBean> getAllUserLatelyLocaitons(WeChatAPPBean bean) throws Exception {
+		return userLocationDao.getAllUserLatelyLocaitons(bean);
 	}
 
 	@Override

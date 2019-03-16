@@ -35,6 +35,8 @@ public class SignRecordBean implements Serializable {
     private Date signTime;
     /** 创建时间 */
     private Date createTime;
+    /** 小程序Id */
+    private Long appId;
 
     /** 查询参数不对应数据库 */
     private Date queryStartTime;
@@ -133,5 +135,11 @@ public class SignRecordBean implements Serializable {
     }
     public void setDistance(Double distance) {
         this.distance = distance;
+    }
+    public Long getAppId() {
+        return appId;
+    }
+    public void setAppId(Long appId) {
+        this.appId = appId;
     }
 }

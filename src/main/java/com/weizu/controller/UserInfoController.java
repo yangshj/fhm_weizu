@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.weizu.helper.WeChatAppHelper;
+import com.weizu.pojo.addressBook.WeChatAPPBean;
 import net.sf.json.JSONArray;
 
 import org.apache.shiro.SecurityUtils;
@@ -90,9 +92,14 @@ public class UserInfoController extends BaseController{
 	 * 请求角色菜单授权页面
 	 */
 	@RequestMapping(value="/auth")
-	public String auth(@RequestParam String userId, Model model)throws Exception{
+	public String auth(@RequestParam String userId, String appId, Model model)throws Exception{
 		try{
-			List<SurNameBean> surList = surNameService.getAllSurName();
+			WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+			if(weChatAPPBean==null){
+				weChatAPPBean = WeChatAppHelper.getFirst();
+				logger.info("默认");
+			}
+			List<SurNameBean> surList = surNameService.getAllSurName(weChatAPPBean);
 			List<Menu> menuList = new ArrayList<Menu>();
 			UserInfoBean userInfo = userInfoService.findUserById(userId);
 				String roleRights = userInfo.getRights();
