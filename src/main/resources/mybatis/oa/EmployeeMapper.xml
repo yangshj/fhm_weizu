@@ -141,8 +141,8 @@
 		inner join weizu_oa_employee_team as et on t.id = et.employee_id
 		left join weizu_user as wu on t.user_id = wu.id
 		where et.team_id = #{teamId}
-        <if test="t.appId!=null and t.appId!=''"><!-- appId -->
-            and t.app_id = #{pd.appId}
+        <if test="appId!=null and appId!=''">
+            and t.app_id = #{appId}
         </if>
 	</select>
 

@@ -15,7 +15,7 @@ public class WeChatAPPBean implements Serializable {
     /** 主键 */
     private Long id;
     /** 小程序名称 */
-    private Long name;
+    private String name;
     /** 小程序ID */
     private String appId;
     /** 小程序密钥 */
@@ -28,10 +28,10 @@ public class WeChatAPPBean implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-    public Long getName() {
+    public String getName() {
         return name;
     }
-    public void setName(Long name) {
+    public void setName(String name) {
         this.name = name;
     }
     public String getAppId() {

@@ -465,7 +465,7 @@ public class WeiXinController extends BaseController{
 				}
 				UserInfoBean params = new UserInfoBean();
 				params.setOpenId(userOpenInfo.getOpenId());
-				params.setAppId(Long.parseLong(appId));
+				params.setAppId(weChatAPPBean.getId());
                 UserInfoBean userInfoBean = userInfoService.findUserByOpenId(params);
                 // 新增
                 if(StringUtil.isEmpty(modifyOrAdd) || StringUtil.isEmpty(manager) || modifyOrAdd.equals("add")){
@@ -584,7 +584,7 @@ public class WeiXinController extends BaseController{
 				}
 				UserInfoBean bean = new UserInfoBean();
 				bean.setAppId(weChatAPPBean.getId());
-                List<UserInfoBean> list =  userInfoService.getAllUserByCondition(null);
+                List<UserInfoBean> list =  userInfoService.getAllUserByCondition(bean);
                 re.setListData(list);
                 re.setResult(ResultHelper.SUCCESS);
             } else {

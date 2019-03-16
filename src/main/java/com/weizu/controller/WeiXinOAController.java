@@ -361,7 +361,7 @@ public class WeiXinOAController extends BaseController {
                 } else {
                     UserInfoBean param = new UserInfoBean();
                     param.setOpenId(userOpenInfo.getOpenId());
-                    param.setAppId(Long.parseLong(appId));
+                    param.setAppId(weChatAPPBean.getId());
                     UserInfoBean userInfoBean = userInfoService.findUserByOpenId(param);
                     EmployeeBean query = new EmployeeBean();
                     query.setUserId(userInfoBean.getId());
@@ -523,7 +523,7 @@ public class WeiXinOAController extends BaseController {
                 } else {
                     UserInfoBean params = new UserInfoBean();
                     params.setOpenId(userOpenInfo.getOpenId());
-                    params.setAppId(Long.parseLong(appId));
+                    params.setAppId(weChatAPPBean.getId());
                     UserInfoBean userInfoBean = userInfoService.findUserByOpenId(params);
                     EmployeeBean query = new EmployeeBean();
                     query.setUserId(userInfoBean.getId());
@@ -708,7 +708,7 @@ public class WeiXinOAController extends BaseController {
                 }
                 UserInfoBean params = new UserInfoBean();
                 params.setOpenId(userOpenInfo.getOpenId());
-                params.setAppId(Long.parseLong(appId));
+                params.setAppId(weChatAPPBean.getId());
                 UserInfoBean userInfoBean = userInfoService.findUserByOpenId(params);
                 EmployeeBean query = new EmployeeBean();
                 query.setUserId(userInfoBean.getId());
@@ -829,7 +829,7 @@ public class WeiXinOAController extends BaseController {
                 }
                 UserInfoBean params = new UserInfoBean();
                 params.setOpenId(userOpenInfo.getOpenId());
-                params.setAppId(Long.parseLong(appId));
+                params.setAppId(weChatAPPBean.getId());
                 UserInfoBean userInfoBean = userInfoService.findUserByOpenId(params);
                 EmployeeBean query = new EmployeeBean();
                 query.setUserId(userInfoBean.getId());
@@ -884,7 +884,7 @@ public class WeiXinOAController extends BaseController {
                 }
                 UserInfoBean params = new UserInfoBean();
                 params.setOpenId(userOpenInfo.getOpenId());
-                params.setAppId(Long.parseLong(appId));
+                params.setAppId(weChatAPPBean.getId());
                 UserInfoBean userInfoBean = userInfoService.findUserByOpenId(params);
                 EmployeeBean query = new EmployeeBean();
                 query.setUserId(userInfoBean.getId());
@@ -948,7 +948,7 @@ public class WeiXinOAController extends BaseController {
                 }
                 UserInfoBean params = new UserInfoBean();
                 params.setOpenId(userOpenInfo.getOpenId());
-                params.setAppId(Long.parseLong(appId));
+                params.setAppId(weChatAPPBean.getId());
                 UserInfoBean userInfoBean = userInfoService.findUserByOpenId(params);
                 EmployeeBean query = new EmployeeBean();
                 query.setUserId(userInfoBean.getId());
@@ -1031,7 +1031,7 @@ public class WeiXinOAController extends BaseController {
                 }
                 UserInfoBean params = new UserInfoBean();
                 params.setOpenId(userOpenInfo.getOpenId());
-                params.setAppId(Long.parseLong(appId));
+                params.setAppId(weChatAPPBean.getId());
                 UserInfoBean userInfoBean = userInfoService.findUserByOpenId(params);
                 EmployeeBean query = new EmployeeBean();
                 query.setUserId(userInfoBean.getId());
@@ -1131,7 +1131,7 @@ public class WeiXinOAController extends BaseController {
                 }
                 UserInfoBean params = new UserInfoBean();
                 params.setOpenId(userOpenInfo.getOpenId());
-                params.setAppId(Long.parseLong(appId));
+                params.setAppId(weChatAPPBean.getId());
                 UserInfoBean userInfoBean = userInfoService.findUserByOpenId(params);
                 EmployeeBean query = new EmployeeBean();
                 query.setUserId(userInfoBean.getId());
@@ -1223,7 +1223,7 @@ public class WeiXinOAController extends BaseController {
                 }
                 UserInfoBean params = new UserInfoBean();
                 params.setOpenId(userOpenInfo.getOpenId());
-                params.setAppId(Long.parseLong(appId));
+                params.setAppId(weChatAPPBean.getId());
                 UserInfoBean userInfoBean = userInfoService.findUserByOpenId(params);
                 // 距离校验
                 SignSchemeBean schemeQuery = new SignSchemeBean();

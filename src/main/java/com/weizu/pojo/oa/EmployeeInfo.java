@@ -16,6 +16,12 @@ public class EmployeeInfo implements Serializable {
     private Long userId;
     /** 微信昵称 */
     private String nickName;
+    /** 邮箱 */
+    private String email;
+    /** 性别 */
+    private Integer sex;
+    /** 管理员权限 */
+    private String managerRights;
     /** 员工名称 */
     private String userName;
     /** 电话 */
@@ -66,5 +72,23 @@ public class EmployeeInfo implements Serializable {
     }
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public Integer getSex() {
+        return sex;
+    }
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+    public String getManagerRights() {
+        return managerRights;
+    }
+    public void setManagerRights(String managerRights) {
+        this.managerRights = managerRights;
     }
 }

@@ -16,14 +16,17 @@ import com.fh.util.Const;
  */
 public class WebAppContextListener implements ServletContextListener {
 
+	@Override
 	public void contextDestroyed(ServletContextEvent event) {
 		// TODO Auto-generated method stub
 	}
 
+	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		// TODO Auto-generated method stub
+		System.out.println("========获取Spring WebApplicationContext开始");
 		Const.WEB_APP_CONTEXT = WebApplicationContextUtils.getWebApplicationContext(event.getServletContext());
-		//System.out.println("========获取Spring WebApplicationContext");
+		System.out.println("========获取Spring WebApplicationContext结束");
 	}
 
 }

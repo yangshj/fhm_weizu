@@ -45,10 +45,13 @@
     <filter-class>com.fh.filter.LoginFilter</filter-class>
   </filter>
   <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <listener>
     <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
   </listener>
   <listener>
-    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    <listener-class>com.fh.listener.WebAppContextListener</listener-class>
   </listener>
   <servlet>
     <servlet-name>springMvc</servlet-name>
@@ -57,7 +60,7 @@
       <param-name>contextConfigLocation</param-name>
       <param-value>classpath*:spring/ApplicationContext-mvc.xml</param-value>
     </init-param>
-    <load-on-startup>1</load-on-startup>
+    <load-on-startup>0</load-on-startup>
   </servlet>
   <servlet-mapping>
     <servlet-name>springMvc</servlet-name>
