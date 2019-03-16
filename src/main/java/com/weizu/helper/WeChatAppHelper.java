@@ -23,8 +23,12 @@ public class WeChatAppHelper {
     private static WeChatAPPService weChatAPPService = null;
 
     public static WeChatAPPBean getWeChatApp(String appId){
+        // 兼容处理
         if(StringUtil.isEmpty(appId)){
-            return null;
+            if(map.size()==0){
+                reload();
+            }
+            return weChatAPPBeanList.get(0);
         }
         WeChatAPPBean bean = map.get(appId);
         if(bean==null){

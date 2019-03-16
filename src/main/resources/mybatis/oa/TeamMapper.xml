@@ -147,7 +147,7 @@
             t.modify_time as modifyTime
 		from weizu_oa_team as t
         <if test="appId != null">
-            and t.app_id = #{appId}
+            and t.app_id = #{id}
         </if>
 	</select>
 

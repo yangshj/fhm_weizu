@@ -160,7 +160,7 @@
 		from
 			weizu_user
 		where nick_name is not null and nick_name!='' and (rights is null or rights='0')
-		and app_id = #{appId}
+		and app_id = #{id}
 	</select>
 
 
