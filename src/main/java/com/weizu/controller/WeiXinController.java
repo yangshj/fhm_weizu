@@ -402,7 +402,7 @@ public class WeiXinController extends BaseController{
     public boolean testRigthsByLocation(String sessionId, String latitude, String longitude, UserInfoBean userInfo, WeChatAPPBean weChatAPPBean) {
     	try{
 			if(StringUtil.isNotEmpty(latitude) && StringUtil.isNotEmpty(longitude) && StringUtil.isNotEmpty(sessionId)){
-				boolean rights = RightsHelper.hasRights(Double.parseDouble(latitude), Double.parseDouble(longitude));
+				boolean rights = RightsHelper.hasRights(weChatAPPBean, Double.parseDouble(latitude), Double.parseDouble(longitude));
 				if(rights){
 					if(userInfo!=null){
 						List<SurNameBean> surNameBeanList = surNameService.getAllSurName(weChatAPPBean);
