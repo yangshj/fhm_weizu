@@ -333,7 +333,7 @@ public class WeiXinController extends BaseController{
         }
     }
 
-	// 判断通讯录界面权限
+	// 判断通讯录界面权限--暂时去掉权限校验
     @RequestMapping(value="/judgeAddressLookAuthority")
 	public void judgeAddressLookAuthority(HttpServletRequest request, HttpServletResponse response){
         AddressLookRE re = new AddressLookRE();
@@ -360,34 +360,35 @@ public class WeiXinController extends BaseController{
 				query.setAppId(weChatAPPBean.getId());
                 userInfo = userInfoService.findUserByOpenId(query);
                 if(userInfo!=null){
-                    List<SurNameBean> list = surNameService.getAllSurName(weChatAPPBean);
-                    if(list!=null && list.size()>0){
-                        for(SurNameBean surNameBean: list){
-                            if(surNameBean.getSurname().equals(surname)){
-                                String rights = userInfo.getRights();
-                                if(rights!=null && rights!=""){
-                                    Boolean hasRights = RightsHelper.testRights(rights, surNameBean.getId().intValue());
-                                    if(hasRights){
-                                        re.setResult(ResultHelper.SUCCESS);
-										// session 置空，重新登录
-										if(userOpenInfo!=null && !userOpenInfo.getManager() && StringUtil.isNotEmpty(userInfo.getManagerRights())){
-											Boolean hasManagerRights = RightsHelper.testRights(userInfo.getManagerRights(), surNameBean.getId().intValue());
-											if(hasManagerRights){
-												WeiXinMemoryCacheHelper.clearSession(sessionId);
-											}
-										}
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    // 根据位置来判断是否有权限
-					if(re.getResult().equals(ResultHelper.FAIL) && StringUtil.isNotEmpty(latitude) && StringUtil.isNotEmpty(longitude)){
-						boolean rights = testRigthsByLocation(sessionId, latitude, longitude, userInfo, weChatAPPBean);
-						if(rights){
-							re.setResult(ResultHelper.SUCCESS);
-						}
-					}
+					re.setResult(ResultHelper.SUCCESS);
+//                    List<SurNameBean> list = surNameService.getAllSurName(weChatAPPBean);
+//                    if(list!=null && list.size()>0){
+//                        for(SurNameBean surNameBean: list){
+//                            if(surNameBean.getSurname().equals(surname)){
+//                                String rights = userInfo.getRights();
+//                                if(rights!=null && rights!=""){
+//                                    Boolean hasRights = RightsHelper.testRights(rights, surNameBean.getId().intValue());
+//                                    if(hasRights){
+//                                        re.setResult(ResultHelper.SUCCESS);
+//										// session 置空，重新登录
+//										if(userOpenInfo!=null && !userOpenInfo.getManager() && StringUtil.isNotEmpty(userInfo.getManagerRights())){
+//											Boolean hasManagerRights = RightsHelper.testRights(userInfo.getManagerRights(), surNameBean.getId().intValue());
+//											if(hasManagerRights){
+//												WeiXinMemoryCacheHelper.clearSession(sessionId);
+//											}
+//										}
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                    // 根据位置来判断是否有权限
+//					if(re.getResult().equals(ResultHelper.FAIL) && StringUtil.isNotEmpty(latitude) && StringUtil.isNotEmpty(longitude)){
+//						boolean rights = testRigthsByLocation(sessionId, latitude, longitude, userInfo, weChatAPPBean);
+//						if(rights){
+//							re.setResult(ResultHelper.SUCCESS);
+//						}
+//					}
                 }
             } else {
 				re.setResult(ResultHelper.SESSION_INVALID);
