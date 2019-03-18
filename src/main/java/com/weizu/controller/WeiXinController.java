@@ -112,7 +112,7 @@ public class WeiXinController extends BaseController{
 	}
 	
 	/**
-	 *  根据code,获取用户openId。
+	 *  根据code,获取用户openId。-- 暂时放开权限
 	 *  如果用户表已经存在次openId，直接返回sessionId。
 	 *  如果用户表不存在次openId，先保存用户再返回sessionId。
 	 *  @return {sessionId:""};
@@ -187,6 +187,8 @@ public class WeiXinController extends BaseController{
 					System.out.println("头像没发生变化不更新： "+usrString);
 				}
                 if(StringUtil.isNotEmpty(exit.getManagerRights()) && !exit.getManagerRights().equals("0")){
+					userOpenInfo.setManager(true);
+				} else{
 					userOpenInfo.setManager(true);
 				}
 				if(exit.getAdmin()!=null && exit.getAdmin().intValue()==1){

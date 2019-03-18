@@ -132,6 +132,7 @@
 	           	/login_login	 			= anon
 	           	/app**/** 					= anon
 	           	/weixin/** 					= anon
+				/websocket/** 				= anon
 	           	/**							= authc
 				</value>
 			</property>

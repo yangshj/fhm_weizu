@@ -17,13 +17,34 @@
 	</properties>
 
 	<dependencies>
+
 		<!-- 百度api -->
 		<dependency>
 			<groupId>com.baidu.aip</groupId>
 			<artifactId>java-sdk</artifactId>
 			<version>4.8.0</version>
 		</dependency>
-		<!-- spring start -->
+		<!-- webSocket -->
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>7.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+			<version>4.3.4.RELEASE</version>
+		</dependency>
+
+        <dependency>
+            <groupId>javax.websocket</groupId>
+            <artifactId>javax.websocket-api</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+        <!-- webSocket -->
+        <!-- spring start -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
