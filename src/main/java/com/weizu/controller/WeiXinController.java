@@ -167,6 +167,8 @@ public class WeiXinController extends BaseController{
 				bean.setProvince(province);
 				bean.setAppId(weChatAPPBean.getId());
 				userInfoService.inserWeiZuUser(bean);
+				// 暂时放开权限
+				userOpenInfo.setManager(true);
 			} else {
 			    // 更新数据库昵称和头像为空的数据
 			    if(StringUtil.isNotEmpty(avatarUrl) && !avatarUrl.equals(exit.getAvatarUrl())){
