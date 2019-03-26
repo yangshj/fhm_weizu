@@ -43,16 +43,15 @@ public class LimitTravelHelper {
             SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd");
             String todayStr = dateFormat.format(new Date());
             Date today = dateFormat.parse(todayStr);
-            // 说明已经过期
+            // 已经过期
             if(today.getTime()>first.getLimitDate().getTime()){
                 System.out.println("过期重新加载……");
                 reload();
             }
-            return list;
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return null;
+        return limitNumMap.get(cityName);
     }
 
 

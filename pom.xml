@@ -18,6 +18,12 @@
 
 	<dependencies>
 
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.8.1</version>
+		</dependency>
+
 		<!-- 百度api -->
 		<dependency>
 			<groupId>com.baidu.aip</groupId>
