@@ -23,8 +23,11 @@ import java.util.Map;
  **/
 public class LimitTravelHelper {
 
-    // 存储限行数据<cityName, List<今天，明天，后天>>
+    // 存储限行数据<cityId, List<今天，明天，后天>>
     private static Map<String, List<LimitTravelVO>> limitNumMap = new HashMap<String, List<LimitTravelVO>>();
+    // 存储支持的城市列表
+    private static List<LimitTravelVO> cityList = new ArrayList<>();
+
     private static String URL = "https://wx.hbgajg.com/wap/wfcx/xianxing";
 
     static {
@@ -32,12 +35,12 @@ public class LimitTravelHelper {
     }
 
 
-    public static List<LimitTravelVO> getLimitTravel(String cityName){
-        if(cityName==null || !limitNumMap.containsKey(cityName)){
+    public static List<LimitTravelVO> getLimitTravel(String cityId){
+        if(cityId==null || !limitNumMap.containsKey(cityId)){
             return null;
         }
         try {
-            List<LimitTravelVO> list = limitNumMap.get(cityName);
+            List<LimitTravelVO> list = limitNumMap.get(cityId);
             // 校验是否过期
             LimitTravelVO first = list.get(0);
             SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd");
@@ -51,7 +54,7 @@ public class LimitTravelHelper {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return limitNumMap.get(cityName);
+        return limitNumMap.get(cityId);
     }
 
 
@@ -86,7 +89,12 @@ public class LimitTravelHelper {
                 String cityName = th.replace("<th>","").replace("</th>","");
                 System.out.println("cityName: "+cityName+ " cityId:"+cityId);
                 map.put(cityId, cityName);
+                LimitTravelVO vo = new LimitTravelVO();
+                vo.setCityId(cityId);
+                vo.setCityName(cityName);
+                cityList.add(vo);
             }
+            System.out.println("cityList: "+JSON.toJSONString(cityList));
             // 右侧表格解析
             Elements xx = doc.getElementsByClass("xx");
             Document xxDoc = Jsoup.parse(xx.toString());
@@ -113,9 +121,13 @@ public class LimitTravelHelper {
                     vo.setCityName(cityName);
                     vo.setLimitDesc(desc);
                     vo.setLimitDate(DateUtil.dayAddNum(date, i));
+                    String dayDesc = "今天";
+                    if(i==1) dayDesc = "明天";
+                    if(i==2) dayDesc = "后天";
+                    vo.setDayDesc(dayDesc);
                     list.add(vo);
                 }
-                limitNumMap.put(cityName, list);
+                limitNumMap.put(cityId, list);
             }
             System.out.println("初始化完成: "+JSON.toJSON(limitNumMap));
         } catch (Exception e){
@@ -125,7 +137,7 @@ public class LimitTravelHelper {
     }
 
     public static void main(String[] args) {
-        List<LimitTravelVO> list = getLimitTravel("北京");
+        List<LimitTravelVO> list = getLimitTravel("133");
         System.out.println("北京: "+JSON.toJSON(list));
     }
 }

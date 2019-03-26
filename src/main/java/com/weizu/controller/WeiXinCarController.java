@@ -26,7 +26,7 @@ import java.util.List;
  * @since : 2019/3/26 15:26:45
  **/
 @Controller
-@RequestMapping(value="/weizu/weixin/car/")
+@RequestMapping(value="/weizu/weixin/car")
 public class WeiXinCarController  extends BaseController {
 
 
@@ -40,7 +40,7 @@ public class WeiXinCarController  extends BaseController {
             re.setResult(ResultHelper.FAIL);
             String sessionId = request.getParameter("sessionId");
             String appId = request.getParameter("appId");
-            String cityName = request.getParameter("cityName");
+            String cityId = request.getParameter("cityId");
             UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
             if(userOpenInfo!=null){
                 WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
@@ -49,7 +49,7 @@ public class WeiXinCarController  extends BaseController {
                     re.setMsg("无效的appId");
                     return;
                 }
-                List<LimitTravelVO> list = LimitTravelHelper.getLimitTravel(cityName);
+                List<LimitTravelVO> list = LimitTravelHelper.getLimitTravel(cityId);
                 re.setList(list);
                 re.setResult(ResultHelper.SUCCESS);
             } else {

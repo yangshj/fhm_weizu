@@ -11,6 +11,8 @@ public class LimitTravelVO {
 
     /** 限行日期 */
     private Date limitDate;
+    /** 天描述: 今天、明天、后天 */
+    private String dayDesc;
     /** 限行描述 */
     private String limitDesc;
     /** 城市名称 */
@@ -41,5 +43,11 @@ public class LimitTravelVO {
     }
     public void setCityId(String cityId) {
         this.cityId = cityId;
+    }
+    public String getDayDesc() {
+        return dayDesc;
+    }
+    public void setDayDesc(String dayDesc) {
+        this.dayDesc = dayDesc;
     }
 }
