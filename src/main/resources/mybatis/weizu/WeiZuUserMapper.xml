@@ -5,7 +5,10 @@
 	
 	<!-- 新增-->
 	<insert id="inserWeiZuUser" parameterType="userInfoBean">
-		insert into weizu_user(
+		<selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into weizu_	user(
 			 avatar_url,
 			 city,
 			 country,

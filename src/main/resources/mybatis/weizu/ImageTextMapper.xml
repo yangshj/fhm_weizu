@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weizu.imageText">
+
+
+    <!-- 新增-->
+    <insert id="insertImageText" parameterType="imageTextBean">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        insert into weizu_image_text (
+        user_id,
+        title,
+        content,
+        first_path,
+        cloud_path,
+        app_id,
+        status,
+        create_time,
+        modify_time
+        ) values (
+        #{userId},
+        #{title},
+        #{content},
+        #{firstPath},
+        #{cloudPath},
+        #{appId},
+        #{status},
+        now(),
+        now()
+        )
+    </insert>
+
+
+    <!-- 删除-->
+    <delete id="delete" >
+		delete from weizu_image_text where id = #{id}
+	</delete>
+
+    <!-- 逻辑删除-->
+    <delete id="deleteLogic" >
+		update weizu_image_text set status=0 where id = #{id}
+	</delete>
+
+
+    <!-- 修改 -->
+    <update id="updateImage" parameterType="imageTextBean">
+        update  weizu_image_text
+        set modify_time = now()
+        <if test="userId != null and userId != ''">
+            ,user_id = #{userId}
+        </if>
+        <if test="title != null and title != ''">
+            ,title = #{title}
+        </if>
+        <if test="content != null and content != ''">
+            ,content = #{content}
+        </if>
+        <if test="firstPath != null and firstPath != ''">
+            ,first_path = #{firstPath}
+        </if>
+        <if test="cloudPath != null and cloudPath != ''">
+            ,cloud_path = #{cloudPath}
+        </if>
+        <if test="status != null and status != ''">
+            ,status = #{status}
+        </if>
+        where
+        id = #{id}
+    </update>
+
+    <!-- 通过ID获取数据 -->
+    <select id="findImageTextById" resultType="imageTextBean" >
+		select
+			 id as id,
+			 user_id as userId,
+			 title as title,
+			 content as content,
+			 first_path as firstPath,
+			 cloud_path as cloudPath,
+			 app_id as appId,
+			 status as status,
+			 create_time as createTime,
+			 modify_time as modifyTime
+		from
+			weizu_image_text
+		where
+			id = #{id}
+	</select>
+
+
+    <!--获取所有用户-->
+    <select id="getAllImageTextByCondition" resultType="imageTextBean">
+		select
+			 id as id,
+			 user_id as userId,
+			 title as title,
+			 content as content,
+			 first_path as firstPath,
+			 cloud_path as cloudPath,
+			 app_id as appId,
+			 status as status,
+			 create_time as createTime,
+			 modify_time as modifyTime
+		from
+			weizu_image_text
+		where 1=1
+        <if test="status != null and status != ''">
+            and status = #{status}
+        </if>
+        <if test="userId != null and userId != ''">
+            and user_id = #{userId}
+        </if>
+	</select>
+
+    <!-- 对应小程序加载更多 -->
+    <select id="loadMoreByCondition" resultType="imageTextBean">
+        select
+        id as id,
+        user_id as userId,
+        title as title,
+        content as content,
+        first_path as firstPath,
+        cloud_path as cloudPath,
+        app_id as appId,
+        status as status,
+        create_time as createTime,
+        modify_time as modifyTime
+        from
+        weizu_image_text
+        where 1=1
+        <if test="appId != null and appId != ''">
+            and app_id = #{appId}
+        </if>
+        <if test="status != null and status != ''">
+            and status = #{status}
+        </if>
+        <if test="userId != null and userId != ''">
+            and user_id = #{userId}
+        </if>
+        order by create_time desc
+        limit #{startLimit}, #{endLimit}
+    </select>
+
+    <!-- 列表后台查询页面 -->
+    <select id="getAllImageTextlistPage" parameterType="page" resultType="pd">
+        select
+            id as id,
+            user_id as userId,
+            title as title,
+            content as content,
+            first_path as firstPath,
+            cloud_path as cloudPath,
+            app_id as appId,
+            status as status,
+            create_time as createTime,
+            modify_time as modifyTime
+        from
+        weizu_image_text
+        where 1 = 1
+        <if test="pd.userId != null and pd.userId != ''"><!-- 用户名检索 -->
+            and user_id LIKE CONCAT(CONCAT('%', #{pd.userId}),'%')
+        </if>
+        <if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 到期时间检索 -->
+            and create_time &gt;= #{pd.lastLoginStart}
+        </if>
+        <if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
+            and create_time &lt;= #{pd.lastLoginEnd}
+        </if>
+        <if test="pd.appId!=null and pd.appId!=''"><!-- appId -->
+            and app_id = #{pd.appId}
+        </if>
+    </select>
+
+
+</mapper>

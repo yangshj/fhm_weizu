@@ -8,6 +8,8 @@ public class UserOpenInfo extends BaseRE {
 	
 	private String sessionId;
 	private String openId;
+	/** 用户id */
+	private Long userId;
 	/** 第一次放入的时间 */
 	private Date createTime;
 	/** 最后一次访问的时间 */
@@ -54,5 +56,11 @@ public class UserOpenInfo extends BaseRE {
 	}
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+	public Long getUserId() {
+		return userId;
+	}
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }

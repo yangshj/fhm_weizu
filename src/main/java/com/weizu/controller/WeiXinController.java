@@ -167,6 +167,7 @@ public class WeiXinController extends BaseController{
 				bean.setProvince(province);
 				bean.setAppId(weChatAPPBean.getId());
 				userInfoService.inserWeiZuUser(bean);
+				userOpenInfo.setUserId(bean.getId());
 				// 暂时放开权限
 				userOpenInfo.setManager(true);
 			} else {
@@ -196,6 +197,7 @@ public class WeiXinController extends BaseController{
 				if(exit.getAdmin()!=null && exit.getAdmin().intValue()==1){
                     userOpenInfo.setAdmin(true);
                 }
+                userOpenInfo.setUserId(exit.getId());
             }
 			//return "{sessionId:"+userOpenInfo.getSessionId()+"}";
 		} catch (Exception e) {
