@@ -1,29 +1,27 @@
 package com.weizu.common.enums;
 
-/**
- * 模块权限
- */
-public enum RightsEnum {
 
-    ACCESS(1, "访问权限-只读"),
-    MODIFY_OWN(2, "修改权限-自己"),
-    MODIFY_ALL(3, "修改权限-所有"),
-    MANAGER(4, "管理员权限"),
-    ADMIN(5, "超级管理员权限");
+/**
+ * 模块
+ */
+public enum ModuleEnum {
+
+    ADDRESS_BOOK(1, "通讯录"),
+    SCHOOL(2, "校园一角");
 
     private Integer index;
     private String desc;
 
-    private RightsEnum(Integer index, String desc) {
+    private ModuleEnum(Integer index, String desc) {
         this.index = index;
         this.desc = desc;
     }
 
-    public static RightsEnum getEnumByIndex(Integer index) {
-        RightsEnum[] arr = values();
+    public static ModuleEnum getEnumByIndex(Integer index) {
+        ModuleEnum[] arr = values();
         int len = arr.length;
         for(int i = 0; i < len; ++i) {
-            RightsEnum itemEnum = arr[i];
+            ModuleEnum itemEnum = arr[i];
             if (itemEnum.getIndex().equals(index)) {
                 return itemEnum;
             }
