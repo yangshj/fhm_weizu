@@ -48,6 +48,7 @@ public class WeiXinOtherController  extends BaseController {
             String appId = request.getParameter("appId");
             String startLimit = request.getParameter("startLimit");
             String endLimit = request.getParameter("endLimit");
+            String userId = request.getParameter("userId");
             UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
             if(userOpenInfo!=null){
                 WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
@@ -61,7 +62,22 @@ public class WeiXinOtherController  extends BaseController {
                 query.setEndLimit(Integer.parseInt(endLimit));
                 query.setAppId(weChatAPPBean.getId());
                 query.setStatus(StatusEnum.EFFECTIVE.getIndex());
+                if(StringUtil.isNotEmpty(userId)){
+                    query.setUserId(Long.parseLong(userId));
+                }
                 List<ImageTextBean>  list = imageTextService.loadMoreByCondition(query);
+                for(ImageTextBean bean:list){
+                    if(StringUtil.isNotEmpty(bean.getTitle()) && bean.getTitle().length()>20){
+                        bean.setTitleAb(bean.getTitle().substring(0,15)+"...");
+                    } else {
+                        bean.setTitleAb(bean.getTitle());
+                    }
+                    if(StringUtil.isNotEmpty(bean.getContent()) && bean.getContent().length()>20){
+                        bean.setContentAb(bean.getContent().substring(0,25)+"...");
+                    } else {
+                        bean.setContentAb(bean.getContent());
+                    }
+                }
                 re.setList(list);
                 re.setResult(ResultHelper.SUCCESS);
             } else {
@@ -112,6 +128,43 @@ public class WeiXinOtherController  extends BaseController {
                 bean.setAppId(weChatAPPBean.getId());
                 bean.setStatus(StatusEnum.EFFECTIVE.getIndex());
                 imageTextService.insertImageText(bean);
+                re.setResult(ResultHelper.SUCCESS);
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+            System.out.println("成功……");
+        } catch (Exception e) {
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        } finally {
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }
+    }
+
+    @RequestMapping(value="/deleteImageText")
+    @ResponseBody
+    public void deleteImageText(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        BaseRE re = new BaseRE();
+        try {
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String appId = request.getParameter("appId");
+            String id = request.getParameter("id");
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+                if(weChatAPPBean==null){
+                    re.setResult(ResultHelper.FAIL);
+                    re.setMsg("无效的appId");
+                    return;
+                }
+                if(StringUtil.isNotEmpty(id)){
+                    imageTextService.deleteLogic(Long.parseLong(id));
+                }
                 re.setResult(ResultHelper.SUCCESS);
             } else {
                 re.setResult(ResultHelper.SESSION_INVALID);

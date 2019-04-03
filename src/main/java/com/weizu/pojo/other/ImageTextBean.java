@@ -36,7 +36,9 @@ public class ImageTextBean implements Serializable {
     /** 分页 */
     private Integer startLimit;
     private Integer endLimit;
-
+    /** 缩写 */
+    private String titleAb;
+    private String contentAb;
 
     public Long getId() {
         return id;
@@ -110,6 +112,16 @@ public class ImageTextBean implements Serializable {
     public void setEndLimit(Integer endLimit) {
         this.endLimit = endLimit;
     }
-
-
+    public String getTitleAb() {
+        return titleAb;
+    }
+    public void setTitleAb(String titleAb) {
+        this.titleAb = titleAb;
+    }
+    public String getContentAb() {
+        return contentAb;
+    }
+    public void setContentAb(String contentAb) {
+        this.contentAb = contentAb;
+    }
 }
