@@ -55,7 +55,7 @@ public class WeiXinCarController  extends BaseController {
             } else {
                 re.setResult(ResultHelper.SESSION_INVALID);
             }
-            System.out.println("成功……");
+            System.out.println("查询限号成功……"+JSON.toJSONString(re));
         } catch (Exception e) {
             re.setResult(ResultHelper.FAIL);
             e.printStackTrace();
