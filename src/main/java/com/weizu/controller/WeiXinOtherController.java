@@ -62,7 +62,10 @@ public class WeiXinOtherController  extends BaseController {
                 query.setEndLimit(Integer.parseInt(endLimit));
                 query.setAppId(weChatAPPBean.getId());
                 query.setStatus(StatusEnum.EFFECTIVE.getIndex());
-                query.setUserId(userOpenInfo.getUserId());
+                // 判断不能去，和我的发布公用一个方法
+                if(StringUtil.isNotEmpty(userId)){
+                    query.setUserId(userOpenInfo.getUserId());
+                }
                 List<ImageTextBean>  list = imageTextService.loadMoreByCondition(query);
                 for(ImageTextBean bean:list){
                     if(StringUtil.isNotEmpty(bean.getTitle()) && bean.getTitle().length()>20){
