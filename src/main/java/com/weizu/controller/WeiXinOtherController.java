@@ -2,6 +2,7 @@ package com.weizu.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.fh.controller.base.BaseController;
+import com.weizu.common.enums.ModuleEnum;
 import com.weizu.common.enums.StatusEnum;
 import com.weizu.helper.ResultHelper;
 import com.weizu.helper.UserOpenInfo;
@@ -49,6 +50,7 @@ public class WeiXinOtherController  extends BaseController {
             String startLimit = request.getParameter("startLimit");
             String endLimit = request.getParameter("endLimit");
             String userId = request.getParameter("userId");
+            String module = request.getParameter("module");
             UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
             if(userOpenInfo!=null){
                 WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
@@ -62,9 +64,16 @@ public class WeiXinOtherController  extends BaseController {
                 query.setEndLimit(Integer.parseInt(endLimit));
                 query.setAppId(weChatAPPBean.getId());
                 query.setStatus(StatusEnum.EFFECTIVE.getIndex());
+                if(StringUtil.isNotEmpty(module)){
+                    query.setModule(Integer.parseInt(module));
+                } else {
+                    // 默认为校园一角
+                    query.setModule(ModuleEnum.SCHOOL.getIndex());
+                }
                 // 判断不能去，和我的发布公用一个方法
                 if(StringUtil.isNotEmpty(userId)){
                     query.setUserId(userOpenInfo.getUserId());
+                    query.setModule(null);
                 }
                 List<ImageTextBean>  list = imageTextService.loadMoreByCondition(query);
                 for(ImageTextBean bean:list){
@@ -108,6 +117,7 @@ public class WeiXinOtherController  extends BaseController {
             String appId = request.getParameter("appId");
             String title = request.getParameter("title");
             String content = request.getParameter("content");
+            String module = request.getParameter("module");
             String cloudPathArrayStr = request.getParameter("cloudPathArrayStr");
             UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
             if(userOpenInfo!=null){
@@ -125,6 +135,12 @@ public class WeiXinOtherController  extends BaseController {
                     bean.setCloudPath(cloudPathArrayStr);
                     String[] cloudPathArray = cloudPathArrayStr.split(",");
                     bean.setFirstPath(cloudPathArray[0]);
+                }
+                if(StringUtil.isNotEmpty(module)){
+                    bean.setModule(Integer.parseInt(module));
+                } else {
+                    // 默认为校园一角
+                    bean.setModule(ModuleEnum.SCHOOL.getIndex());
                 }
                 bean.setAppId(weChatAPPBean.getId());
                 bean.setStatus(StatusEnum.EFFECTIVE.getIndex());

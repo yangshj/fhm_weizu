@@ -7,7 +7,8 @@ package com.weizu.common.enums;
 public enum ModuleEnum {
 
     ADDRESS_BOOK(1, "通讯录"),
-    SCHOOL(2, "校园一角");
+    SCHOOL(2, "校园一角"),
+    NOTICE(3, "公告");
 
     private Integer index;
     private String desc;

@@ -14,6 +14,7 @@
         content,
         first_path,
         cloud_path,
+        module,
         app_id,
         status,
         create_time,
@@ -24,6 +25,7 @@
         #{content},
         #{firstPath},
         #{cloudPath},
+        #{module},
         #{appId},
         #{status},
         now(),
@@ -134,6 +136,9 @@
         </if>
         <if test="status != null and status != ''">
             and status = #{status}
+        </if>
+        <if test="module != null and module != ''">
+            and module = #{module}
         </if>
         <if test="userId != null and userId != ''">
             and user_id = #{userId}

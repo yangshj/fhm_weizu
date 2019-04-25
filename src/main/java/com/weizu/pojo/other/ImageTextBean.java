@@ -28,6 +28,8 @@ public class ImageTextBean implements Serializable {
     private Date createTime;
     /** 修改时间 */
     private Date modifyTime;
+    /** 所属模块 ModuleEnum */
+    private Integer module;
     /** 小程序Id */
     private Long appId;
     /** 是否有效 */
@@ -123,5 +125,11 @@ public class ImageTextBean implements Serializable {
     }
     public void setContentAb(String contentAb) {
         this.contentAb = contentAb;
+    }
+    public Integer getModule() {
+        return module;
+    }
+    public void setModule(Integer module) {
+        this.module = module;
     }
 }
