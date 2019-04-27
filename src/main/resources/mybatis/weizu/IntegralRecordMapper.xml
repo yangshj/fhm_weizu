@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weizu.integral">
+
+    <resultMap id="BaseResultMap" type="com.weizu.pojo.integral.IntegralRecordBean">
+        <id column="id" jdbcType="LONG" property="id" />
+        <result column="integral_id" jdbcType="LONG" property="integralId" />
+        <result column="integral" jdbcType="INTEGER" property="integral" />
+        <result column="oper_type" jdbcType="TINYINT" property="operType" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+       id, integral_id, integral, oper_type, create_time, remark
+    </sql>
+
+
+
+    <insert id="insertIntegralRecord" parameterType="com.weizu.pojo.integral.IntegralRecordBean">
+        insert into weizu_integral_record (integral_id, integral,
+          oper_type, create_time, remark
+          )
+        values (#{integralId,jdbcType=LONG}, #{integral,jdbcType=INTEGER},
+          #{operType,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
+          )
+    </insert>
+
+    <update id="updateIntegralRecord" parameterType="com.weizu.pojo.integral.IntegralRecordBean">
+        update weizu_integral_record
+        <set>
+            <if test="integralId != null">
+                integral_id = #{integralId,jdbcType=LONG},
+            </if>
+            <if test="integral != null">
+                integral = #{integral,jdbcType=INTEGER},
+            </if>
+            <if test="operType != null">
+                oper_type = #{operType,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteIntegralRecord" parameterType="java.lang.Long">
+       delete from weizu_integral_record
+       where id = #{id,jdbcType=LONG}
+    </delete>
+
+    <select id="getIntegralRecordByIntegralId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from weizu_integral_record
+        where integral_id = #{integralId,jdbcType=LONG}
+    </select>
+
+
+</mapper>

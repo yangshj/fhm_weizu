@@ -30,6 +30,8 @@
 		<typeAlias type="com.weizu.pojo.addressBook.WeChatAPPBean" alias="weChatAPPBean"/>
 		<typeAlias type="com.weizu.pojo.other.ImageTextBean" alias="imageTextBean"/>
 		<typeAlias type="com.weizu.pojo.system.WechatRightsBean" alias="wechatRightsBean"/>
+		<typeAlias type="com.weizu.pojo.integral.IntegralBean" alias="integralBean"/>
+		<typeAlias type="com.weizu.pojo.integral.IntegralRecordBean" alias="integralRecordBean"/>
 		<!-- 分页 -->
 		<typeAlias type="com.fh.entity.Page" alias="Page"/>
 	</typeAliases>

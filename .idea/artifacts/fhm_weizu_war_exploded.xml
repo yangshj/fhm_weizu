@@ -7,6 +7,11 @@
           <element id="module-output" name="fhm_weizu" />
         </element>
         <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: org.jsoup:jsoup:1.8.1" />
+          <element id="library" level="project" name="Maven: com.baidu.aip:java-sdk:4.8.0" />
+          <element id="library" level="project" name="Maven: org.json:json:20160810" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-websocket:4.3.20.RELEASE" />
+          <element id="library" level="project" name="Maven: javax.websocket:javax.websocket-api:1.1" />
           <element id="library" level="project" name="Maven: org.springframework:spring-aop:4.3.20.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-aspects:4.3.20.RELEASE" />
           <element id="library" level="project" name="Maven: org.aspectj:aspectjweaver:1.8.9" />
