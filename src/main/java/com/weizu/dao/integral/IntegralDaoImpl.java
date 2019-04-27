@@ -1,7 +1,6 @@
 package com.weizu.dao.integral;
 
 import com.fh.dao.DaoSupport;
-import com.weizu.pojo.addressBook.WeChatAPPBean;
 import com.weizu.pojo.integral.IntegralBean;
 import org.springframework.stereotype.Repository;
 

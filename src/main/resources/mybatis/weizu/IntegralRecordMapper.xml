@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.weizu.integral">
+<mapper namespace="com.weizu.integralRecord">
 
     <resultMap id="BaseResultMap" type="com.weizu.pojo.integral.IntegralRecordBean">
-        <id column="id" jdbcType="LONG" property="id" />
-        <result column="integral_id" jdbcType="LONG" property="integralId" />
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="integral_id" jdbcType="BIGINT" property="integralId" />
         <result column="integral" jdbcType="INTEGER" property="integral" />
         <result column="oper_type" jdbcType="TINYINT" property="operType" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -21,8 +21,8 @@
         insert into weizu_integral_record (integral_id, integral,
           oper_type, create_time, remark
           )
-        values (#{integralId,jdbcType=LONG}, #{integral,jdbcType=INTEGER},
-          #{operType,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
+        values (#{integralId,jdbcType=BIGINT}, #{integral,jdbcType=INTEGER},
+          #{operType,jdbcType=TINYINT}, now(), #{remark,jdbcType=VARCHAR}
           )
     </insert>
 
@@ -30,7 +30,7 @@
         update weizu_integral_record
         <set>
             <if test="integralId != null">
-                integral_id = #{integralId,jdbcType=LONG},
+                integral_id = #{integralId,jdbcType=BIGINT},
             </if>
             <if test="integral != null">
                 integral = #{integral,jdbcType=INTEGER},
@@ -42,7 +42,7 @@
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="remark != null">
-                remark = #{remark,jdbcType=VARCHAR},
+                remark = #{remark,jdbcType=VARCHAR}
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
@@ -50,14 +50,14 @@
 
     <delete id="deleteIntegralRecord" parameterType="java.lang.Long">
        delete from weizu_integral_record
-       where id = #{id,jdbcType=LONG}
+       where id = #{id,jdbcType=BIGINT}
     </delete>
 
     <select id="getIntegralRecordByIntegralId" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from weizu_integral_record
-        where integral_id = #{integralId,jdbcType=LONG}
+        where integral_id = #{integralId,jdbcType=BIGINT} order by create_time desc
     </select>
 
 

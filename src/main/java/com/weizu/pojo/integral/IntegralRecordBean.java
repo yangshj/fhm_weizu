@@ -1,6 +1,9 @@
 package com.weizu.pojo.integral;
 
+import com.weizu.common.enums.IntegralOperTypeEnum;
+
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -20,6 +23,9 @@ public class IntegralRecordBean implements Serializable {
     /** 备注 */
     private String remark;
 
+    /** 操作类型字符串 */
+    private String operTypeStr;
+    private String createTimeStr;
 
     public Long getId() {
         return id;
@@ -57,5 +63,20 @@ public class IntegralRecordBean implements Serializable {
     public void setRemark(String remark) {
         this.remark = remark;
     }
-
+    public String getOperTypeStr() {
+        if(operType!=null){
+            return IntegralOperTypeEnum.getEnumByIndex(operType).getDesc();
+        }
+        return null;
+    }
+    public void setOperTypeStr(String operTypeStr) {
+        this.operTypeStr = operTypeStr;
+    }
+    public String getCreateTimeStr() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return format.format(createTime);
+    }
+    public void setCreateTimeStr(String createTimeStr) {
+        this.createTimeStr = createTimeStr;
+    }
 }
