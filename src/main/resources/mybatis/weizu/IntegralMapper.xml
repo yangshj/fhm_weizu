@@ -36,7 +36,7 @@
 
     <update id="updateIntegral" parameterType="com.weizu.pojo.integral.IntegralBean">
         update weizu_integral
-        set modify_time = now(),
+        set modify_time = now()
         <if test="nickName != null">
             ,nick_name = #{nickName,jdbcType=VARCHAR}
         </if>
