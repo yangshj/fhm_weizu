@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weizu.order">
+
+    <resultMap id="BaseResultMap" type="orderBean">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+        <result column="user_id" jdbcType="BIGINT" property="userId" />
+        <result column="integral_num" jdbcType="INTEGER" property="integralNum" />
+        <result column="commodity_id" jdbcType="BIGINT" property="commodityId" />
+        <result column="commodity_num" jdbcType="INTEGER" property="commodityNum" />
+        <result column="commodity_title" jdbcType="VARCHAR" property="commodityTitle" />
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+        <result column="exchange_status" jdbcType="INTEGER" property="exchangeStatus" />
+        <result column="exchange_emp" jdbcType="BIGINT" property="exchangeEmp" />
+        <result column="exchange_time" jdbcType="TIMESTAMP" property="exchangeTime" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, order_no, user_id, integral_num, commodity_id, commodity_num, commodity_title,
+        nick_name, user_name, exchange_status, exchange_emp, exchange_time, create_time,
+        modify_time
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from weizu_order
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from weizu_order
+    where id = #{id,jdbcType=BIGINT}
+   </delete>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="orderBean" useGeneratedKeys="true">
+        insert into weizu_order (order_no, user_id, integral_num,
+          commodity_id, commodity_num, commodity_title,
+          nick_name, user_name, exchange_status,
+          exchange_emp, exchange_time, create_time,
+          modify_time)
+        values (#{orderNo,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}, #{integralNum,jdbcType=INTEGER},
+          #{commodityId,jdbcType=BIGINT}, #{commodityNum,jdbcType=INTEGER}, #{commodityTitle,jdbcType=VARCHAR},
+          #{nickName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{exchangeStatus,jdbcType=INTEGER},
+          #{exchangeEmp,jdbcType=BIGINT}, #{exchangeTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP},
+          #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="orderBean">
+        update weizu_order
+        <set>
+            <if test="orderNo != null">
+                order_no = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="integralNum != null">
+                integral_num = #{integralNum,jdbcType=INTEGER},
+            </if>
+            <if test="commodityId != null">
+                commodity_id = #{commodityId,jdbcType=BIGINT},
+            </if>
+            <if test="commodityNum != null">
+                commodity_num = #{commodityNum,jdbcType=INTEGER},
+            </if>
+            <if test="commodityTitle != null">
+                commodity_title = #{commodityTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="nickName != null">
+                nick_name = #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="exchangeStatus != null">
+                exchange_status = #{exchangeStatus,jdbcType=INTEGER},
+            </if>
+            <if test="exchangeEmp != null">
+                exchange_emp = #{exchangeEmp,jdbcType=BIGINT},
+            </if>
+            <if test="exchangeTime != null">
+                exchange_time = #{exchangeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyTime != null">
+                modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

@@ -29,7 +29,7 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-tx:4.3.20.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-web:4.3.20.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:4.3.20.RELEASE" />
-          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.34" />
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.45" />
           <element id="library" level="project" name="Maven: javax.servlet:servlet-api:2.5" />
           <element id="library" level="project" name="Maven: aopalliance:aopalliance:1.0" />
           <element id="library" level="project" name="Maven: org.apache.james:apache-mime4j:0.6.1" />

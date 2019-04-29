@@ -1,29 +1,26 @@
 package com.weizu.common.enums;
 
-
 /**
  * 模块
  */
-public enum ModuleEnum {
-
-    ADDRESS_BOOK(1, "通讯录"),
-    SCHOOL(2, "校园一角"),
-    NOTICE(3, "公告"),
-    INTEGRAL_SHOP(4, "积分商城");
+public enum ExchangeStatusEnum {
+    
+    NOT_HAVE(1, "未兑换"),
+    ALREADY(2, "已兑换");
 
     private Integer index;
     private String desc;
 
-    private ModuleEnum(Integer index, String desc) {
+    private ExchangeStatusEnum(Integer index, String desc) {
         this.index = index;
         this.desc = desc;
     }
 
-    public static ModuleEnum getEnumByIndex(Integer index) {
-        ModuleEnum[] arr = values();
+    public static ExchangeStatusEnum getEnumByIndex(Integer index) {
+        ExchangeStatusEnum[] arr = values();
         int len = arr.length;
         for(int i = 0; i < len; ++i) {
-            ModuleEnum itemEnum = arr[i];
+            ExchangeStatusEnum itemEnum = arr[i];
             if (itemEnum.getIndex().equals(index)) {
                 return itemEnum;
             }
