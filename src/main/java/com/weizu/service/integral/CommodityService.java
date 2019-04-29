@@ -1,10 +1,10 @@
-package com.weizu.dao.integral;
+package com.weizu.service.integral;
 
 import com.weizu.pojo.integral.CommodityBean;
 
 import java.util.List;
 
-public interface CommodityDao {
+public interface CommodityService {
 
     /** 插入商品 */
     Integer insertCommodity(CommodityBean bean) throws Exception;
@@ -26,4 +26,5 @@ public interface CommodityDao {
 
     /** 对应小程序加载更多 */
     List<CommodityBean> loadMoreByCondition(CommodityBean bean) throws Exception;
+
 }

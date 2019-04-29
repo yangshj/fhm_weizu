@@ -25,19 +25,7 @@
         modify_time
     </sql>
 
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List" />
-        from weizu_order
-        where id = #{id,jdbcType=BIGINT}
-    </select>
-
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from weizu_order
-    where id = #{id,jdbcType=BIGINT}
-   </delete>
-
-    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="orderBean" useGeneratedKeys="true">
+    <insert id="insertOrder" keyColumn="id" keyProperty="id" parameterType="orderBean" useGeneratedKeys="true">
         insert into weizu_order (order_no, user_id, integral_num,
           commodity_id, commodity_num, commodity_title,
           nick_name, user_name, exchange_status,
@@ -48,10 +36,9 @@
           #{nickName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{exchangeStatus,jdbcType=INTEGER},
           #{exchangeEmp,jdbcType=BIGINT}, #{exchangeTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP},
           #{modifyTime,jdbcType=TIMESTAMP})
-  </insert>
+    </insert>
 
-
-    <update id="updateByPrimaryKeySelective" parameterType="orderBean">
+    <update id="updateOrder" parameterType="orderBean">
         update weizu_order
         <set>
             <if test="orderNo != null">
@@ -96,5 +83,30 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
+
+    <select id="getOrderByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from weizu_order
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="getOrderByCondition" parameterType="orderBean" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from weizu_order
+        where 1=1
+        <if test="orderNo != null">
+            and order_no = #{orderNo,jdbcType=VARCHAR}
+        </if>
+        <if test="userId != null">
+            and user_id = #{userId,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <delete id="deleteOrder" parameterType="java.lang.Long">
+    delete from weizu_order
+    where id = #{id,jdbcType=BIGINT}
+   </delete>
 
 </mapper>

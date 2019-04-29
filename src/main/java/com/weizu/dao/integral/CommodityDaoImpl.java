@@ -20,8 +20,13 @@ public class CommodityDaoImpl extends DaoSupport implements CommodityDao {
     }
 
     @Override
-    public void deleteCommodity(CommodityBean bean) throws Exception {
-        this.delete("com.weizu.commodity.deleteCommodity", bean);
+    public void deleteCommodity(Long id) throws Exception {
+        this.delete("com.weizu.commodity.deleteCommodity", id);
+    }
+
+    @Override
+    public void deleteCommodityLogic(Long id) throws Exception {
+        this.delete("com.weizu.commodity.deleteCommodityLogic", id);
     }
 
     @Override

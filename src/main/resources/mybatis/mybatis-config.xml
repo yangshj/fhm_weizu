@@ -32,6 +32,9 @@
 		<typeAlias type="com.weizu.pojo.system.WechatRightsBean" alias="wechatRightsBean"/>
 		<typeAlias type="com.weizu.pojo.integral.IntegralBean" alias="integralBean"/>
 		<typeAlias type="com.weizu.pojo.integral.IntegralRecordBean" alias="integralRecordBean"/>
+		<typeAlias type="com.weizu.pojo.integral.CommodityBean" alias="commodityBean"/>
+		<typeAlias type="com.weizu.pojo.integral.OrderBean" alias="orderBean"/>
+
 		<!-- 分页 -->
 		<typeAlias type="com.fh.entity.Page" alias="Page"/>
 	</typeAliases>
