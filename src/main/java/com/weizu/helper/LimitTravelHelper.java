@@ -43,15 +43,13 @@ public class LimitTravelHelper {
             List<LimitTravelVO> list = limitNumMap.get(cityId);
             // 校验是否过期
             LimitTravelVO first = list.get(0);
-            SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd");
-            String todayStr = dateFormat.format(new Date());
-            Date today = dateFormat.parse(todayStr);
-            // 已经过期
-            if(today.getTime()>first.getLimitDate().getTime()){
+            Date now = new Date();
+            // 已经过期（两小时刷新一次）
+            if(now.getTime()-first.getCreateTime().getTime()>2*60*60*1000L){
                 System.out.println("过期重新加载……");
                 reload();
             }
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return limitNumMap.get(cityId);
@@ -61,6 +59,7 @@ public class LimitTravelHelper {
     private static synchronized void reload(){
         System.out.println("刷新限号规则……");
         limitNumMap.clear();
+        cityList.clear();
         init();
     }
 
@@ -121,6 +120,7 @@ public class LimitTravelHelper {
                     vo.setCityName(cityName);
                     vo.setLimitDesc(desc);
                     vo.setLimitDate(DateUtil.dayAddNum(date, i));
+                    vo.setCreateTime(new Date());
                     String dayDesc = "今天";
                     if(i==1) dayDesc = "明天";
                     if(i==2) dayDesc = "后天";

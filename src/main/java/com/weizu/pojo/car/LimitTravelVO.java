@@ -19,6 +19,8 @@ public class LimitTravelVO {
     private String cityName;
     /** 城市id */
     private String cityId;
+    /** 创建日期 */
+    private Date createTime;
 
     public Date getLimitDate() {
         return limitDate;
@@ -49,5 +51,11 @@ public class LimitTravelVO {
     }
     public void setDayDesc(String dayDesc) {
         this.dayDesc = dayDesc;
+    }
+    public Date getCreateTime() {
+        return createTime;
+    }
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }
