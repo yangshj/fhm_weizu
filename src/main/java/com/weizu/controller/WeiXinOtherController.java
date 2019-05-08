@@ -75,9 +75,9 @@ public class WeiXinOtherController  extends BaseController {
                     query.setUserId(userOpenInfo.getUserId());
                     query.setModule(null);
                     // 积分商城是个独立模块--需要单独过滤
-                    if(StringUtil.isNotEmpty(module) && ModuleEnum.INTEGRAL_SHOP.getIndex().equals(Integer.parseInt(module))){
-                        query.setModule(ModuleEnum.INTEGRAL_SHOP.getIndex());
-                    }
+//                    if(StringUtil.isNotEmpty(module) && ModuleEnum.INTEGRAL_SHOP.getIndex().equals(Integer.parseInt(module))){
+//                        query.setModule(ModuleEnum.INTEGRAL_SHOP.getIndex());
+//                    }
                 }
                 List<ImageTextBean>  list = imageTextService.loadMoreByCondition(query);
                 for(ImageTextBean bean:list){
