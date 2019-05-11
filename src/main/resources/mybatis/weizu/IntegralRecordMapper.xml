@@ -57,7 +57,7 @@
         select
         <include refid="Base_Column_List" />
         from weizu_integral_record
-        where integral_id = #{integralId,jdbcType=BIGINT} order by create_time desc
+        where integral_id = #{integralId,jdbcType=BIGINT} order by create_time desc limit 30
     </select>
 
 
