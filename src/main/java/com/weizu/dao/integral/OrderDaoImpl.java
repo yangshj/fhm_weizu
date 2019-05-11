@@ -15,6 +15,11 @@ public class OrderDaoImpl extends DaoSupport implements OrderDao {
     }
 
     @Override
+    public OrderBean getOrderById(Long id) throws Exception {
+        return (OrderBean) this.findForObject("com.weizu.order.getOrderById",id);
+    }
+
+    @Override
     public Integer updateOrder(OrderBean bean) throws Exception {
         return (Integer) this.update("com.weizu.order.updateOrder",bean);
     }

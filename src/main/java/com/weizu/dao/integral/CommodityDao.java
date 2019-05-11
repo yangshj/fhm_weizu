@@ -9,6 +9,9 @@ public interface CommodityDao {
     /** 插入商品 */
     Integer insertCommodity(CommodityBean bean) throws Exception;
 
+    /** 查找商品 */
+    CommodityBean findCommodityById(Long id) throws Exception;
+
     /** 修改商品 */
     Integer updateCommodity(CommodityBean bean) throws Exception;
 

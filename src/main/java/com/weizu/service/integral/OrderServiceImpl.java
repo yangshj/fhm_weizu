@@ -19,6 +19,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public OrderBean getOrderById(Long id) throws Exception {
+        return orderDao.getOrderById(id);
+    }
+
+    @Override
     public Integer updateOrder(OrderBean bean) throws Exception {
         return orderDao.updateOrder(bean);
     }

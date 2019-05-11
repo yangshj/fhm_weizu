@@ -88,6 +88,13 @@
         select
         <include refid="Base_Column_List" />
         from weizu_order
+        where user_id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="getOrderById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from weizu_order
         where id = #{id,jdbcType=BIGINT}
     </select>
 

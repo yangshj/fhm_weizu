@@ -19,6 +19,11 @@ public class CommodityServiceImpl implements CommodityService {
     }
 
     @Override
+    public CommodityBean findCommodityById(Long id) throws Exception {
+        return commodityDao.findCommodityById(id);
+    }
+
+    @Override
     public Integer updateCommodity(CommodityBean bean) throws Exception {
         return commodityDao.updateCommodity(bean);
     }

@@ -15,6 +15,11 @@ public class CommodityDaoImpl extends DaoSupport implements CommodityDao {
     }
 
     @Override
+    public CommodityBean findCommodityById(Long id) throws Exception {
+        return (CommodityBean)this.findForObject("com.weizu.commodity.findCommodityById",id);
+    }
+
+    @Override
     public Integer updateCommodity(CommodityBean bean) throws Exception {
         return (Integer) this.update("com.weizu.commodity.updateCommodity",bean);
     }

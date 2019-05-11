@@ -9,6 +9,9 @@ public interface OrderDao {
     /** 插入订单 */
     Integer insertOrder(OrderBean bean) throws Exception;
 
+    /** 获取订单 */
+    OrderBean getOrderById(Long id) throws Exception;
+
     /** 修改订单 */
     Integer updateOrder(OrderBean bean) throws Exception;
 
