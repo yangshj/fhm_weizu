@@ -43,6 +43,9 @@ public class WeiXinIntegralController extends BaseController {
     @Autowired
     private UserInfoService userInfoService;
 
+    /**
+     * 我的积分
+     */
     @RequestMapping(value="/getIntegral")
     @ResponseBody
     public void getIntegral(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -97,6 +100,9 @@ public class WeiXinIntegralController extends BaseController {
         }
     }
 
+    /**
+     * 新增积分
+     */
     @RequestMapping(value="/addIntegral")
     @ResponseBody
     public void addIntegral(HttpServletRequest request, HttpServletResponse response) throws IOException {
