@@ -35,7 +35,7 @@ import java.util.List;
  * @since : 2019/3/26 15:26:45
  **/
 @Controller
-@RequestMapping(value="/weizu/weixin/other")
+@RequestMapping(value="/weizu/weixin/order")
 public class WeiXinOrderController  extends BaseController {
 
     @Autowired
@@ -49,6 +49,9 @@ public class WeiXinOrderController  extends BaseController {
     @Autowired
     private IntegralRecordService integralRecordService;
 
+    /**
+     * 兑换
+     */
     @RequestMapping(value="/exchange")
     @ResponseBody
     public void exchange(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -76,7 +79,7 @@ public class WeiXinOrderController  extends BaseController {
                 }
                 IntegralBean query = new IntegralBean();
                 query.setUserId(userOpenInfo.getUserId());
-                query.setAppId(Long.parseLong(appId));
+                query.setAppId(weChatAPPBean.getId());
                 List<IntegralBean> list = integralService.getIntegralByCondition(query);
                 if(list==null || list.size()==0){
                     re.setResult(ResultHelper.FAIL);
@@ -98,8 +101,10 @@ public class WeiXinOrderController  extends BaseController {
                 orderBean.setNickName(userInfoBean.getNickName());
                 orderBean.setExchangeStatus(ExchangeStatusEnum.NOT_HAVE.getIndex());
                 orderBean.setIntegralNum(commodityBean.getIntegralNum());
-                orderBean.setOrderNo(System.currentTimeMillis()+"-"+userOpenInfo.getUserId());
+                orderBean.setOrderNo(System.currentTimeMillis()+""+userOpenInfo.getUserId());
                 orderBean.setUserId(userOpenInfo.getUserId());
+                orderBean.setCreateTime(new Date());
+                orderBean.setModifyTime(new Date());
                 orderService.insertOrder(orderBean);
                 // 更新积分
                 IntegralBean update = new IntegralBean();
@@ -111,12 +116,17 @@ public class WeiXinOrderController  extends BaseController {
                 bean.setIntegralId(integralBean.getId());
                 bean.setIntegral(commodityBean.getIntegralNum());
                 bean.setOperType(IntegralOperTypeEnum.SUB.getIndex());
+                bean.setCreateTime(new Date());
                 bean.setRemark("购买商品"+commodityBean.getTitle()+"消费积分"+commodityBean.getIntegralNum());
                 integralRecordService.insertIntegralRecord(bean);
                 // 返回结果成功
                 re.setResult(ResultHelper.SUCCESS);
                 re.setOrderNo(orderBean.getOrderNo());
                 re.setOrderId(orderBean.getId());
+                OrderInfoBean param = new OrderInfoBean();
+                param.setOrderNo(orderBean.getOrderNo());
+                List<OrderInfoBean> orderInfoBeans= orderService.getOrderListByCondition(param);
+                re.setOrderInfo(orderInfoBeans.get(0));
             } else {
                 re.setResult(ResultHelper.SESSION_INVALID);
             }
@@ -131,6 +141,9 @@ public class WeiXinOrderController  extends BaseController {
         }
     }
 
+    /**
+     * 订单详情
+     */
     @RequestMapping(value="/orderDetail")
     @ResponseBody
     public void orderDetail(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -151,20 +164,7 @@ public class WeiXinOrderController  extends BaseController {
                     re.setMsg("无效的appId");
                     return;
                 }
-                OrderBean orderBean = orderService.getOrderById(Long.parseLong(orderId));
-                if(orderBean==null){
-                    re.setResult(ResultHelper.FAIL);
-                    re.setMsg("无效的订单id");
-                    return;
-                } else if(!orderBean.getOrderNo().equals(orderNo)) {
-                    re.setResult(ResultHelper.FAIL);
-                    re.setMsg("无效的订单号");
-                    return;
-                }
-                CommodityBean commodityBean = commodityService.findCommodityById(orderBean.getCommodityId());
-                re.setResult(ResultHelper.SUCCESS);
-                re.setCommodityInfo(commodityBean);
-                re.setOrderInfo(orderBean);
+
             } else {
                 re.setResult(ResultHelper.SESSION_INVALID);
             }
@@ -179,7 +179,9 @@ public class WeiXinOrderController  extends BaseController {
         }
     }
 
-
+    /**
+     * 订单完成
+     */
     @RequestMapping(value="/orderFinish")
     @ResponseBody
     public void orderFinish(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -227,5 +229,49 @@ public class WeiXinOrderController  extends BaseController {
         }
     }
 
+
+    /**
+     * 我的订单列表
+     */
+    @RequestMapping(value="/myOrderList")
+    @ResponseBody
+    public void myOrderList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        MyOrderListRE re = new MyOrderListRE();
+        try {
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String appId = request.getParameter("appId");
+            String exchangeStatus = request.getParameter("exchangeStatus");
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+                if(weChatAPPBean==null){
+                    re.setResult(ResultHelper.FAIL);
+                    re.setMsg("无效的appId");
+                    return;
+                }
+                OrderInfoBean query = new OrderInfoBean();
+                query.setUserId(userOpenInfo.getUserId());
+                if(StringUtil.isNotEmpty(exchangeStatus)){
+                    query.setExchangeStatus(Integer.parseInt(exchangeStatus));
+                }
+                List<OrderInfoBean> list = orderService.getOrderListByCondition(query);
+                re.setList(list);
+                re.setResult(ResultHelper.SUCCESS);
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+            System.out.println("成功……");
+        } catch (Exception e) {
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        } finally {
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }
+    }
 
 }

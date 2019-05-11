@@ -1,6 +1,7 @@
 package com.weizu.service.integral;
 
 import com.weizu.pojo.integral.OrderBean;
+import com.weizu.pojo.integral.OrderInfoBean;
 
 import java.util.List;
 
@@ -23,4 +24,7 @@ public interface OrderService {
 
     /** 通过条件获取订单 */
     List<OrderBean> getOrderByCondition(OrderBean bean) throws Exception;
+
+    /** 通过条件获取订单 */
+    List<OrderInfoBean> getOrderListByCondition(OrderInfoBean bean) throws Exception;
 }

@@ -34,6 +34,8 @@
 		<typeAlias type="com.weizu.pojo.integral.IntegralRecordBean" alias="integralRecordBean"/>
 		<typeAlias type="com.weizu.pojo.integral.CommodityBean" alias="commodityBean"/>
 		<typeAlias type="com.weizu.pojo.integral.OrderBean" alias="orderBean"/>
+		<typeAlias type="com.weizu.pojo.integral.OrderInfoBean" alias="orderInfoBean"/>
+
 
 		<!-- 分页 -->
 		<typeAlias type="com.fh.entity.Page" alias="Page"/>

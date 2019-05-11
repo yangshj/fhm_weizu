@@ -10,6 +10,8 @@ public class ExchangeRE extends BaseRE {
     private String orderNo;
     private Long orderId;
 
+    private OrderInfoBean orderInfo;
+
     public String getOrderNo() {
         return orderNo;
     }
@@ -21,5 +23,11 @@ public class ExchangeRE extends BaseRE {
     }
     public void setOrderId(Long orderId) {
         this.orderId = orderId;
+    }
+    public OrderInfoBean getOrderInfo() {
+        return orderInfo;
+    }
+    public void setOrderInfo(OrderInfoBean orderInfo) {
+        this.orderInfo = orderInfo;
     }
 }

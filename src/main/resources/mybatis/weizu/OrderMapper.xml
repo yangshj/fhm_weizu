@@ -116,4 +116,25 @@
     where id = #{id,jdbcType=BIGINT}
    </delete>
 
+    <select id="getOrderListByCondition" parameterType="orderInfoBean" resultType="orderInfoBean">
+        select
+        od.id as orderId, od.order_no as orderNo, od.user_id as userId, od.integral_num as orderIntegralNum,
+        od.commodity_id as commodityId, od.commodity_num as orderCommodityNum, od.commodity_title as commodityTitle,
+        od.nick_name as nickName, od.user_name as userName, od.exchange_status as exchangeStatus,
+        od.exchange_emp as exchangeEmp, od.exchange_time as exchangeTime, od.create_time as createTime,
+        od.modify_time as modifyTime, cd.integral_num as commodityIntegralNum, cd.first_path as commodityFirstImg
+        from weizu_order od left join weizu_commodity cd on od.commodity_id=cd.id
+        where 1=1
+        <if test="orderNo != null">
+            and od.order_no = #{orderNo,jdbcType=VARCHAR}
+        </if>
+        <if test="userId != null">
+            and od.user_id = #{userId,jdbcType=BIGINT}
+        </if>
+        <if test="exchangeStatus != null">
+            and od.exchange_status = #{exchangeStatus,jdbcType=INTEGER}
+        </if>
+    </select>
+
+
 </mapper>

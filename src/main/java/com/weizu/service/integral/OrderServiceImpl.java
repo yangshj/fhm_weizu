@@ -2,6 +2,7 @@ package com.weizu.service.integral;
 
 import com.weizu.dao.integral.OrderDao;
 import com.weizu.pojo.integral.OrderBean;
+import com.weizu.pojo.integral.OrderInfoBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +42,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderBean> getOrderByCondition(OrderBean bean) throws Exception {
         return orderDao.getOrderByCondition(bean);
+    }
+
+    @Override
+    public List<OrderInfoBean> getOrderListByCondition(OrderInfoBean bean) throws Exception {
+        return orderDao.getOrderListByCondition(bean);
     }
 }

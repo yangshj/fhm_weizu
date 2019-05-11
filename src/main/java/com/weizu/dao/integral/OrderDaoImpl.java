@@ -2,6 +2,7 @@ package com.weizu.dao.integral;
 
 import com.fh.dao.DaoSupport;
 import com.weizu.pojo.integral.OrderBean;
+import com.weizu.pojo.integral.OrderInfoBean;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -37,5 +38,10 @@ public class OrderDaoImpl extends DaoSupport implements OrderDao {
     @Override
     public List<OrderBean> getOrderByCondition(OrderBean bean) throws Exception {
         return (List<OrderBean>) this.findForList("com.weizu.order.getOrderByCondition", bean);
+    }
+
+    @Override
+    public List<OrderInfoBean> getOrderListByCondition(OrderInfoBean bean) throws Exception {
+        return (List<OrderInfoBean>) this.findForList("com.weizu.order.getOrderListByCondition", bean);
     }
 }
