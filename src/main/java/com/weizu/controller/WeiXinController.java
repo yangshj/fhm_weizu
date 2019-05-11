@@ -197,6 +197,9 @@ public class WeiXinController extends BaseController{
 				if(exit.getAdmin()!=null && exit.getAdmin().intValue()==1){
                     userOpenInfo.setAdmin(true);
                 }
+				if(exit.getSuperAdmin()!=null && exit.getSuperAdmin().intValue()==1){
+					userOpenInfo.setSuperAdmin(true);
+				}
                 userOpenInfo.setUserId(exit.getId());
             }
 			//return "{sessionId:"+userOpenInfo.getSessionId()+"}";

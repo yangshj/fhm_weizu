@@ -137,7 +137,8 @@
 			 app_id as appId,
 			 rights as rights,
 			 manager_rights as managerRights,
-			 admin as admin
+			 admin as admin,
+			 super_admin as superAdmin
 		from 
 			weizu_user
 		where 
@@ -159,7 +160,8 @@
 			 app_id as appId,
 			 rights as rights,
 			 manager_rights as managerRights,
-			 admin as admin
+			  admin as admin,
+			 super_admin as superAdmin
 		from
 			weizu_user
 		where nick_name is not null and nick_name!='' and (rights is null or rights='0')
@@ -182,7 +184,8 @@
 			 app_id as appId,
 			 rights as rights,
 			 manager_rights as managerRights,
-			 admin as admin
+			 admin as admin,
+			 super_admin as superAdmin
 		from
 			weizu_user
 		where nick_name is not null and nick_name!='' and app_id = #{appId}

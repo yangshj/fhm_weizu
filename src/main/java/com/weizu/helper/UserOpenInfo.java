@@ -16,8 +16,10 @@ public class UserOpenInfo extends BaseRE {
 	private Date updateTime;
 	/** 管理员 */
 	private Boolean manager=false;
-	/** 超级管理员 */
+	/** 高级管理员 */
 	private Boolean admin = false;
+	/** 超级admin */
+	private Boolean superAdmin = false;
 
 
 
@@ -62,5 +64,11 @@ public class UserOpenInfo extends BaseRE {
 	}
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+	public Boolean getSuperAdmin() {
+		return superAdmin;
+	}
+	public void setSuperAdmin(Boolean superAdmin) {
+		this.superAdmin = superAdmin;
 	}
 }

@@ -164,7 +164,11 @@ public class WeiXinOrderController  extends BaseController {
                     re.setMsg("无效的appId");
                     return;
                 }
-
+                OrderInfoBean param = new OrderInfoBean();
+                param.setOrderNo(orderNo);
+                List<OrderInfoBean> orderInfoBeans= orderService.getOrderListByCondition(param);
+                re.setOrderInfo(orderInfoBeans.get(0));
+                re.setResult(ResultHelper.SUCCESS);
             } else {
                 re.setResult(ResultHelper.SESSION_INVALID);
             }
@@ -209,12 +213,22 @@ public class WeiXinOrderController  extends BaseController {
                     re.setMsg("无效的订单id");
                     return;
                 }
+                OrderBean orderBean = list.get(0);
+                if(orderBean.getExchangeStatus()!=null && orderBean.getExchangeStatus().equals(ExchangeStatusEnum.ALREADY.getIndex())){
+                    re.setResult(ResultHelper.SUCCESS);
+                    return;
+                }
                 OrderBean update = new OrderBean();
-                update.setId(list.get(0).getId());
+                update.setId(orderBean.getId());
                 update.setExchangeEmp(userOpenInfo.getUserId());
                 update.setExchangeStatus(ExchangeStatusEnum.ALREADY.getIndex());
                 update.setExchangeTime(new Date());
                 orderService.updateOrder(update);
+                OrderInfoBean param = new OrderInfoBean();
+                param.setOrderNo(orderNo);
+                List<OrderInfoBean> orderInfoBeans= orderService.getOrderListByCondition(param);
+                re.setOrderInfo(orderInfoBeans.get(0));
+                re.setResult(ResultHelper.SUCCESS);
             } else {
                 re.setResult(ResultHelper.SESSION_INVALID);
             }
