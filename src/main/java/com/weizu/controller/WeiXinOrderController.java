@@ -215,7 +215,8 @@ public class WeiXinOrderController  extends BaseController {
                 }
                 OrderBean orderBean = list.get(0);
                 if(orderBean.getExchangeStatus()!=null && orderBean.getExchangeStatus().equals(ExchangeStatusEnum.ALREADY.getIndex())){
-                    re.setResult(ResultHelper.SUCCESS);
+                    re.setResult(ResultHelper.FAIL);
+                    re.setMsg("订单已兑换");
                     return;
                 }
                 OrderBean update = new OrderBean();
