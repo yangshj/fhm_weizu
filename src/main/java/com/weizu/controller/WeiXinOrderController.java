@@ -167,6 +167,11 @@ public class WeiXinOrderController  extends BaseController {
                 OrderInfoBean param = new OrderInfoBean();
                 param.setOrderNo(orderNo);
                 List<OrderInfoBean> orderInfoBeans= orderService.getOrderListByCondition(param);
+                if(orderInfoBeans==null || orderInfoBeans.size()==0){
+                    re.setResult(ResultHelper.FAIL);
+                    re.setMsg("订单不存在");
+                    return;
+                }
                 re.setOrderInfo(orderInfoBeans.get(0));
                 re.setResult(ResultHelper.SUCCESS);
             } else {
