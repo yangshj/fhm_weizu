@@ -10,6 +10,7 @@ public enum ModuleEnum {
     SCHOOL(2, "校园一角"),
     NOTICE(3, "公告"),
     INTEGRAL_SHOP(4, "积分商城"),
+    RESTAURANT(5, "餐厅"),
     ZERO_GRADE(10, "幼儿园风采"),
     ONE_GRADE(11, "一年级风采"),
     TWO_GRADE(12, "二年级风采"),
