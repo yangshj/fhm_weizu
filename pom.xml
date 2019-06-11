@@ -8,7 +8,7 @@
 	<name>fhm_weizu</name>
 	<url>http://maven.apache.org</url>
 
-
+	<!-- 测试修改pom -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<javax-activation.version>1.1</javax-activation.version>
