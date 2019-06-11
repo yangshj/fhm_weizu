@@ -2,6 +2,9 @@ package com.weizu.util;
 
 import java.io.*;
 
+/**
+ * 文件操作工具类
+ */
 public class FileUtil {
 
     /**
