@@ -10,6 +10,7 @@ import com.weizu.helper.WeChatAppHelper;
 import com.weizu.helper.WeiXinMemoryCacheHelper;
 import com.weizu.pojo.addressBook.WeChatAPPBean;
 import com.weizu.pojo.oa.BaseRE;
+import com.weizu.pojo.other.GetImageTextRE;
 import com.weizu.pojo.other.ImageTextBean;
 import com.weizu.pojo.other.LoadMoreImageTextRE;
 import com.weizu.service.other.ImageTextService;
@@ -93,6 +94,44 @@ public class WeiXinOtherController  extends BaseController {
                     }
                 }
                 re.setList(list);
+                re.setResult(ResultHelper.SUCCESS);
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+            System.out.println("成功……");
+        } catch (Exception e) {
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        } finally {
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }
+    }
+
+
+    @RequestMapping(value="/getImageText")
+    @ResponseBody
+    public void getImageText(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        GetImageTextRE re = new GetImageTextRE();
+        try {
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String appId = request.getParameter("appId");
+            String userId = request.getParameter("userId");
+            String id = request.getParameter("id");
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+                if(weChatAPPBean==null){
+                    re.setResult(ResultHelper.FAIL);
+                    re.setMsg("无效的appId");
+                    return;
+                }
+                ImageTextBean bean = imageTextService.findImageTextById(Long.parseLong(id));
+                re.setBean(bean);
                 re.setResult(ResultHelper.SUCCESS);
             } else {
                 re.setResult(ResultHelper.SESSION_INVALID);
