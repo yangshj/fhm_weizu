@@ -131,7 +131,11 @@ public class WeiXinOtherController  extends BaseController {
                     return;
                 }
                 ImageTextBean bean = imageTextService.findImageTextById(Long.parseLong(id));
-                re.setBean(bean);
+                if(bean!=null){
+                    bean.setTitleAb(bean.getTitle().substring(0,15)+"...");
+                    bean.setContentAb(bean.getContent().substring(0,25)+"...");
+                    re.setBean(bean);
+                }
                 re.setResult(ResultHelper.SUCCESS);
             } else {
                 re.setResult(ResultHelper.SESSION_INVALID);
