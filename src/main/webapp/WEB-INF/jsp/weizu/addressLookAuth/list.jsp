@@ -58,9 +58,9 @@
 				
 				<thead>
 					<tr>
-						<th class="center">
-						<label><input type="checkbox" id="zcheckbox" /><span class="lbl"></span></label>
-						</th>
+						<%--<th class="center">--%>
+						<%--<label><input type="checkbox" id="zcheckbox" /><span class="lbl"></span></label>--%>
+						<%--</th>--%>
 						<th>序号</th>
 						<th>用户昵称</th>
 						<th>访问家谱</th>
@@ -69,8 +69,8 @@
 						<th>性別</th>
 						<th>用户头像</th>
 						<th><i class="icon-time hidden-phone"></i>创建日期</th>
-						<th class="center">状态</th>
-						<th class="center">操作</th>
+						<%--<th class="center">状态</th>--%>
+						<%--<th class="center">操作</th>--%>
 					</tr>
 				</thead>
 										
@@ -82,14 +82,14 @@
 						<c:if test="${QX.cha == 1 }">
 						<c:forEach items="${userList}" var="user" varStatus="vs">
 							<tr>
-								<td class='center' style="width: 30px;">
-									<label><input type='checkbox' name='ids' value="${user.id }" id="${user.id }" alt="${user.id }"/><span class="lbl"></span></label>
-								</td>
+								<%--<td class='center' style="width: 30px;">--%>
+									<%--<label><input type='checkbox' name='ids' value="${user.id }" id="${user.id }" alt="${user.id }"/><span class="lbl"></span></label>--%>
+								<%--</td>--%>
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
 								<td>${user.nickName }</td>
 								<td>${user.surname }</td>
-								<td style="width:250px;word-wrap:break-word;word-break:break-all;">${user.requestInfo}</td>
-								<td style="width:250px;word-wrap:break-word;word-break:break-all;">${user.beforeInfo}</td>
+								<td style="width:500px;word-wrap:break-word;word-break:break-all;">${user.requestInfo}</td>
+								<td style="width:500px;word-wrap:break-word;word-break:break-all;">${user.beforeInfo}</td>
 								<td>
 									<c:if test="${user.gender == '1' }"><span class="label label-important arrowed-in">男</span></c:if>
 									<c:if test="${user.gender == '2' }"><span class="label label-success arrowed">女</span></c:if>
@@ -99,34 +99,34 @@
 									<a href="${user.avatarUrl_0}" target="_blank">点击看大头像</a>
 								</td>
 								<td>${user.createTime}</td>
-								<td style="width: 60px;" class="center">
-									<c:if test="${user.STATUS == '0' }"><span class="label label-important arrowed-in">冻结</span></c:if>
-									<c:if test="${user.STATUS == '1' }"><span class="label label-success arrowed">正常</span></c:if>
-								</td>
-								<td style="width: 30px;" class="center">
-									<div class='hidden-phone visible-desktop btn-group'>
-									
-										<c:if test="${QX.edit != 1 && QX.del != 1 }">
-										<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="icon-lock" title="无权限"></i></span>
-										</c:if>
-										<div class="inline position-relative">
-										<button class="btn btn-mini btn-info" data-toggle="dropdown"><i class="icon-cog icon-only"></i></button>
-										<ul class="dropdown-menu dropdown-icon-only dropdown-light pull-right dropdown-caret dropdown-close">
-											<c:if test="${QX.edit == 1 }">
-												<li><a style="cursor:pointer;" title="编辑" onclick="editUser('${user.id }');" class="tooltip-success" data-rel="tooltip" title="" data-placement="left"><span class="green"><i class="icon-edit"></i></span></a></li>
-											</c:if>
-											<c:choose>
-												<c:when test="${user.userName=='admin'}"></c:when>
-												<c:otherwise>
-													<c:if test="${QX.del == 1 }">
-													<li><a style="cursor:pointer;" title="删除" onclick="delUser('${user.id }','${user.userName }');" class="tooltip-error" data-rel="tooltip" title="" data-placement="left"><span class="red"><i class="icon-trash"></i></span> </a></li>
-													</c:if>
-												</c:otherwise>
-											</c:choose>
-										</ul>
-										</div>
-									</div>
-								</td>
+								<%--<td style="width: 60px;" class="center">--%>
+									<%--<c:if test="${user.STATUS == '0' }"><span class="label label-important arrowed-in">冻结</span></c:if>--%>
+									<%--<c:if test="${user.STATUS == '1' }"><span class="label label-success arrowed">正常</span></c:if>--%>
+								<%--</td>--%>
+								<%--<td style="width: 30px;" class="center">--%>
+									<%--<div class='hidden-phone visible-desktop btn-group'>--%>
+									<%----%>
+										<%--<c:if test="${QX.edit != 1 && QX.del != 1 }">--%>
+										<%--<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="icon-lock" title="无权限"></i></span>--%>
+										<%--</c:if>--%>
+										<%--<div class="inline position-relative">--%>
+										<%--<button class="btn btn-mini btn-info" data-toggle="dropdown"><i class="icon-cog icon-only"></i></button>--%>
+										<%--<ul class="dropdown-menu dropdown-icon-only dropdown-light pull-right dropdown-caret dropdown-close">--%>
+											<%--<c:if test="${QX.edit == 1 }">--%>
+												<%--<li><a style="cursor:pointer;" title="编辑" onclick="editUser('${user.id }');" class="tooltip-success" data-rel="tooltip" title="" data-placement="left"><span class="green"><i class="icon-edit"></i></span></a></li>--%>
+											<%--</c:if>--%>
+											<%--<c:choose>--%>
+												<%--<c:when test="${user.userName=='admin'}"></c:when>--%>
+												<%--<c:otherwise>--%>
+													<%--<c:if test="${QX.del == 1 }">--%>
+													<%--<li><a style="cursor:pointer;" title="删除" onclick="delUser('${user.id }','${user.userName }');" class="tooltip-error" data-rel="tooltip" title="" data-placement="left"><span class="red"><i class="icon-trash"></i></span> </a></li>--%>
+													<%--</c:if>--%>
+												<%--</c:otherwise>--%>
+											<%--</c:choose>--%>
+										<%--</ul>--%>
+										<%--</div>--%>
+									<%--</div>--%>
+								<%--</td>--%>
 							</tr>
 						
 						</c:forEach>
