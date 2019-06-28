@@ -17,6 +17,8 @@ public class AddressLookAuthRequestBean  implements Serializable {
     private String nickName;
     /** 请求信息 */
     private String requestInfo;
+    /** 修改前信息 */
+    private String beforeInfo;
     /** 请求分配权限的姓氏 */
     private String surname;
     /** 审批状态 */
@@ -77,5 +79,11 @@ public class AddressLookAuthRequestBean  implements Serializable {
     }
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+    public String getBeforeInfo() {
+        return beforeInfo;
+    }
+    public void setBeforeInfo(String beforeInfo) {
+        this.beforeInfo = beforeInfo;
     }
 }

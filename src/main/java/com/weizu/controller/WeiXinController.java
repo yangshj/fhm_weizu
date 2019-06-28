@@ -717,6 +717,8 @@ public class WeiXinController extends BaseController{
 					param.setId(Long.parseLong(userId));
 					AddressLookBean bean = addressLookService.findAddressLookById(param);
 					if(bean!=null){
+                        AddressLookAuthRequestBean requestBean = new AddressLookAuthRequestBean();
+                        requestBean.setBeforeInfo(JSON.toJSONString(bean));
 						if(StringUtil.isNotEmpty(upAvatar) && upAvatar.equals("true")){
 							String headImage = saveImage(request,userId,imageFile);
 							bean.setHeadImage(headImage);
@@ -728,7 +730,6 @@ public class WeiXinController extends BaseController{
 						if(StringUtil.isNotEmpty(remark)) bean.setRemark(remark);
 						addressLookService.updateAddressLook(bean);
                         // 历史记录
-                        AddressLookAuthRequestBean requestBean = new AddressLookAuthRequestBean();
                         requestBean.setUserId(userInfoBean.getId());
                         requestBean.setNickName(userInfoBean.getNickName());
                         requestBean.setSurname(surname);

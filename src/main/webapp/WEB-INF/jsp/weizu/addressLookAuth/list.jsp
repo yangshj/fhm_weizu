@@ -65,6 +65,7 @@
 						<th>用户昵称</th>
 						<th>访问家谱</th>
 						<th>请求信息</th>
+						<th>修改前信息</th>
 						<th>性別</th>
 						<th>用户头像</th>
 						<th><i class="icon-time hidden-phone"></i>创建日期</th>
@@ -87,7 +88,8 @@
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
 								<td>${user.nickName }</td>
 								<td>${user.surname }</td>
-								<td style="width:500px;word-wrap:break-word;word-break:break-all;">${user.requestInfo}</td>
+								<td style="width:250px;word-wrap:break-word;word-break:break-all;">${user.requestInfo}</td>
+								<td style="width:250px;word-wrap:break-word;word-break:break-all;">${user.beforeInfo}</td>
 								<td>
 									<c:if test="${user.gender == '1' }"><span class="label label-important arrowed-in">男</span></c:if>
 									<c:if test="${user.gender == '2' }"><span class="label label-success arrowed">女</span></c:if>
