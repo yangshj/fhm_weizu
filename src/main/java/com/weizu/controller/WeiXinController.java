@@ -310,6 +310,41 @@ public class WeiXinController extends BaseController{
 		}
 	}
 
+	@RequestMapping(value="/getAddressLookById")
+	public void getAddressLookById(HttpServletRequest request, HttpServletResponse response){
+		GetAddressLookByIdRE re = new GetAddressLookByIdRE();
+		try{
+			response.setContentType("text/json;charset=UTF-8");
+			response.setCharacterEncoding("UTF-8");
+			re.setResult(ResultHelper.FAIL);
+			String sessionId = request.getParameter("sessionId");
+			String id = request.getParameter("id");
+			String appId = request.getParameter("appId");
+			UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+			if(userOpenInfo!=null){
+				WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+				if(weChatAPPBean==null){
+					re.setResult(ResultHelper.FAIL);
+					re.setMsg("无效的appId");
+					return;
+				}
+				AddressLookBean bean = new AddressLookBean();
+				bean.setId(Long.parseLong(id));
+				AddressLookBean beanRe = addressLookService.findAddressLookById(bean);
+				re.setBean(beanRe);
+				re.setResult(ResultHelper.SUCCESS);
+			} else {
+				re.setResult(ResultHelper.SESSION_INVALID);
+			}
+			PrintWriter writer = response.getWriter();
+			writer.print(JSON.toJSONString(re));
+			writer.flush();
+		}catch(Exception e){
+			re.setResult(ResultHelper.FAIL);
+			logger.error("获取通讯录详情失败", e);
+		}
+	}
+
 	// 获取姓氏目录
     @RequestMapping(value="/getSurNames")
 	public void getSurNames(HttpServletRequest request, HttpServletResponse response){

@@ -10,8 +10,10 @@ import com.weizu.helper.WeChatAppHelper;
 import com.weizu.helper.WeiXinMemoryCacheHelper;
 import com.weizu.pojo.addressBook.WeChatAPPBean;
 import com.weizu.pojo.integral.CommodityBean;
+import com.weizu.pojo.integral.GetCommodityRE;
 import com.weizu.pojo.integral.LoadMoreCommodityRE;
 import com.weizu.pojo.oa.BaseRE;
+import com.weizu.pojo.other.GetImageTextRE;
 import com.weizu.pojo.other.ImageTextBean;
 import com.weizu.pojo.other.LoadMoreImageTextRE;
 import com.weizu.service.integral.CommodityService;
@@ -105,6 +107,53 @@ public class WeiXinIntegralShopController extends BaseController {
         }
     }
 
+    @RequestMapping(value="/getCommodity")
+    @ResponseBody
+    public void getCommodity(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        GetCommodityRE re = new GetCommodityRE();
+        try {
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            re.setResult(ResultHelper.FAIL);
+            String sessionId = request.getParameter("sessionId");
+            String appId = request.getParameter("appId");
+            String id = request.getParameter("id");
+            UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
+            if(userOpenInfo!=null){
+                WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
+                if(weChatAPPBean==null){
+                    re.setResult(ResultHelper.FAIL);
+                    re.setMsg("无效的appId");
+                    return;
+                }
+                CommodityBean bean = commodityService.findCommodityById(Long.parseLong(id));
+                if(bean!=null){
+                    if(StringUtil.isNotEmpty(bean.getTitle()) && bean.getTitle().length()>20){
+                        bean.setTitleAb(bean.getTitle().substring(0,15)+"...");
+                    } else {
+                        bean.setTitleAb(bean.getTitle());
+                    }
+                    if(StringUtil.isNotEmpty(bean.getContent()) && bean.getContent().length()>20){
+                        bean.setContentAb(bean.getContent().substring(0,25)+"...");
+                    } else {
+                        bean.setContentAb(bean.getContent());
+                    }
+                }
+                re.setBean(bean);
+                re.setResult(ResultHelper.SUCCESS);
+            } else {
+                re.setResult(ResultHelper.SESSION_INVALID);
+            }
+            System.out.println("成功……");
+        } catch (Exception e) {
+            re.setResult(ResultHelper.FAIL);
+            e.printStackTrace();
+        } finally {
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSONString(re));
+            writer.flush();
+        }
+    }
 
     @RequestMapping(value="/submitCommodity")
     @ResponseBody
