@@ -1,6 +1,7 @@
 package com.weizu.helper;
 
 import com.fh.util.Tools;
+import com.weizu.pojo.addressBook.SurNameBean;
 import com.weizu.pojo.addressBook.WeChatAPPBean;
 
 import java.math.BigInteger;
@@ -144,9 +145,13 @@ public class RightsHelper {
 	}
 
 	public static void main(String[] args) {
-		String t = getRights(29).toString();
-		System.out.println("t: "+t);
-//		List<String> list = new ArrayList<String>();
-//		list.add
+		String str = "1,2,3,4,5,6,7,8,9,10,11,12,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,223,224";
+		List<String> rightList = new ArrayList<String>();
+		str.split(",");
+		for(String id : str.split(",")){
+			rightList.add(id);
+		}
+		BigInteger rightString = RightsHelper.sumRights(rightList);
+		System.out.println(rightString);
 	}
 }
