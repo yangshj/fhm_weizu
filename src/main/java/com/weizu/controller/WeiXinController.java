@@ -404,33 +404,36 @@ public class WeiXinController extends BaseController{
 				query.setAppId(weChatAPPBean.getId());
                 userInfo = userInfoService.findUserByOpenId(query);
                 if(userInfo!=null){
-//					re.setResult(ResultHelper.SUCCESS);
-                    List<SurNameBean> list = surNameService.getAllSurName(weChatAPPBean);
-                    if(list!=null && list.size()>0){
-                        for(SurNameBean surNameBean: list){
-                            if(surNameBean.getSurname().equals(surname)){
-                                String rights = userInfo.getRights();
-                                if(rights!=null && rights!=""){
-                                    Boolean hasRights = RightsHelper.testRights(rights, surNameBean.getId().intValue());
-                                    if(hasRights){
-                                        re.setResult(ResultHelper.SUCCESS);
-										// session 置空，重新登录
-										if(userOpenInfo!=null && !userOpenInfo.getManager() && StringUtil.isNotEmpty(userInfo.getManagerRights())){
-											Boolean hasManagerRights = RightsHelper.testRights(userInfo.getManagerRights(), surNameBean.getId().intValue());
-											if(hasManagerRights){
-												WeiXinMemoryCacheHelper.clearSession(sessionId);
+                	if(weChatAPPBean.getPermissionCheck().equals(0)){
+						re.setResult(ResultHelper.SUCCESS);
+					} else {
+						List<SurNameBean> list = surNameService.getAllSurName(weChatAPPBean);
+						if(list!=null && list.size()>0){
+							for(SurNameBean surNameBean: list){
+								if(surNameBean.getSurname().equals(surname)){
+									String rights = userInfo.getRights();
+									if(rights!=null && rights!=""){
+										Boolean hasRights = RightsHelper.testRights(rights, surNameBean.getId().intValue());
+										if(hasRights){
+											re.setResult(ResultHelper.SUCCESS);
+											// session 置空，重新登录
+											if(userOpenInfo!=null && !userOpenInfo.getManager() && StringUtil.isNotEmpty(userInfo.getManagerRights())){
+												Boolean hasManagerRights = RightsHelper.testRights(userInfo.getManagerRights(), surNameBean.getId().intValue());
+												if(hasManagerRights){
+													WeiXinMemoryCacheHelper.clearSession(sessionId);
+												}
 											}
 										}
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    // 根据位置来判断是否有权限
-					if(re.getResult().equals(ResultHelper.FAIL) && StringUtil.isNotEmpty(latitude) && StringUtil.isNotEmpty(longitude)){
-						boolean rights = testRigthsByLocation(sessionId, latitude, longitude, userInfo, weChatAPPBean);
-						if(rights){
-							re.setResult(ResultHelper.SUCCESS);
+									}
+								}
+							}
+						}
+						// 根据位置来判断是否有权限
+						if(re.getResult().equals(ResultHelper.FAIL) && StringUtil.isNotEmpty(latitude) && StringUtil.isNotEmpty(longitude)){
+							boolean rights = testRigthsByLocation(sessionId, latitude, longitude, userInfo, weChatAPPBean);
+							if(rights){
+								re.setResult(ResultHelper.SUCCESS);
+							}
 						}
 					}
                 }

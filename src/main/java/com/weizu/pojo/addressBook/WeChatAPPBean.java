@@ -20,6 +20,8 @@ public class WeChatAPPBean implements Serializable {
     private String appId;
     /** 小程序密钥 */
     private String appSecret;
+    /** 是否开启权限校验 */
+    private Integer permissionCheck;
 
 
     public Long getId() {
@@ -45,5 +47,11 @@ public class WeChatAPPBean implements Serializable {
     }
     public void setAppSecret(String appSecret) {
         this.appSecret = appSecret;
+    }
+    public Integer getPermissionCheck() {
+        return permissionCheck;
+    }
+    public void setPermissionCheck(Integer permissionCheck) {
+        this.permissionCheck = permissionCheck;
     }
 }
