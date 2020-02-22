@@ -59,6 +59,6 @@
 		<if test="pd.appId!=null and pd.appId!=''"><!-- appId -->
 			and la.app_id = #{pd.appId}
 		</if>
-		order by create_time desc
+		order by la.create_time desc
 	</select>
 </mapper>
