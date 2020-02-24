@@ -25,11 +25,15 @@
 	<div
 		style="width:100%;text-align: center;margin: 0 auto;position: absolute;">
 		<div id="loginbox">
-			<form action="" method="post" name="loginForm"
-				id="loginForm">
+			<form action="" method="post" name="loginForm" id="loginForm">
 				<div class="control-group normal_text">
 					<h3>
-						<img src="static/login/logo.png" alt="Logo" />
+						<c:if test="${pd.SYSNAME=='FH Admin'}">
+							<img src="static/login/logo.png" alt="Logo" />
+						</c:if>
+						<c:if test="${pd.SYSNAME !='FH Admin'}">
+							${pd.SYSNAME}
+						</c:if>
 					</h3>
 				</div>
 				<div class="control-group">
