@@ -87,8 +87,7 @@
 
 			<div class="controls">
 				<div class="main_input_box">
-					<font color="white"><span id="nameerr">Copyright © FH
-							2100</span></font>
+						<a href="http://www.beian.miit.gov.cn" target="_blank" style="font-size: 12px; color:#fff;"> 京ICP备18054394号-1 </a>
 				</div>
 			</div>
 		</div>
