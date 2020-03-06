@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.weizu.fund">
+
+    <insert id = "inserFund" parameterType = "fundBean">
+        insert into weizu_fund(
+        code,
+        name,
+        type,
+        manager,
+        fund_scale,
+        last_month_growth,
+        last_three_month_growth,
+        last_six_month_growth,
+        last_year_growth,
+        buy_min,
+        buy_rate
+        )values(
+        #{code},
+        #{name},
+        #{type},
+        #{manager},
+        #{fundScale},
+        #{lastMonthGrowth},
+        #{lastThreeMonthGrowth},
+        #{lastSixMonthGrowth},
+        #{lastYearGrowth},
+        #{buyMin},
+        #{buyRate}
+        )
+    </insert>
+
+    <delete id="deleteFund" >
+        delete from weizu_fund where id = #{id}
+    </delete>
+
+    <update id="updateFund" parameterType="fundBean">
+        update weizu_fund
+        set code=#{code},
+        name = #{name},
+        type = #{type},
+        manager = #{manager},
+        fund_scale = #{fundScale},
+        last_month_growth = #{lastMonthGrowth},
+        last_three_month_growth = #{lastThreeMonthGrowth},
+        last_six_month_growth = #{lastSixMonthGrowth},
+        last_year_growth = #{lastYearGrowth},
+        buy_min = #{buyMin},
+        buy_rate = #{buyRate}
+        where
+        id = #{id}
+    </update>
+
+    <select id="findFundById" resultType="fundBean" parameterType="fundBean">
+        select
+        fund.id,
+        fund.code,
+        fund.name,
+        fund.type,
+        fund.manager,
+        fund.fund_scale,
+        fund.last_month_growth,
+        fund.last_three_month_growth,
+        fund.last_six_month_growth,
+        fund.last_year_growth,
+        fund.buy_min,
+        fund.buy_rate
+        from weizu_fund as fund
+        where
+        id = #{id}
+    </select>
+
+    <select id="findFundByCondition" resultType="fundBean" parameterType="fundBean">
+        select
+        fund.id,
+        fund.code,
+        fund.name,
+        fund.type,
+        fund.manager,
+        fund.fund_scale,
+        fund.last_month_growth,
+        fund.last_three_month_growth,
+        fund.last_six_month_growth,
+        fund.last_year_growth,
+        fund.buy_min,
+        fund.buy_rate
+        from weizu_fund as fund
+        where
+        fund.code = #{code}
+    </select>
+
+    <select id="getAllFundlistPage" parameterType="page">
+        select
+        fund.id,
+        fund.code,
+        fund.name,
+        fund.type,
+        fund.manager,
+        fund.fund_scale,
+        fund.last_month_growth,
+        fund.last_three_month_growth,
+        fund.last_six_month_growth,
+        fund.last_year_growth,
+        fund.buy_min,
+        fund.buy_rate
+        from weizu_fund as fund
+        where 1 = 1
+
+    </select>
+</mapper>
+
+
