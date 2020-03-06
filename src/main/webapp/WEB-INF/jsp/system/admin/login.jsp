@@ -25,11 +25,15 @@
 	<div
 		style="width:100%;text-align: center;margin: 0 auto;position: absolute;">
 		<div id="loginbox">
-			<form action="" method="post" name="loginForm"
-				id="loginForm">
+			<form action="" method="post" name="loginForm" id="loginForm">
 				<div class="control-group normal_text">
 					<h3>
-						<img src="static/login/logo.png" alt="Logo" />
+						<c:if test="${pd.SYSNAME=='FH Admin'}">
+							<img src="static/login/logo.png" alt="Logo" />
+						</c:if>
+						<c:if test="${pd.SYSNAME !='FH Admin'}">
+							${pd.SYSNAME}
+						</c:if>
 					</h3>
 				</div>
 				<div class="control-group">
@@ -87,8 +91,7 @@
 
 			<div class="controls">
 				<div class="main_input_box">
-					<font color="white"><span id="nameerr">Copyright © FH
-							2100</span></font>
+						<a href="http://www.beian.miit.gov.cn" target="_blank" style="font-size: 12px; color:#fff;"> 京ICP备18054394号-1 </a>
 				</div>
 			</div>
 		</div>
