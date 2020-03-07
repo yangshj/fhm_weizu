@@ -9,13 +9,21 @@ import java.math.BigDecimal;
 @Alias("fundNetWorthBean")
 public class FundNetWorthBean implements Serializable {
     private static final long serialVersionUID = 1L;
+    /** id */
     private long id;
+    /** 基金id */
     private long fundId;
+    /** 单位净值 */
     private Float netWorth;
+    /** 日期-天 */
     private String worthDate;
+    /** 日涨幅 */
     private BigDecimal dayGrowth;
+    /** 期望日期 */
     private String expectWorthDate;
+    /** 期望净值 */
     private BigDecimal expectWorth;
+    /** 期望增长率 */
     private BigDecimal expectGrowth;
 
     public long getId() {return id ;}

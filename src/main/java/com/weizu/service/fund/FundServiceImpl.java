@@ -18,8 +18,8 @@ public class FundServiceImpl implements FundService {
         return fundDao.findFundById(bean);
     }
     @Override
-    public Integer inserFund(FundBean bean) throws  Exception{
-        return  fundDao.inserFund(bean);
+    public Integer insertFund(FundBean bean) throws  Exception{
+        return  fundDao.insertFund(bean);
     }
     @Override
     public Integer updateFund(FundBean bean) throws  Exception{

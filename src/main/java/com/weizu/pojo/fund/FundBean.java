@@ -8,17 +8,29 @@ import java.math.BigDecimal;
 @Alias("fundBean")
 public class FundBean implements Serializable {
     private static final long serialVersionUID = 1L;
+    /** id */
     private Long id;
+    /** 编码 */
     private String code;
+    /** 名称 */
     private String name;
+    /** 类型 */
     private String type;
+    /** 基金经理 */
     private String manager;
+    /** 基金规模 */
     private String fundScale;
+    /** 最近一月 */
     private BigDecimal lastMonthGrowth;
+    /** 最近三月 */
     private BigDecimal lastThreeMonthGrowth;
+    /** 最近六月 */
     private BigDecimal lastSixMonthGrowth;
+    /** 最近一年 */
     private BigDecimal lastYearGrowth;
+    /** 最少买入 */
     private Double buyMin;
+    /** 买入费率 */
     private BigDecimal buyRate;
 
     public Long getId() {

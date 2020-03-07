@@ -13,8 +13,8 @@ public class FundNetWorthServiceImpl implements FundNetWorthService {
     private FundNetWorthDao fundNetWorthDao;
 
     @Override
-    public Integer inserFundNetWorth(FundNetWorthBean bean) throws  Exception{
-        return  fundNetWorthDao.inserFundNetWorth(bean);
+    public Integer insertFundNetWorth(FundNetWorthBean bean) throws  Exception{
+        return  fundNetWorthDao.insertFundNetWorth(bean);
     }
     @Override
     public Integer updateFundNetWorth(FundNetWorthBean bean) throws  Exception{

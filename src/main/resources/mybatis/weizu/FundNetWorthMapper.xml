@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace = "com.weizu.fundNetWorth">
 
-    <insert id = "inserFundNetWorth" parameterType = "fundNetWorthBean">
+    <!-- 新增-->
+    <insert id = "insertFundNetWorth" parameterType = "fundNetWorthBean">
         insert into weizu_fund_net_worth(
         fund_id,
         net_worth,
@@ -22,10 +23,12 @@
         )
     </insert>
 
+    <!-- 删除-->
     <delete id="deleteFundNetWorth" >
         delete from weizu_fund_net_worth where id = #{id}
     </delete>
 
+    <!-- 修改-->
     <update id="updateFundNetWorth" parameterType="fundNetWorthBean">
         update weizu_fund_net_worth
         set fund_id=#{fundId},
@@ -39,6 +42,7 @@
         id = #{id}
     </update>
 
+    <!-- 查询所有-->
     <select id="findAllFundNetWorth" resultType="fundNetWorthBean" parameterType="fundNetWorthBean">
         select
         fund.id,

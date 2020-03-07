@@ -13,8 +13,8 @@ import com.fh.util.PageData;
 @Repository("fundNetWorthDaoImpl")
 public class FundNetWorthDaoImpl extends DaoSupport implements FundNetWorthDao {
     @Override
-    public Integer inserFundNetWorth(FundNetWorthBean bean) throws  Exception{
-        return (Integer) this.save("com.weizu.fund.inserFundNetWorth", bean);
+    public Integer insertFundNetWorth(FundNetWorthBean bean) throws  Exception{
+        return (Integer) this.save("com.weizu.fund.insertFundNetWorth", bean);
     }
     @Override
     public Integer updateFundNetWorth(FundNetWorthBean bean) throws Exception {

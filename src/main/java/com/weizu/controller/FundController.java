@@ -37,6 +37,9 @@ public class FundController extends BaseController {
     @Autowired
     private FundService fundService;
 
+    /**
+     * 新增基金信息
+     */
     @RequestMapping(value="/save")
     public ModelAndView saveU(PrintWriter out) throws Exception{
         ModelAndView mv = this.getModelAndView();
@@ -52,7 +55,7 @@ public class FundController extends BaseController {
                 bean.setName((String)pd.get("name"));
                 bean.setType((String)pd.get("type"));
                 bean.setManager((String)pd.get("manager"));
-                fundService.inserFund(bean);
+                fundService.insertFund(bean);
                 mv.addObject("msg","success");
             }else{
                 mv.addObject("msg","failed");
@@ -65,6 +68,9 @@ public class FundController extends BaseController {
         return mv;
     }
 
+    /**
+     * 修改信息
+     */
     @RequestMapping(value="/update")
     public ModelAndView editU(PrintWriter out) throws Exception{
         ModelAndView mv = this.getModelAndView();
@@ -85,6 +91,9 @@ public class FundController extends BaseController {
         return mv;
     }
 
+    /**
+     * 删除信息
+     */
     @RequestMapping(value="/deleteU")
     public void deleteU(PrintWriter out){
         PageData pd = new PageData();
@@ -103,7 +112,7 @@ public class FundController extends BaseController {
     }
 
     /**
-     * 显示用户列表
+     * 显示列表
      */
     @RequestMapping(value="/list")
     public ModelAndView listUsers(Page page){
@@ -117,7 +126,7 @@ public class FundController extends BaseController {
                 pd.put("code", code);
             }
             page.setPd(pd);
-            List<PageData>	userList = fundService.getAllFundListPage(page);	//列出用户列表
+            List<PageData>	userList = fundService.getAllFundListPage(page);	//列出所有列表
 
             mv.setViewName("weizu/fund/list");
             mv.addObject("userList", userList);

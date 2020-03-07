@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace = "com.weizu.fund">
 
-    <insert id = "inserFund" parameterType = "fundBean">
+    <!-- 新增-->
+    <insert id = "insertFund" parameterType = "fundBean">
         insert into weizu_fund(
         code,
         name,
@@ -30,10 +31,12 @@
         )
     </insert>
 
+    <!-- 删除-->
     <delete id="deleteFund" >
         delete from weizu_fund where id = #{id}
     </delete>
 
+    <!-- 修改-->
     <update id="updateFund" parameterType="fundBean">
         update weizu_fund
         set code=#{code},
@@ -51,6 +54,7 @@
         id = #{id}
     </update>
 
+    <!-- 查询-->
     <select id="findFundById" resultType="fundBean" parameterType="fundBean">
         select
         fund.id,
@@ -70,6 +74,7 @@
         id = #{id}
     </select>
 
+    <!-- 查询-->
     <select id="findFundByCondition" resultType="fundBean" parameterType="fundBean">
         select
         fund.id,
@@ -89,6 +94,7 @@
         fund.code = #{code}
     </select>
 
+    <!-- 获取所有信息返回到前台列表页面-->
     <select id="getAllFundListPage" resultType="pd" parameterType="page">
         select
         fund.id as id,
@@ -110,6 +116,7 @@
         </if>
     </select>
 
+    <!-- 批量删除-->
     <delete id="deleteAllU" parameterType="String">
         delete from weizu_fund where id in
         <foreach item="item" index="index" collection="array" open="(" separator="," close=")">

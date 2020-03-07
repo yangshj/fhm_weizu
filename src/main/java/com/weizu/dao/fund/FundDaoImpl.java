@@ -15,8 +15,8 @@ public class FundDaoImpl extends DaoSupport implements FundDao {
         return (FundBean) this.findForObject("com.weizu.fund.findFundById", bean);
     }
     @Override
-    public Integer inserFund(FundBean bean) throws  Exception{
-        return (Integer) this.save("com.weizu.fund.inserFund", bean);
+    public Integer insertFund(FundBean bean) throws  Exception{
+        return (Integer) this.save("com.weizu.fund.insertFund", bean);
     }
     @Override
     public Integer updateFund(FundBean bean) throws Exception {
