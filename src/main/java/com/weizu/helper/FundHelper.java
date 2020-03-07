@@ -94,7 +94,7 @@ public class FundHelper {
         }
         info.setItems(list);
         System.out.println(result);
-        return null;
+        return info;
     }
 
     public static void main(String[] args) {
