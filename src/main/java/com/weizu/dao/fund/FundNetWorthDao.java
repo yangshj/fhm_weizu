@@ -7,7 +7,7 @@ import java.util.List;
 public interface FundNetWorthDao {
 
     /**查询所有基金净值信息*/
-    List<FundNetWorthBean> findAllFundNetWorth(FundNetWorthBean bean) throws Exception;
+    List<FundNetWorthBean> findAllFundNetWorthByCondition(FundNetWorthBean bean) throws Exception;
 
     /**新增基金净值信息*/
     Integer insertFundNetWorth(FundNetWorthBean bean) throws Exception;

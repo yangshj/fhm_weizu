@@ -39,19 +39,38 @@
     <!-- 修改-->
     <update id="updateFund" parameterType="fundBean">
         update weizu_fund
-        set code=#{code},
-        name = #{name},
-        type = #{type},
-        manager = #{manager},
-        fund_scale = #{fundScale},
-        last_month_growth = #{lastMonthGrowth},
-        last_three_month_growth = #{lastThreeMonthGrowth},
-        last_six_month_growth = #{lastSixMonthGrowth},
-        last_year_growth = #{lastYearGrowth},
-        buy_min = #{buyMin},
-        buy_rate = #{buyRate}
-        where
-        id = #{id}
+        set code=#{code}
+        <if test="name != null and name != ''">
+            ,name = #{name}
+        </if>
+        <if test="type != null and type != ''">
+            ,type = #{type}
+        </if>
+        <if test="manager != null and manager != ''">
+            ,manager = #{manager}
+        </if>
+        <if test="fundScale != null">
+            ,fund_scale = #{fundScale}
+        </if>
+        <if test="lastMonthGrowth != null">
+            ,last_month_growth = #{lastMonthGrowth}
+        </if>
+        <if test="lastThreeMonthGrowth != null">
+            ,last_three_month_growth = #{lastThreeMonthGrowth}
+        </if>
+        <if test="lastSixMonthGrowth != null">
+            ,last_six_month_growth = #{lastSixMonthGrowth}
+        </if>
+        <if test="lastYearGrowth != null">
+            ,last_year_growth = #{lastYearGrowth}
+        </if>
+        <if test="buyMin != null">
+            ,buy_min = #{buyMin}
+        </if>
+        <if test="buyRate != null">
+            ,buy_rate = #{buyRate}
+        </if>
+        where id = #{id}
     </update>
 
     <!-- 查询-->
@@ -90,8 +109,10 @@
         fund.buy_min,
         fund.buy_rate
         from weizu_fund as fund
-        where
-        fund.code = #{code}
+        where 1=1
+        <if test="code != null and code != ''">
+            and fund.code = #{code}
+        </if>
     </select>
 
     <!-- 获取所有信息返回到前台列表页面-->

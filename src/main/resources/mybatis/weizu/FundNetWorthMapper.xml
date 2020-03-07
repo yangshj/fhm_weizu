@@ -43,7 +43,7 @@
     </update>
 
     <!-- 查询所有-->
-    <select id="findAllFundNetWorth" resultType="fundNetWorthBean" parameterType="fundNetWorthBean">
+    <select id="findAllFundNetWorthByCondition" resultType="fundNetWorthBean" parameterType="fundNetWorthBean">
         select
         fund.id,
         fund.fund_id,
@@ -55,5 +55,8 @@
         fund.expect_growth
         from weizu_fund_net_worth as fund
         where 1 = 1
+        <if test="fundId != null and fundId != ''">
+            and fund.fund_id = #{fundId}
+        </if>
     </select>
 </mapper>

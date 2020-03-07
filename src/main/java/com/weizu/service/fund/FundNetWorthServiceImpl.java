@@ -29,7 +29,7 @@ public class FundNetWorthServiceImpl implements FundNetWorthService {
     }
 
     @Override
-    public List<FundNetWorthBean> findAllFundNetWorth(FundNetWorthBean bean) throws Exception{
-        return  fundNetWorthDao.findAllFundNetWorth(bean);
+    public List<FundNetWorthBean> findAllFundNetWorthByCondition(FundNetWorthBean bean) throws Exception{
+        return  fundNetWorthDao.findAllFundNetWorthByCondition(bean);
     }
 }
