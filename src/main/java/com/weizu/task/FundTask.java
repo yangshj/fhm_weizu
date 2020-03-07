@@ -12,6 +12,8 @@ import com.weizu.util.StringUtil;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,13 +33,15 @@ public class FundTask {
     // 定义锁对象
     private Lock lock = new ReentrantLock();
 
-    @Scheduled(cron = "0 * */1 * * *") // 间隔每1小时执行
+    @Scheduled(cron = "0 0 */1 * * *") // 间隔每1小时执行
     public void taskCycle() {
         System.out.println("使用SpringMVC框架配置定时任务");
         boolean hasLock = false;
         try{
             hasLock = lock.tryLock(5, TimeUnit.SECONDS);
             if(hasLock){
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                System.out.println("基金定时任务执行:" + format.format(new Date()));
                 analysisData();
             }
         } catch (Exception e){
