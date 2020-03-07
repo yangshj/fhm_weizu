@@ -89,23 +89,25 @@
         fund.code = #{code}
     </select>
 
-    <select id="getAllFundlistPage" parameterType="page">
+    <select id="getAllFundListPage" resultType="pd" parameterType="page">
         select
-        fund.id,
-        fund.code,
-        fund.name,
-        fund.type,
-        fund.manager,
-        fund.fund_scale,
-        fund.last_month_growth,
-        fund.last_three_month_growth,
-        fund.last_six_month_growth,
-        fund.last_year_growth,
-        fund.buy_min,
-        fund.buy_rate
+        fund.id as id,
+        fund.code as code,
+        fund.name as name,
+        fund.type as type,
+        fund.manager as manager,
+        fund.fund_scale as fundScale,
+        fund.last_month_growth as lastMonthGrowth,
+        fund.last_three_month_growth as lastThreeMonthGrowth,
+        fund.last_six_month_growth as lastSixMonthGrowth,
+        fund.last_year_growth as lastYearGrowth,
+        fund.buy_min as buyMin,
+        fund.buy_rate as buyRate
         from weizu_fund as fund
         where 1 = 1
-
+        <if test="pd.USERNAME != null and pd.USERNAME != ''"><!-- 用户名检索 -->
+            and fund.name LIKE CONCAT(CONCAT('%', #{pd.USERNAME}),'%')
+        </if>
     </select>
 </mapper>
 
