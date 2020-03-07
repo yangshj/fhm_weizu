@@ -36,6 +36,7 @@
 		<typeAlias type="com.weizu.pojo.integral.OrderBean" alias="orderBean"/>
 		<typeAlias type="com.weizu.pojo.integral.OrderInfoBean" alias="orderInfoBean"/>
 		<typeAlias type="com.weizu.pojo.fund.FundBean" alias="fundBean"/>
+		<typeAlias type="com.weizu.pojo.fund.FundNetWorthBean" alias="fundNetWorthBean"/>
 
 		<!-- 分页 -->
 		<typeAlias type="com.fh.entity.Page" alias="Page"/>

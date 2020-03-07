@@ -109,6 +109,13 @@
             and fund.name LIKE CONCAT(CONCAT('%', #{pd.USERNAME}),'%')
         </if>
     </select>
+
+    <delete id="deleteAllU" parameterType="String">
+        delete from weizu_fund where id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+    </delete>
 </mapper>
 
 

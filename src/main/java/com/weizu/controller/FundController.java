@@ -1,6 +1,7 @@
 package com.weizu.controller;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,5 +175,36 @@ public class FundController extends BaseController {
         Subject currentUser = SecurityUtils.getSubject();  //shiro管理的session
         Session session = currentUser.getSession();
         return (Map<String, String>)session.getAttribute(Const.SESSION_QX);
+    }
+
+    /**
+     * 批量删除
+     */
+    @RequestMapping(value="/deleteAllU")
+    @ResponseBody
+    public Object deleteAllU() {
+        PageData pd = new PageData();
+        Map<String,Object> map = new HashMap<String,Object>();
+        try {
+            pd = this.getPageData();
+            List<PageData> pdList = new ArrayList<PageData>();
+            String id = pd.getString("id");
+
+            if(null != id && !"".equals(id)){
+                String ArrayUSER_IDS[] = id.split(",");
+                if(Jurisdiction.buttonJurisdiction(menuUrl, "del")){fundService.deleteAllU(ArrayUSER_IDS);}
+                pd.put("msg", "ok");
+            }else{
+                pd.put("msg", "no");
+            }
+
+            pdList.add(pd);
+            map.put("list", pdList);
+        } catch (Exception e) {
+            logger.error(e.toString(), e);
+        } finally {
+            logAfter(logger);
+        }
+        return AppUtil.returnObject(pd, map);
     }
 }

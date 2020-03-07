@@ -13,4 +13,5 @@ public interface FundDao {
     Integer updateFund(FundBean bean) throws Exception;
     void deleteFund(FundBean bean) throws Exception;
     List<PageData> getAllFundListPage(Page page) throws Exception;
+    void deleteAllU(String[] USER_IDS) throws Exception;
 }

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.weizu.fundNetWorth">
+
+    <insert id = "inserFundNetWorth" parameterType = "fundNetWorthBean">
+        insert into weizu_fund_net_worth(
+        fund_id,
+        net_worth,
+        worth_date,
+        day_growth,
+        expect_worth_Date,
+        expect_worth,
+        expect_growth
+        )values(
+        #{fundId},
+        #{netWorth},
+        #{worthDate},
+        #{dayGrowth},
+        #{expectWorthDate},
+        #{expectWorth},
+        #{expectGrowth}
+        )
+    </insert>
+
+    <delete id="deleteFundNetWorth" >
+        delete from weizu_fund_net_worth where id = #{id}
+    </delete>
+
+    <update id="updateFundNetWorth" parameterType="fundNetWorthBean">
+        update weizu_fund_net_worth
+        set fund_id=#{fundId},
+        net_worth = #{netWorth},
+        worth_date = #{worthDate},
+        day_growth = #{dayGrowth},
+        expect_worth_Date = #{expectWorthDate},
+        expect_worth = #{expectWorth},
+        expect_growth = #{expectGrowth}
+        where
+        id = #{id}
+    </update>
+
+    <select id="findAllFundNetWorth" resultType="fundNetWorthBean" parameterType="fundNetWorthBean">
+        select
+        fund.id,
+        fund.fund_id,
+        fund.net_worth,
+        fund.worth_date,
+        fund.day_growth,
+        fund.expect_worth_Date,
+        fund.expect_worth,
+        fund.expect_growth
+        from weizu_fund_net_worth as fund
+        where 1 = 1
+    </select>
+</mapper>

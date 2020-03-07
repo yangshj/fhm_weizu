@@ -13,4 +13,8 @@ public interface FundService {
     Integer updateFund(FundBean bean) throws  Exception;
     void deleteFund(FundBean bean) throws  Exception;
     List<PageData> getAllFundListPage(Page page) throws Exception;
+    /*
+     * 批量删除用户
+     */
+     void deleteAllU(String[] USER_IDS)throws Exception;
 }

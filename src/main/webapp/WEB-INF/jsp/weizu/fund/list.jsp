@@ -263,7 +263,7 @@
         top.jzts();
         var diag = new top.Dialog();
         diag.Drag=true;
-        diag.Title ="会员资料";
+        diag.Title ="基金净值信息";
         diag.URL = '<%=basePath%>weizu/fund/goUpdate.do?id='+user_id;
         diag.Width = 450;
         diag.Height = 555;
@@ -362,8 +362,8 @@
                         top.jzts();
                         $.ajax({
                             type: "POST",
-                            url: '<%=basePath%>happuser/deleteAllU.do?tm='+new Date().getTime(),
-                            data: {USER_IDS:str},
+                            url: '<%=basePath%>weizu/fund/deleteAllU.do?tm='+new Date().getTime(),
+                            data: {id:str},
                             dataType:'json',
                             //beforeSend: validateData,
                             cache: false,
