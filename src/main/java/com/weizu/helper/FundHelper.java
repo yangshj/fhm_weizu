@@ -7,6 +7,7 @@ import com.weizu.pojo.fund.FundInfo;
 import com.weizu.util.StringUtil;
 import com.weizu.util.UrlUtil;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,15 +48,25 @@ public class FundHelper {
         bean.setName(jsonData.getString("name"));
         bean.setManager(jsonData.getString("manager"));
         bean.setType(jsonData.getString("type"));
-        bean.setBuyMin(jsonData.getString("buyMin"));
+        if(jsonData.getString("buyMin")!=null){
+            bean.setBuyMin(Double.valueOf(jsonData.getString("buyMin")));
+        }
         String fundScale = jsonData.getString("fundScale");
         if(StringUtil.isNotEmpty(fundScale)){
             bean.setFundScale(fundScale);
         }
-        bean.setLastMonthGrowth(jsonData.getString("lastMonthGrowth"));
-        bean.setLastThreeMonthGrowth(jsonData.getString("lastThreeMonthGrowth"));
-        bean.setLastSixMonthGrowth(jsonData.getString("lastSixMonthGrowth"));
-        bean.setLastYearGrowth(jsonData.getString("lastYearGrowth"));
+        if(StringUtil.isNotEmpty(jsonData.getString("lastMonthGrowth"))){
+            bean.setLastMonthGrowth(new BigDecimal(jsonData.getString("lastMonthGrowth")));
+        }
+        if(StringUtil.isNotEmpty(jsonData.getString("lastThreeMonthGrowth"))){
+            bean.setLastThreeMonthGrowth(new BigDecimal(jsonData.getString("lastThreeMonthGrowth")));
+        }
+        if(StringUtil.isNotEmpty(jsonData.getString("lastSixMonthGrowth"))){
+            bean.setLastSixMonthGrowth(new BigDecimal(jsonData.getString("lastSixMonthGrowth")));
+        }
+        if(StringUtil.isNotEmpty(jsonData.getString("lastYearGrowth"))){
+            bean.setLastYearGrowth(new BigDecimal(jsonData.getString("lastYearGrowth")));
+        }
         info.setFundBean(bean);
         System.out.println("info"+JSON.toJSONString(info));
 

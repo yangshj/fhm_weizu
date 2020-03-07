@@ -1,6 +1,8 @@
 package com.weizu.task;
 
 import com.fh.util.Logger;
+import com.weizu.service.fund.FundNetWorthService;
+import com.weizu.service.fund.FundService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -14,8 +16,8 @@ import java.util.concurrent.locks.ReentrantLock;
 public class FundTask {
 
     private Logger logger = Logger.getLogger(this.getClass());
-
-
+    private FundNetWorthService fundNetWorthService;
+    private FundService fundService;
     // 定义锁对象
     private Lock lock = new ReentrantLock();
 
