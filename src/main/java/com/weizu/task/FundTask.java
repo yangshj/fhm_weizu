@@ -1,11 +1,17 @@
 package com.weizu.task;
 
 import com.fh.util.Logger;
+import com.fh.util.ServiceHelper;
+import com.weizu.helper.FundHelper;
+import com.weizu.pojo.fund.FundBean;
+import com.weizu.pojo.fund.FundInfo;
 import com.weizu.service.fund.FundNetWorthService;
 import com.weizu.service.fund.FundService;
+import com.weizu.util.StringUtil;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -16,8 +22,8 @@ import java.util.concurrent.locks.ReentrantLock;
 public class FundTask {
 
     private Logger logger = Logger.getLogger(this.getClass());
-    private FundNetWorthService fundNetWorthService;
-    private FundService fundService;
+    private FundNetWorthService fundNetWorthService = null;
+    private FundService fundService = null;
     // 定义锁对象
     private Lock lock = new ReentrantLock();
 
@@ -40,7 +46,26 @@ public class FundTask {
     }
 
 
-    private void analysisData(){
+    private void analysisData() throws Exception{
+        if(fundService==null){
+            fundService = (FundService) ServiceHelper.getService("fundService");
+            fundNetWorthService = (FundNetWorthService) ServiceHelper.getService("fundNetWorthService");
+        }
+        List<FundBean> fundList =  fundService.findFundByCondition(null);
+        if(fundList==null || fundList.size()==0){
+            return;
+        }
+        for(FundBean fundBean : fundList){
+            if(StringUtil.isEmpty(fundBean.getCode())){
+                continue;
+            }
+            FundInfo fundInfo = FundHelper.getFundInfo(fundBean.getCode());
+            if(fundInfo==null|| fundInfo.getFundBean()==null){
+                continue;
+            }
+
+
+        }
 
     }
 }

@@ -10,14 +10,17 @@ import com.fh.dao.DaoSupport;
 
 @Repository("fundDaoImpl")
 public class FundDaoImpl extends DaoSupport implements FundDao {
+
     @Override
     public FundBean findFundById(FundBean bean) throws Exception{
         return (FundBean) this.findForObject("com.weizu.fund.findFundById", bean);
     }
+
     @Override
     public Integer insertFund(FundBean bean) throws  Exception{
         return (Integer) this.save("com.weizu.fund.insertFund", bean);
     }
+
     @Override
     public Integer updateFund(FundBean bean) throws Exception {
         return (Integer) this.update("com.weizu.fund.updateFund", bean);
@@ -27,18 +30,18 @@ public class FundDaoImpl extends DaoSupport implements FundDao {
     public void deleteFund(FundBean bean) throws Exception {
         this.delete("com.weizu.fund.deleteFund", bean);
     }
+
     @Override
     public List<FundBean> findFundByCondition(FundBean bean)
             throws Exception {
         return (List<FundBean>) this.findForList("com.weizu.fund.findFundByCondition", bean);
     }
+
     @Override
     public List<PageData> getAllFundListPage(Page page) throws Exception {
         return (List<PageData>) this.findForList("com.weizu.fund.getAllFundListPage", page);
     }
-    /*
-     * 批量删除用户
-     */
+
     @Override
     public void deleteAllU(String[] USER_IDS)throws Exception{
         this.delete("com.weizu.fund.deleteAllU", USER_IDS);

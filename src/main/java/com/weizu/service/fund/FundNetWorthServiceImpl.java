@@ -9,6 +9,7 @@ import java.util.List;
 
 @Service("fundNetWorthServiceImpl")
 public class FundNetWorthServiceImpl implements FundNetWorthService {
+
     @Autowired
     private FundNetWorthDao fundNetWorthDao;
 
@@ -16,14 +17,17 @@ public class FundNetWorthServiceImpl implements FundNetWorthService {
     public Integer insertFundNetWorth(FundNetWorthBean bean) throws  Exception{
         return  fundNetWorthDao.insertFundNetWorth(bean);
     }
+
     @Override
     public Integer updateFundNetWorth(FundNetWorthBean bean) throws  Exception{
         return  fundNetWorthDao.updateFundNetWorth(bean);
     }
+
     @Override
     public void deleteFundNetWorth(FundNetWorthBean bean) throws  Exception{
         fundNetWorthDao.deleteFundNetWorth(bean);
     }
+
     @Override
     public List<FundNetWorthBean> findAllFundNetWorth(FundNetWorthBean bean) throws Exception{
         return  fundNetWorthDao.findAllFundNetWorth(bean);

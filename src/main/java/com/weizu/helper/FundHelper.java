@@ -1,6 +1,7 @@
 package com.weizu.helper;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.weizu.pojo.fund.FundBean;
 import com.weizu.pojo.fund.FundInfo;
@@ -9,7 +10,9 @@ import com.weizu.util.UrlUtil;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 基金信息抓取工具类
@@ -43,6 +46,7 @@ public class FundHelper {
         }
         JSONObject jsonData = jsonObject.getJSONObject("data");
         FundInfo info = new FundInfo();
+        // 解析基础信息
         FundBean bean = new FundBean();
         bean.setCode(jsonData.getString("code"));
         bean.setName(jsonData.getString("name"));
@@ -68,6 +72,21 @@ public class FundHelper {
             bean.setLastYearGrowth(new BigDecimal(jsonData.getString("lastYearGrowth")));
         }
         info.setFundBean(bean);
+        // 解析走势
+        JSONArray netWorthData = jsonData.getJSONArray("netWorthData");
+        Iterator iterator = netWorthData.iterator();
+        while (iterator.hasNext()){
+            JSONArray key = (JSONArray) iterator.next();
+            Object[] arrys = key.toArray();
+            // 日期天
+            String dayStr = (String) arrys[0];
+            // 单位净值
+            String netWorthStr = (String) arrys[1];
+            // 增长率
+            String growth = (String) arrys[2];
+
+        }
+
         System.out.println("info"+JSON.toJSONString(info));
 
 
