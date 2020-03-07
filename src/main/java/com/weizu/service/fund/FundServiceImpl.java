@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service("FundServiceImpl")
+@Service("fundServiceImpl")
 public class FundServiceImpl implements FundService {
     @Autowired
     private FundDao fundDao;

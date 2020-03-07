@@ -10,7 +10,7 @@ import com.fh.entity.Page;
 import com.fh.util.PageData;
 
 
-@Repository("FundNetWorthDaoImpl")
+@Repository("fundNetWorthDaoImpl")
 public class FundNetWorthDaoImpl extends DaoSupport implements FundNetWorthDao {
     @Override
     public Integer inserFundNetWorth(FundNetWorthBean bean) throws  Exception{

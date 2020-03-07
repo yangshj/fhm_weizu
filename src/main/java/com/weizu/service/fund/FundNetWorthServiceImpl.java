@@ -7,7 +7,7 @@ import com.weizu.dao.fund.FundNetWorthDao;
 import java.util.List;
 
 
-@Service("FundNetWorthServiceImpl")
+@Service("fundNetWorthServiceImpl")
 public class FundNetWorthServiceImpl implements FundNetWorthService {
     @Autowired
     private FundNetWorthDao fundNetWorthDao;

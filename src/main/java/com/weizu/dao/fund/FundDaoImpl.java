@@ -8,7 +8,7 @@ import com.weizu.pojo.fund.FundBean;
 import org.springframework.stereotype.Repository;
 import com.fh.dao.DaoSupport;
 
-@Repository("FundDaoImpl")
+@Repository("fundDaoImpl")
 public class FundDaoImpl extends DaoSupport implements FundDao {
     @Override
     public FundBean findFundById(FundBean bean) throws Exception{
