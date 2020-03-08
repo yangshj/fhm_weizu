@@ -85,7 +85,7 @@ public class FundEmailHelper {
         // 最后一天的净值
         BigDecimal todayNetWorth = todayNetWorthBean.getNetWorth();
         if(todayNetWorth.compareTo(lowestNewWorth)<=0){
-            String content = "基金编码："+fundInfo.getFundBean().getCode()+"基金名称："+fundInfo.getFundBean().getName()+"\r\n";
+            String content = "基金编码："+fundInfo.getFundBean().getCode()+"\t基金名称："+fundInfo.getFundBean().getName()+"\r\n";
             content += "当前净值:"+todayNetWorth+"低于最近一年净值:"+lowestNewWorth;
             sendEmail(content);
         }
