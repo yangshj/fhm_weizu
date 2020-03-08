@@ -29,7 +29,7 @@ public class FundHelper {
         }
         Map<String,String> map = new HashMap<>();
         map.put("code",fundCode);
-//        String result = UrlUtil.sendGet(url, map);
+        String result = UrlUtil.sendGet(url, map);
         JSONObject jsonObject = JSON.parseObject(result);
         String code = jsonObject.getString("code");
         if(code==null || !code.equals("200")){
