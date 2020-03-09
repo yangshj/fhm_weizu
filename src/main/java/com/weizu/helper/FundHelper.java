@@ -46,6 +46,9 @@ public class FundHelper {
         if(jsonData.getString("buyMin")!=null){
             bean.setBuyMin(Double.valueOf(jsonData.getString("buyMin")));
         }
+        if(StringUtil.isNotEmpty(jsonData.getString("buyRate"))){
+            bean.setBuyRate(new BigDecimal(jsonData.getString("buyRate")));
+        }
         String fundScale = jsonData.getString("fundScale");
         if(StringUtil.isNotEmpty(fundScale)){
             bean.setFundScale(fundScale);
