@@ -67,11 +67,11 @@ public class FundHelper {
         }
         info.setFundBean(bean);
         // 期望净值
-        String expectWorth = jsonData.getString("lastYearGrowth");
+        String expectWorth = jsonData.getString("expectWorth");
         // 期望增长率
         String expectGrowth = jsonData.getString("expectGrowth");
         // 期望日
-        String dayGrowth = jsonData.getString("expectGrowth");
+        String expectWorthDate = jsonData.getString("expectWorthDate");
         // 解析走势
         List<FundNetWorthBean> list = new ArrayList<>();
         JSONArray netWorthData = jsonData.getJSONArray("netWorthData");
@@ -95,8 +95,20 @@ public class FundHelper {
             list.add(item);
 
         }
+        if(list.size()>1){
+            FundNetWorthBean last = list.get(list.size()-1);
+            last.setExpectWorthDate(expectWorthDate);
+            if(StringUtil.isNotEmpty(expectGrowth)){
+                last.setExpectGrowth(new BigDecimal(expectGrowth));
+            }
+            if(StringUtil.isNotEmpty(expectWorth)){
+                last.setExpectWorth(new BigDecimal(expectWorth));
+            }
+        }
         info.setItems(list);
-        FundEmailHelper.addQueue(info);
+        FundInfo infoCopy = new FundInfo();
+        infoCopy = JSON.parseObject(JSON.toJSONString(info), infoCopy.getClass());
+        FundEmailHelper.addQueue(infoCopy);
         return info;
     }
 

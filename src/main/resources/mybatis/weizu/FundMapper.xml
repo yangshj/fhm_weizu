@@ -76,18 +76,18 @@
     <!-- 查询-->
     <select id="findFundById" resultType="fundBean" parameterType="fundBean">
         select
-        fund.id,
-        fund.code,
-        fund.name,
-        fund.type,
-        fund.manager,
-        fund.fund_scale,
-        fund.last_month_growth,
-        fund.last_three_month_growth,
-        fund.last_six_month_growth,
-        fund.last_year_growth,
-        fund.buy_min,
-        fund.buy_rate
+            fund.id as id,
+            fund.code as code,
+            fund.name as name,
+            fund.type as type,
+            fund.manager as manager,
+            fund.fund_scale as fundScale,
+            fund.last_month_growth as lastMonthGrowth,
+            fund.last_three_month_growth as lastThreeMonthGrowth,
+            fund.last_six_month_growth as lastSixMonthGrowth,
+            fund.last_year_growth as lastYearGrowth,
+            fund.buy_min as buyMin,
+            fund.buy_rate as buyRate
         from weizu_fund as fund
         where
         id = #{id}
@@ -96,18 +96,18 @@
     <!-- 查询-->
     <select id="findFundByCondition" resultType="fundBean" parameterType="fundBean">
         select
-        fund.id,
-        fund.code,
-        fund.name,
-        fund.type,
-        fund.manager,
-        fund.fund_scale,
-        fund.last_month_growth,
-        fund.last_three_month_growth,
-        fund.last_six_month_growth,
-        fund.last_year_growth,
-        fund.buy_min,
-        fund.buy_rate
+            fund.id as id,
+            fund.code as code,
+            fund.name as name,
+            fund.type as type,
+            fund.manager as manager,
+            fund.fund_scale as fundScale,
+            fund.last_month_growth as lastMonthGrowth,
+            fund.last_three_month_growth as lastThreeMonthGrowth,
+            fund.last_six_month_growth as lastSixMonthGrowth,
+            fund.last_year_growth as lastYearGrowth,
+            fund.buy_min as buyMin,
+            fund.buy_rate as buyRate
         from weizu_fund as fund
         where 1=1
         <if test="code != null and code != ''">

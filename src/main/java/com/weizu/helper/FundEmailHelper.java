@@ -36,7 +36,11 @@ public class FundEmailHelper {
                     try {
                         FundInfo fundInfo = queue.take();
                         System.out.println("消费队列："+fundInfo);
-                        analysisFundInfo(fundInfo);
+                        Date today = new Date();
+                        analysisFundInfo(fundInfo, new Date(today.getTime()-360*24*60*60*1000L), "最近一年");
+                        analysisFundInfo(fundInfo, new Date(today.getTime()-180*24*60*60*1000L), "最近半年");
+                        analysisFundInfo(fundInfo, new Date(today.getTime()-90*24*60*60*1000L), "最近三月");
+                        analysisFundInfo(fundInfo, new Date(today.getTime()-30*24*60*60*1000L), "最近一月");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -49,13 +53,11 @@ public class FundEmailHelper {
     /**
      * 今天的净值低于一年内的最低时，发送邮件
      */
-    public static void analysisFundInfo(FundInfo fundInfo){
+    public static void analysisFundInfo(FundInfo fundInfo, Date lastYear, String describe){
         if(fundInfo==null|| fundInfo.getFundBean()==null || fundInfo.getItems()==null || fundInfo.getItems().size()==0){
             return;
         }
         SimpleDateFormat format = new SimpleDateFormat("yyMMdd");
-        Date today = new Date();
-        Date lastYear = new Date(today.getTime()-360*24*60*60*1000L);
         String lastYearStr = format.format(lastYear);
         // 先排序
         Collections.sort(fundInfo.getItems(), new Comparator<FundNetWorthBean>(){
@@ -86,7 +88,7 @@ public class FundEmailHelper {
         BigDecimal todayNetWorth = todayNetWorthBean.getNetWorth();
         if(todayNetWorth.compareTo(lowestNewWorth)<=0){
             String content = "基金编码："+fundInfo.getFundBean().getCode()+"\t基金名称："+fundInfo.getFundBean().getName()+"\r\n";
-            content += "当前净值:"+todayNetWorth+"低于最近一年净值:"+lowestNewWorth;
+            content += "当前净值:"+todayNetWorth+"低于"+describe+"的净值:"+lowestNewWorth;
             sendEmail(content);
         }
     }
@@ -107,3 +109,4 @@ public class FundEmailHelper {
         }
     }
 }
+

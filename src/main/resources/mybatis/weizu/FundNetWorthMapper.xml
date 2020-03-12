@@ -45,14 +45,14 @@
     <!-- 查询所有-->
     <select id="findAllFundNetWorthByCondition" resultType="fundNetWorthBean" parameterType="fundNetWorthBean">
         select
-        fund.id,
-        fund.fund_id,
-        fund.net_worth,
-        fund.worth_date,
-        fund.day_growth,
-        fund.expect_worth_Date,
-        fund.expect_worth,
-        fund.expect_growth
+        fund.id as id,
+        fund.fund_id as fundId,
+        fund.net_worth as netWorth,
+        fund.worth_date as worthDate,
+        fund.day_growth as dayGrowth,
+        fund.expect_worth_Date as expectWorthDate,
+        fund.expect_worth as expectWorth ,
+        fund.expect_growth as expectGrowth
         from weizu_fund_net_worth as fund
         where 1 = 1
         <if test="fundId != null and fundId != ''">
