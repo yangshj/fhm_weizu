@@ -89,12 +89,15 @@ public class FundEmailHelper {
         if(todayNetWorth.compareTo(lowestNewWorth)<=0){
             String content = "基金编码："+fundInfo.getFundBean().getCode()+"\t基金名称："+fundInfo.getFundBean().getName()+"\r\n";
             content += "当前净值:"+todayNetWorth+"低于"+describe+"的净值:"+lowestNewWorth;
+            System.out.println(content);
             sendEmail(content);
         }
+        // 再将最后一天放进去
+        fundInfo.getItems().add(todayNetWorthBean);
     }
 
     private static void sendEmail(String content) {
-        String email = "shuaijun.yang@aliyun.com";
+        String email = "754179755@qq.com";
         String title = "基金变动提醒";
         //调用发送邮件函数
         String sendEmail = "18910970262@163.com";
