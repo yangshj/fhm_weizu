@@ -216,4 +216,28 @@ public class FundController extends BaseController {
         }
         return AppUtil.returnObject(pd, map);
     }
+
+    /**
+     * 去修改页面
+     */
+    @RequestMapping(value="/goUpdate")
+    public ModelAndView goEditU(){
+        ModelAndView mv = this.getModelAndView();
+        PageData pd = new PageData();
+        pd = this.getPageData();
+        try {
+            if(pd.get("id")!=null){
+                Long id = Long.parseLong((String) pd.get("id"));
+                FundBean param = new FundBean();
+                param.setId(id);
+                FundBean bean = fundService.findFundById(param);
+                mv.addObject("bean", bean);
+            }
+            mv.setViewName("weizu/fund/edit");
+            mv.addObject("path", "update");
+        } catch (Exception e) {
+            logger.error(e.toString(), e);
+        }
+        return mv;
+    }
 }
