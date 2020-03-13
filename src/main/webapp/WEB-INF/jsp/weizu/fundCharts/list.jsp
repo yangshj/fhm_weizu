@@ -14,6 +14,12 @@
     <!-- 引入 echarts.js -->
     <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
 </head>
+<style type="text/css">
+    .myTable-container {
+        width: 1000px;
+        height: 530px;
+    }
+</style>
 <body>
 
 
@@ -28,39 +34,56 @@
 
                 <!-- 检索  -->
                 <form action="weizu/fundCharts/list.do" method="post" name="userForm" id="userForm">
-                    <table border='0'>
-                        <tr>
+                    <table border='0' class="table table-striped table-bordered table-hover">
+                        <tr style="width:100%">
                             <td>
-                                <select class="chosen-select" id="fundId" name="fundId" data-placeholder="请选择……">
+                                <select class="chosen-select" style="width:95%" id="fundId" name="fundId" data-placeholder="请选择……">
                                     <option value=""></option>
                                     <c:forEach items="${fundList}" var="fund">
                                         <option value="${fund.id}"  <c:if test="${pd.fundId == fund.id}">selected</c:if> >${fund.name}</option>
                                     </c:forEach>
                                 </select>
+                                <button class="btn btn-mini btn-light" onclick="search();"  title="检索"><i id="nav-search-icon" class="icon-search"></i></button>
                             </td>
 
-                            <td><input class="span10 date-picker" name="lastLoginStart" id="lastLoginStart" value="${pd.lastLoginStart}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期"/></td>
-                            <td><input class="span10 date-picker" name="lastLoginEnd" id="lastLoginEnd" value="${pd.lastLoginEnd}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期"/></td>
-                            <td style="vertical-align:top;">
-                                <select class="chzn-select" name="STATUS" id="STATUS" data-placeholder="状态" style="vertical-align:top;width: 79px;">
-                                    <option value=""></option>
-                                    <option value="">全部</option>
-                                    <option value="1" <c:if test="${pd.STATUS == '1' }">selected</c:if> >正常</option>
-                                    <option value="0" <c:if test="${pd.STATUS == '0' }">selected</c:if> >冻结</option>
-                                </select>
-                            </td>
-                            <td style="vertical-align:top;"><button class="btn btn-mini btn-light" onclick="search();"  title="检索"><i id="nav-search-icon" class="icon-search"></i></button></td>
-                            <c:if test="${QX.cha == 1 }">
-                                <td style="vertical-align:top;"><a class="btn btn-mini btn-light" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="icon-download-alt"></i></a></td>
-                            </c:if>
                         </tr>
                     </table>
                     <!-- 检索  -->
                 </form>
+                <div class="container" style="padding-top: 5%; padding-left: 10%">
+                    <ul id="myTab" class="nav nav-tabs">
+                        <li class="active"><a href="#tab1" data-toggle="tab" >近一个月</a></li>
+                        <li><a href="#tab2" data-toggle="tab">近三个月</a></li>
+                        <li><a href="#tab3" data-toggle="tab">近六个月</a></li>
+                        <li><a href="#tab4" data-toggle="tab">近一年</a></li>
+                        <li ><a href="#tab5" data-toggle="tab">近三年</a></li>
+                    </ul>
 
-                <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-                <div id="main" style="width: 800px;height:450px;"></div>
-                <input id="fundCharts" type="hidden" value="${dataList}">
+                    <div id="myTabContent" class="tab-content">
+                        <div class="tab-pane active" id="tab1">
+                            <div id="tab1-container" class="myTable-container"></div>
+                        </div>
+                        <div class="tab-pane " id="tab2">
+                            <div id="tab2-container" class="myTable-container"></div>
+                        </div>
+                        <div class="tab-pane " id="tab3">
+                            <div id="tab3-container" class="myTable-container"></div>
+                        </div>
+                        <div class="tab-pane " id="tab4">
+                            <div id="tab4-container" class="myTable-container"></div>
+                        </div>
+                        <div class="tab-pane  " id="tab5">
+                            <div id="tab5-container" class="myTable-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <input id="lastMonthList" type="hidden" value="${lastMonthList}">
+                <input id="lastThreeList" type="hidden" value="${lastThreeList}">
+                <input id="lastSixList" type="hidden" value="${lastSixList}">
+                <input id="lastYearList" type="hidden" value="${lastYearList}">
+                <input id="lastThreeYearList" type="hidden" value="${lastThreeYearList}">
+
             </div>
 
             <!-- PAGE CONTENT ENDS HERE -->
@@ -122,54 +145,65 @@
 
 </script>
 <script type="text/javascript">
-    // 基于准备好的dom，初始化echarts实例
-    var myChart = echarts.init(document.getElementById('main'));
-    data = JSON.parse($("#fundCharts").val());
-    var dateList = data.map(function (item) {
-        return item[0];
-    });
-    var valueList = data.map(function (item) {
-        return item[1];
-    });
 
-    // 指定图表的配置项和数据
-    var option = {
-        tooltip: {
-            trigger: 'axis'
-        },
-        xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            data: dateList
-        },
-        yAxis: {
-            type: 'value'
-        },
-        ///用于添加框选缩放功能
-        toolbox: {
-            show: true,
-            feature:{
-                dataZoom:
-                    {
-                        realtime: false,
-                        yAxisIndex: 'none',
-                    },
-                restore: {},
-            }
-        },
-        dataZoom:[
-                {type: 'inside'},   //用于添加滚轮缩放
-                {type:'slider' },  //用于添加滑动条缩放，
-        ],
-        series: [{
-            name:'本基金',
-            data: valueList,
-            type: 'line'
-        }]
-    };
+    chartInit("tab1-container","lastMonthList");
+    chartInit("tab2-container","lastThreeList");
+    chartInit("tab3-container","lastSixList");
+    chartInit("tab4-container","lastYearList");
+    chartInit("tab5-container","lastThreeYearList");
 
-    // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
+
+
+    function chartInit(divId,  dataListId) {
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById(divId));
+        data = JSON.parse($("#"+dataListId).val());
+        var dateList = data.map(function (item) {
+            return item[0];
+        });
+        var valueList = data.map(function (item) {
+            return item[1];
+        });
+
+        // 指定图表的配置项和数据
+        var option = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: dateList
+            },
+            yAxis: {
+                type: 'value'
+            },
+            ///用于添加框选缩放功能
+            toolbox: {
+                show: true,
+                feature:{
+                    dataZoom:
+                        {
+                            realtime: false,
+                            yAxisIndex: 'none',
+                        },
+                    restore: {},
+                }
+            },
+            dataZoom:[
+                    {type: 'inside'},   //用于添加滚轮缩放
+                    {type:'slider' },  //用于添加滑动条缩放，
+            ],
+            series: [{
+                name:'本基金',
+                data: valueList,
+                type: 'line'
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
 </script>
 </body>
 </html>
