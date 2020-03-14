@@ -224,6 +224,7 @@
                 data: dateList
             },
             yAxis: {
+                scale: true, // y轴数据,根据数据的最大最小之进行计算
                 type: 'value'
             },
             ///用于添加框选缩放功能
