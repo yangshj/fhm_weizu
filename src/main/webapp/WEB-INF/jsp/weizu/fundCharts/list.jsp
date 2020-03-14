@@ -17,7 +17,7 @@
 </head>
 <style type="text/css">
     .myTable-container {
-        width: 1000px;
+        width: calc(100vw - 400px);
         height: 530px;
     }
 </style>
@@ -49,7 +49,7 @@
                     <!-- 检索  -->
                 </form>
             </div>
-                <div class="pull-left" style="padding-top: 5%; padding-left: 10%">
+                <div class="pull-left" style="padding-top: 5%; ">
                     <table id="table_report" class="table table-striped table-bordered table-hover">
                         <tbody>
                             <tr>
@@ -99,7 +99,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="pull-right" style="padding-top: 5%; padding-right: 10%">
+                <div class="pull-right" style="padding-top: 5%;">
                     <ul id="myTab" class="nav nav-tabs">
                         <li class="active"><a href="#tab1" data-toggle="tab" >近一个月</a></li>
                         <li><a href="#tab2" data-toggle="tab">近三个月</a></li>
@@ -200,12 +200,20 @@
     chartInit("tab4-container","lastYearList");
     chartInit("tab5-container","lastThreeYearList");
 
-
+    // 自动调整宽度
+    window.addEventListener("resize",function (){
+        var width = window.innerWidth;
+        $("#tab1-container").css('width',(width-400))
+        $("#tab2-container").css('width',(width-400))
+        $("#tab3-container").css('width',(width-400))
+        $("#tab4-container").css('width',(width-400))
+        $("#tab5-container").css('width', (width-400))
+    });
 
     function chartInit(divId,  dataListId) {
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById(divId));
-        data = JSON.parse($("#"+dataListId).val());
+        var data = JSON.parse($("#"+dataListId).val());
         var dateList = data.map(function (item) {
             return item[0];
         });
@@ -218,6 +226,7 @@
             tooltip: {
                 trigger: 'axis'
             },
+
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
@@ -249,7 +258,6 @@
                 type: 'line'
             }]
         };
-
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
     }
