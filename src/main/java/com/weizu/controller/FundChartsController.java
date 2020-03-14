@@ -62,6 +62,7 @@ public class FundChartsController extends BaseController {
             mv.addObject("lastYearList", getDataList(lastYearList));
             mv.addObject("lastThreeYearList", getDataList(lastThreeYearList));
             mv.addObject("fundList",fundList);
+            mv.addObject("fund",getFundBeanById(fundList, Long.parseLong(fundId)));
             mv.addObject("pd", pd);
             mv.setViewName("weizu/fundCharts/list");
             mv.addObject(Const.SESSION_QX,this.getHC());	//按钮权限
@@ -69,6 +70,18 @@ public class FundChartsController extends BaseController {
             logger.error(e.toString(), e);
         }
         return mv;
+    }
+
+    private FundBean getFundBeanById(List<FundBean> fundList, Long fundId){
+        if(fundList==null || fundList.size()==0){
+            return null;
+        }
+        for(FundBean bean : fundList){
+            if(bean.getId().equals(fundId)){
+                return bean;
+            }
+        }
+        return null;
     }
 
     /**

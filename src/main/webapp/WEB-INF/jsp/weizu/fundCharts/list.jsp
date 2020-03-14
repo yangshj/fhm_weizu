@@ -13,6 +13,7 @@
     <%@ include file="../../system/admin/top.jsp"%>
     <!-- 引入 echarts.js -->
     <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+
 </head>
 <style type="text/css">
     .myTable-container {
@@ -28,10 +29,7 @@
 
     <div id="page-content" class="clearfix">
 
-        <div class="row-fluid">
-
             <div class="row-fluid">
-
                 <!-- 检索  -->
                 <form action="weizu/fundCharts/list.do" method="post" name="userForm" id="userForm">
                     <table border='0' class="table table-striped table-bordered table-hover">
@@ -50,7 +48,58 @@
                     </table>
                     <!-- 检索  -->
                 </form>
-                <div class="container" style="padding-top: 5%; padding-left: 10%">
+            </div>
+                <div class="pull-left" style="padding-top: 5%; padding-left: 10%">
+                    <table id="table_report" class="table table-striped table-bordered table-hover">
+                        <tbody>
+                            <tr>
+                                <td>基金名称</td>
+                                <td>${fund.name }</td>
+                            </tr>
+                            <tr>
+                                <td>编码</td>
+                                <td>${fund.code}</td>
+                            </tr>
+                            <tr>
+                                <td>类型</td>
+                                <td>${fund.type}</td>
+                            </tr>
+                            <tr>
+                                <td>基金经理</td>
+                                <td>${fund.manager }</td>
+                            </tr>
+                            <tr>
+                                <td>基金规模</td>
+                                <td>${fund.fundScale }</td>
+                            </tr>
+                            <tr>
+                                <td>最近一月</td>
+                                <td>${fund.lastMonthGrowth }</td>
+                            </tr>
+                            <tr>
+                                <td>最近三月</td>
+                                <td>${fund.lastThreeMonthGrowth }</td>
+                            </tr>
+                            <tr>
+                                <td>最近六月</td>
+                                <td>${fund.lastSixMonthGrowth }</td>
+                            </tr>
+                            <tr>
+                                <td>最近一年</td>
+                                <td>${fund.lastYearGrowth }</td>
+                            </tr>
+                            <tr>
+                                <td>最少买入</td>
+                                <td>${fund.buyMin }</td>
+                            </tr>
+                            <tr>
+                                <td>买入费率</td>
+                                <td>${fund.buyRate }</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pull-right" style="padding-top: 5%; padding-right: 10%">
                     <ul id="myTab" class="nav nav-tabs">
                         <li class="active"><a href="#tab1" data-toggle="tab" >近一个月</a></li>
                         <li><a href="#tab2" data-toggle="tab">近三个月</a></li>
@@ -87,9 +136,8 @@
             </div>
 
             <!-- PAGE CONTENT ENDS HERE -->
-        </div><!--/row-->
+    </div><!--/row-->
 
-    </div><!--/#page-content-->
 </div><!--/.fluid-container#main-container-->
 
 <!-- 返回顶部  -->
