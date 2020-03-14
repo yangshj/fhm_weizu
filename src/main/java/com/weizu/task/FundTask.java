@@ -27,9 +27,9 @@ import java.util.concurrent.locks.ReentrantLock;
 @Component
 public class FundTask {
 
-    private Logger logger = Logger.getLogger(this.getClass());
-    private FundNetWorthService fundNetWorthService = null;
-    private FundService fundService = null;
+    private static Logger logger = Logger.getLogger(FundTask.class);
+    private static FundNetWorthService fundNetWorthService = null;
+    private static FundService fundService = null;
     // 定义锁对象
     private Lock lock = new ReentrantLock();
 
@@ -42,7 +42,7 @@ public class FundTask {
             if(hasLock){
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 System.out.println("基金定时任务执行:" + format.format(new Date()));
-                analysisData();
+                syncFundData(null);
             }
         } catch (Exception e){
             e.printStackTrace();
@@ -53,13 +53,45 @@ public class FundTask {
         }
     }
 
+    /**
+     * 同步解析基金数据
+     * @param code 指定code，不指定时同步所有
+     * @throws Exception
+     */
+    public static void syncFundData(String code) throws Exception{
+        analysisFundData(code);
 
-    private void analysisData() throws Exception{
+    }
+
+    /**
+     * 异步解析基金数据
+     * @param code 指定code，不指定时同步所有
+     * @throws Exception
+     */
+    public static void asyncFundData(final String code) throws Exception{
+        Thread t = new Thread(){
+            @Override
+            public void run() {
+                try {
+                    analysisFundData(code);
+                }catch (Exception e){
+                    logger.error("异步解析基金数据异常:"+code, e);
+                }
+            }
+
+        };
+        t.start();
+    }
+
+
+    private static void analysisFundData(String code) throws Exception{
         if(fundService==null){
             fundService = (FundService) ServiceHelper.getService("fundServiceImpl");
             fundNetWorthService = (FundNetWorthService) ServiceHelper.getService("fundNetWorthServiceImpl");
         }
-        List<FundBean> fundList =  fundService.findFundByCondition(null);
+        FundBean queryParam = new FundBean();
+        queryParam.setCode(code);
+        List<FundBean> fundList =  fundService.findFundByCondition(queryParam);
         if(fundList==null || fundList.size()==0){
             return;
         }
@@ -98,6 +130,5 @@ public class FundTask {
                 fundNetWorthService.insertFundNetWorth(item);
             }
         }
-
     }
 }

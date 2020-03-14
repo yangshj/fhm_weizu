@@ -24,8 +24,13 @@ public class FundNetWorthDaoImpl extends DaoSupport implements FundNetWorthDao {
     }
 
     @Override
-    public void deleteFundNetWorth(FundNetWorthBean bean) throws Exception {
-        this.delete("com.weizu.fundNetWorth.deleteFundNetWorth", bean);
+    public void deleteFundNetWorth(Long id) throws Exception {
+        this.delete("com.weizu.fundNetWorth.deleteFundNetWorth", id);
+    }
+
+    @Override
+    public void deleteFundNetWorthByFundId(Long id) throws Exception {
+        this.delete("com.weizu.fundNetWorth.deleteFundNetWorthByFundId", id);
     }
 
     @Override

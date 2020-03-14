@@ -16,5 +16,8 @@ public interface FundNetWorthDao {
     Integer updateFundNetWorth(FundNetWorthBean bean) throws Exception;
 
     /**删除基金净值信息*/
-    void deleteFundNetWorth(FundNetWorthBean bean) throws Exception;
+    void deleteFundNetWorth(Long id) throws Exception;
+
+    /**删除基金净值信息*/
+    void deleteFundNetWorthByFundId(Long id) throws Exception;
 }

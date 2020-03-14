@@ -24,9 +24,15 @@ public class FundNetWorthServiceImpl implements FundNetWorthService {
     }
 
     @Override
-    public void deleteFundNetWorth(FundNetWorthBean bean) throws  Exception{
-        fundNetWorthDao.deleteFundNetWorth(bean);
+    public void deleteFundNetWorth(Long id) throws  Exception{
+        fundNetWorthDao.deleteFundNetWorth(id);
     }
+
+    @Override
+    public void deleteFundNetWorthByFundId(Long id) throws Exception {
+        fundNetWorthDao.deleteFundNetWorthByFundId(id);
+    }
+
 
     @Override
     public List<FundNetWorthBean> findAllFundNetWorthByCondition(FundNetWorthBean bean) throws Exception{
