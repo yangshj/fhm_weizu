@@ -33,7 +33,7 @@ public class FundTask {
     // 定义锁对象
     private Lock lock = new ReentrantLock();
 
-    @Scheduled(cron = "0 0 8 * * ?") // 每天8点触发
+    @Scheduled(cron = "0 0 9 * * ?") // 每天9点触发
     public void taskCycle() {
         System.out.println("使用SpringMVC框架配置定时任务");
         boolean hasLock = false;
