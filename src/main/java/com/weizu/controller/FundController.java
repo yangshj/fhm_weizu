@@ -240,4 +240,35 @@ public class FundController extends BaseController {
         }
         return mv;
     }
+
+    /**
+     * 立即同步
+     */
+    @RequestMapping(value="/synchro")
+    @ResponseBody
+    public Object synchro() {
+        PageData pd = new PageData();
+        Map<String,Object> map = new HashMap<String,Object>();
+        try {
+            pd = this.getPageData();
+            List<PageData> pdList = new ArrayList<PageData>();
+            String code = pd.getString("code");
+
+            if(null != code && !"".equals(code)){
+                String ArrayUSER_IDS[] = code.split(",");
+                if(Jurisdiction.buttonJurisdiction(menuUrl, "edit")){com.weizu.task.FundTask.syncFundData(code);}
+                pd.put("msg", "ok");
+            }else{
+                pd.put("msg", "no");
+            }
+
+            pdList.add(pd);
+            map.put("list", pdList);
+        } catch (Exception e) {
+            logger.error(e.toString(), e);
+        } finally {
+            logAfter(logger);
+        }
+        return AppUtil.returnObject(pd, map);
+    }
 }

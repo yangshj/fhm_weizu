@@ -86,7 +86,7 @@
                                     <c:forEach items="${userList}" var="user" varStatus="vs">
                                         <tr>
                                             <td class='center' style="width: 30px;">
-                                                <label><input type='checkbox' name='ids' value="${user.id }" id="${user.id }" alt="${user.id }"/><span class="lbl"></span></label>
+                                                <label><input type='checkbox' name='ids' value="${user.id }" id="${user.id }" alt="${user.code }"/><span class="lbl"></span></label>
                                             </td>
                                             <td class='center' style="width: 30px;">${vs.index+1}</td>
                                             <td>${user.code }</td>
@@ -154,10 +154,7 @@
                                         <a class="btn btn-small btn-success" onclick="add();">新增</a>
                                     </c:if>
                                     <c:if test="${QX.FX_QX == 1 }">
-                                        <a title="批量发送电子邮件" class="btn btn-small btn-info" onclick="makeAll('确定要给选中的用户发送邮件吗?');"><i class="icon-envelope-alt"></i></a>
-                                    </c:if>
-                                    <c:if test="${QX.FW_QX == 1 }">
-                                        <a title="批量发送短信" class="btn btn-small btn-warning" onclick="makeAll('确定要给选中的用户发送短信吗?');"><i class="icon-envelope"></i></a>
+                                        <a class="btn btn-small btn-info" onclick="makeAll('确定要立即同步选中的数据吗?');">立即同步</a>
                                     </c:if>
                                     <c:if test="${QX.del == 1 }">
                                         <a class="btn btn-small btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='icon-trash'></i></a>
@@ -205,35 +202,6 @@
         $("#userForm").submit();
     }
 
-    //去发送电子邮件页面
-    function sendEmail(EMAIL){
-        top.jzts();
-        var diag = new top.Dialog();
-        diag.Drag=true;
-        diag.Title ="发送电子邮件";
-        diag.URL = '<%=basePath%>head/goSendEmail.do?EMAIL='+EMAIL+'&msg=appuser';
-        diag.Width = 660;
-        diag.Height = 470;
-        diag.CancelEvent = function(){ //关闭事件
-            diag.close();
-        };
-        diag.show();
-    }
-
-    //去发送短信页面
-    function sendSms(phone){
-        top.jzts();
-        var diag = new top.Dialog();
-        diag.Drag=true;
-        diag.Title ="发送短信";
-        diag.URL = '<%=basePath%>head/goSendSms.do?PHONE='+phone+'&msg=appuser';
-        diag.Width = 600;
-        diag.Height = 265;
-        diag.CancelEvent = function(){ //关闭事件
-            diag.close();
-        };
-        diag.show();
-    }
 
     //新增
     function add(){
@@ -322,7 +290,7 @@
             if(result) {
                 var str = '';
                 var emstr = '';
-                var phones = '';
+                var codes = '';
                 for(var i=0;i < document.getElementsByName('ids').length;i++)
                 {
                     if(document.getElementsByName('ids')[i].checked){
@@ -332,8 +300,8 @@
                         if(emstr=='') emstr += document.getElementsByName('ids')[i].id;
                         else emstr += ';' + document.getElementsByName('ids')[i].id;
 
-                        if(phones=='') phones += document.getElementsByName('ids')[i].alt;
-                        else phones += ';' + document.getElementsByName('ids')[i].alt;
+                        if(codes=='') codes += document.getElementsByName('ids')[i].alt;
+                        else codes += ';' + document.getElementsByName('ids')[i].alt;
                     }
                 }
                 if(str==''){
@@ -373,10 +341,21 @@
                                 });
                             }
                         });
-                    }else if(msg == '确定要给选中的用户发送邮件吗?'){
-                        sendEmail(emstr);
-                    }else if(msg == '确定要给选中的用户发送短信吗?'){
-                        sendSms(phones);
+                    }else if(msg == '确定要立即同步选中的数据吗?'){
+                        top.jzts();
+                        $.ajax({
+                            type: "POST",
+                            url: '<%=basePath%>weizu/fund/synchro.do?tm='+new Date().getTime(),
+                            data: {code:codes},
+                            dataType:'json',
+                            //beforeSend: validateData,
+                            cache: false,
+                            success: function(data){
+                                $.each(data.list, function(i, list){
+                                    nextPage(${page.currentPage});
+                                });
+                            }
+                        });
                     }
 
                 }
