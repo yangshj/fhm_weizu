@@ -252,13 +252,13 @@ public class FundController extends BaseController {
         try {
             pd = this.getPageData();
             List<PageData> pdList = new ArrayList<PageData>();
-            String code = pd.getString("code");
+            String codes = pd.getString("codes");
 
-            if(null != code && !"".equals(code)){
-                String[] ArrayCode = code.split(";");
-                for(String codes : ArrayCode){
+            if(null != codes && !"".equals(codes)){
+                String[] ArrayCode = codes.split(";");
+                for(String code : ArrayCode){
                     if(Jurisdiction.buttonJurisdiction(menuUrl, "edit")){
-                        FundTask.syncFundData(codes);
+                        FundTask.syncFundData(code);
                     }
                     pd.put("msg", "ok");
                 }

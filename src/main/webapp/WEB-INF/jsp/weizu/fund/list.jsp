@@ -346,7 +346,7 @@
                         $.ajax({
                             type: "POST",
                             url: '<%=basePath%>weizu/fund/synchro.do?tm='+new Date().getTime(),
-                            data: {code:codes},
+                            data: {codes:codes},
                             dataType:'json',
                             //beforeSend: validateData,
                             cache: false,
