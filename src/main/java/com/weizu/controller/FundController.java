@@ -255,9 +255,13 @@ public class FundController extends BaseController {
             String code = pd.getString("code");
 
             if(null != code && !"".equals(code)){
-                String ArrayUSER_IDS[] = code.split(",");
-                if(Jurisdiction.buttonJurisdiction(menuUrl, "edit")){com.weizu.task.FundTask.syncFundData(code);}
-                pd.put("msg", "ok");
+                String[] ArrayCode = code.split(";");
+                for(String codes : ArrayCode){
+                    if(Jurisdiction.buttonJurisdiction(menuUrl, "edit")){
+                        FundTask.syncFundData(codes);
+                    }
+                    pd.put("msg", "ok");
+                }
             }else{
                 pd.put("msg", "no");
             }
