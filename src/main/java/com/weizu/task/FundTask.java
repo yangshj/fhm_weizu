@@ -1,5 +1,6 @@
 package com.weizu.task;
 
+import com.alibaba.fastjson.JSON;
 import com.fh.util.Logger;
 import com.fh.util.ServiceHelper;
 import com.weizu.helper.FundHelper;
@@ -124,11 +125,33 @@ public class FundTask {
                     continue;
                 }
                 if(exitsMap.containsKey(item.getWorthDate())){
+                    if(!isEquals(item, exitsMap.get(item.getWorthDate()))){
+                        // 更新基金信息
+                        item.setId(exitsMap.get(item.getWorthDate()).getId());
+                        fundNetWorthService.updateFundNetWorth(item);
+                        System.out.println("更新基金信息:"+ JSON.toJSONString(item));
+                    }
                     continue;
                 }
                 item.setFundId(fundBean.getId());
                 fundNetWorthService.insertFundNetWorth(item);
             }
         }
+    }
+
+    // 判断两个基金是否相等
+    private static Boolean isEquals(FundNetWorthBean item, FundNetWorthBean exits){
+        if(exits==null || exits==null){
+            return false;
+        }
+        Boolean expectWorthDate = false;
+        Boolean expectGrowth = false;
+        if(item.getExpectWorthDate()!=null && exits.getExpectWorthDate()!=null && item.getExpectWorthDate().equals(exits.getExpectWorthDate())){
+            expectWorthDate = true;
+        }
+        if(item.getExpectGrowth()!=null && exits.getExpectGrowth()!=null && item.getExpectWorth().equals(exits.getExpectWorth())){
+            expectGrowth = true;
+        }
+        return expectWorthDate && expectGrowth;
     }
 }

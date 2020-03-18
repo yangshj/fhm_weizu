@@ -35,13 +35,28 @@
     <!-- 修改-->
     <update id="updateFundNetWorth" parameterType="fundNetWorthBean">
         update weizu_fund_net_worth
-        set fund_id=#{fundId},
-        net_worth = #{netWorth},
-        worth_date = #{worthDate},
-        day_growth = #{dayGrowth},
-        expect_worth_Date = #{expectWorthDate},
-        expect_worth = #{expectWorth},
-        expect_growth = #{expectGrowth}
+        set modify_time=now(),
+        <if test="fundId != null">
+            ,fund_id=#{fundId}
+        </if>
+        <if test="netWorth != null">
+            ,net_worth = #{netWorth}
+        </if>
+        <if test="worthDate != null and worthDate != ''">
+            ,worth_date = #{worthDate}
+        </if>
+        <if test="dayGrowth != null">
+            ,day_growth = #{dayGrowth}
+        </if>
+        <if test="expectWorthDate != null and expectWorthDate != ''">
+            ,expect_worth_Date = #{expectWorthDate}
+        </if>
+        <if test="expectWorth != null">
+            ,expect_worth = #{expectWorth}
+        </if>
+        <if test="expectGrowth != null">
+            ,expect_growth = #{expectGrowth}
+        </if>
         where
         id = #{id}
     </update>

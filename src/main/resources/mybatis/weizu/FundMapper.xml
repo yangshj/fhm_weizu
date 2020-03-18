@@ -39,7 +39,10 @@
     <!-- 修改-->
     <update id="updateFund" parameterType="fundBean">
         update weizu_fund
-        set code=#{code}
+        set modify_time=now()
+        <if test="code != null and code != ''">
+            ,code=#{code}
+        </if>
         <if test="name != null and name != ''">
             ,name = #{name}
         </if>
