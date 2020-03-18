@@ -128,6 +128,7 @@ public class FundTask {
                     if(!isEquals(item, exitsMap.get(item.getWorthDate()))){
                         // 更新基金信息
                         item.setId(exitsMap.get(item.getWorthDate()).getId());
+                        item.setFundId(fundBean.getId());
                         fundNetWorthService.updateFundNetWorth(item);
                         System.out.println("更新基金信息:"+ JSON.toJSONString(item));
                     }
