@@ -144,6 +144,9 @@ public class FundTask {
         if(exits==null || exits==null){
             return false;
         }
+        if(item.getExpectWorthDate()==null && exits.getExpectWorthDate()==null){
+            return true;
+        }
         Boolean expectWorthDate = false;
         Boolean expectGrowth = false;
         if(item.getExpectWorthDate()!=null && exits.getExpectWorthDate()!=null && item.getExpectWorthDate().equals(exits.getExpectWorthDate())){
