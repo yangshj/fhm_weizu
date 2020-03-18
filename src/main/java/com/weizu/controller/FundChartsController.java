@@ -62,6 +62,7 @@ public class FundChartsController extends BaseController {
             mv.addObject("lastYearList", getDataList(lastYearList));
             mv.addObject("lastThreeYearList", getDataList(lastThreeYearList));
             mv.addObject("fundList",fundList);
+            mv.addObject("lastNetWorth",itemList.get(itemList.size()-1));
             mv.addObject("fund",getFundBeanById(fundList, Long.parseLong(fundId)));
             mv.addObject("pd", pd);
             mv.setViewName("weizu/fundCharts/list");

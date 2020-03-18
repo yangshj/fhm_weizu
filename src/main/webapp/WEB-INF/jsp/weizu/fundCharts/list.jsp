@@ -96,6 +96,18 @@
                                 <td>买入费率</td>
                                 <td>${fund.buyRate }</td>
                             </tr>
+                            <tr>
+                                <td>期望日期</td>
+                                <td>${lastNetWorth.expectWorthDate }</td>
+                            </tr>
+                            <tr>
+                                <td>期望净值</td>
+                                <td>${lastNetWorth.expectWorth }</td>
+                            </tr>
+                            <tr>
+                                <td>期望增长率</td>
+                                <td>${lastNetWorth.expectGrowth }</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
