@@ -24,8 +24,8 @@ public class MemberInsertSQLUtils {
         String drivinglicenceno = memberArray[4];
         String xbirthday = memberArray[5];
 
-        String memberSQL = "INSERT INTO [member] ([xpassword], [xname], [xbirthday], [xcardtype],[xidentitycard],[xdrivinglicenceno], [xsex], [xcity], [xmobile], [xoperator_id], [xregtime], [xstatus], [xlevel], [xorigin], [xflag], [xisCanReceiveShortMessage], [xmodifytime], [xnoshow], [credit], [quick_pay_state], [is_hz], [seseame_credit_flag], [xdrivinglicencestatus],[xdrivinglicencedeadline], [xcountrytype], [activity])"+
-        "VALUES ('fea4ad480f537ec76f70c3f6442a814a2baee013', '"+name+"', "+xbirthday+ ",'"+xcardType+"', '"+xidentitycard+"','"+drivinglicenceno+"','男', 0, '"+mobile+"', 1, '2020-4-3 21:00:00', 10, 1, '12', 0, '1', '2020-4-3 21:00:00', 0, 0, 0, 0, 0, 2, '2022-04-01 21:00:00', 3, 0);";
+        String memberSQL = "INSERT INTO [member] ([xpassword], [xname], [xbirthday], [xcardtype],[xidentitycard],[xdrivinglicenceno], [xsex], [xcity], [xmobile], [xoperator_id], [xregtime], [xstatus], [xlevel], [xorigin], [xflag], [xisCanReceiveShortMessage], [xmodifytime], [xnoshow], [credit], [quick_pay_state], [is_hz], [seseame_credit_flag], [xdrivinglicencestatus],[xdrivinglicencedeadline], [xcountrytype],[country_code], [activity])"+
+        "VALUES ('fea4ad480f537ec76f70c3f6442a814a2baee013', '"+name+"', "+xbirthday+ ",'"+xcardType+"', '"+xidentitycard+"','"+drivinglicenceno+"','男', 0, '"+mobile+"', 1, '2020-4-3 21:00:00', 10, 1, '12', 0, '1', '2020-4-3 21:00:00', 0, 0, 0, 0, 0, 2, '2022-04-01 21:00:00', 3, '86', 0);";
 
 
         String memberAddSQl = "INSERT INTO [T_CRM_MEMBER_ADD] ([MEMBER_ID], [VALID_DATE], [CUR_INTEGRAL], [AVAIL_INTEGRAL], [COST_INTEGRAL], [ACC_INTEGRAL], [VERSION], [OPER_TIME])"+
