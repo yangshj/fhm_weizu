@@ -76,8 +76,9 @@ public class ImportAddressLookController extends BaseController {
                    }
                    lookBean.setAppId(1L);
                    lookBean.setSex(1);
+                   lookBean.setSurnameId(temp.getId());
                    addressLookService.inserAddressLook(lookBean);
-                    WriteTxt.write(writeFile, JSON.toJSONString(lookBean));
+                   WriteTxt.write(writeFile, JSON.toJSONString(lookBean));
                 }
             }
             out.write("success");
