@@ -1,16 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.weizu.surName">
-	
+
+	<!-- 新增-->
+	<insert id="insertSurName" parameterType="surNameBean">
+		<selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into weizu_surname(
+			surname,
+			order_num,
+			app_id,
+			create_time,
+			modify_time
+		) values (
+			#{surname},
+			#{orderNum},
+			#{appId},
+			now(),
+			now()
+		)
+	</insert>
+
+
 	<!-- 获取所有姓氏 -->
 	<select id="getAllSurName" resultType="surNameBean" parameterType="weChatAPPBean">
 		select
 		   id,
 		   surname as surname,
+		   order_num as orderNum,
+		   app_id as appId,
 		   create_time as createTime
 		from weizu_surname where 1=1
 		and app_id = #{id} order by order_num
 	</select>
-	
-	
+
+	<!-- 修改-->
+	<update id="updateSurName" parameterType="surNameBean">
+		update weizu_surname
+		set modify_time=now()
+		<if test="surname != null and surname != ''">
+			,surname=#{surname}
+		</if>
+		<if test="orderNum != null and orderNum != ''">
+			,order_num = #{orderNum}
+		</if>
+		<if test="appId != null and appId != ''">
+			,app_id = #{appId}
+		</if>
+		where id = #{id}
+	</update>
+
+
+
 </mapper>

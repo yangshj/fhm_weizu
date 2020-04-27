@@ -9,6 +9,9 @@ public interface SurNameService {
 	
 	
 	List<SurNameBean> getAllSurName(WeChatAPPBean bean) throws Exception;
-	
+
+	Integer updateSurName(SurNameBean bean) throws Exception;
+
+	Integer insertSurName(SurNameBean bean) throws Exception;
 	
 }

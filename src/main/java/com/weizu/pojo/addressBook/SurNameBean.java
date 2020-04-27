@@ -16,6 +16,8 @@ public class SurNameBean implements Serializable{
 	private String surname;
 	/** 创建时间 */
 	private Date createTime;
+	/** 排序 */
+	private Integer orderNum;
 	/** 小程序Id */
 	private Long appId;
 
@@ -44,5 +46,11 @@ public class SurNameBean implements Serializable{
 	}
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+	public Integer getOrderNum() {
+		return orderNum;
+	}
+	public void setOrderNum(Integer orderNum) {
+		this.orderNum = orderNum;
 	}
 }

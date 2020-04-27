@@ -18,6 +18,15 @@ public class ReadTxt {
 	 * @return list<每行数据>
 	 */
 	public static List<String> readTxtFile(String filePath) {
+		return readTxtFile(filePath, false);
+	}
+
+	/**
+	 * 读取文本文件，返回List类型
+	 * @param filePath 文件路径
+	 * @return list<每行数据>
+	 */
+	public static List<String> readTxtFile(String filePath, Boolean distinct) {
 		List<String> list = new ArrayList<String>();
 		try {
 			String encoding = "utf8";
@@ -27,7 +36,13 @@ public class ReadTxt {
 				BufferedReader bufferedReader = new BufferedReader(read);
 				String lineTxt = null;
 				while ((lineTxt = bufferedReader.readLine()) != null) {
-					list.add(lineTxt);
+					if(distinct){
+						if(!list.contains(lineTxt)){
+							list.add(lineTxt);
+						}
+					} else {
+						list.add(lineTxt);
+					}
 				}
 				read.close();
 			} else {

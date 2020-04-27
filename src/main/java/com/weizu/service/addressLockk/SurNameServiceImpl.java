@@ -19,4 +19,14 @@ public class SurNameServiceImpl implements SurNameService{
 	public List<SurNameBean> getAllSurName(WeChatAPPBean bean) throws Exception {
 		return surNameDao.getAllSurName(bean);
 	}
+
+	@Override
+	public Integer updateSurName(SurNameBean bean) throws Exception {
+		return surNameDao.updateSurName(bean);
+	}
+
+	@Override
+	public Integer insertSurName(SurNameBean bean) throws Exception {
+		return surNameDao.insertSurName(bean);
+	}
 }
