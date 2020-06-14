@@ -104,6 +104,10 @@
         <if test="appId != null">
             and bk.app_id = #{appId}
         </if>
+		<if test="searchKeyWord != null and searchKeyWord!=''">
+			and (bk.user_name like CONCAT(CONCAT('%', #{searchKeyWord}),'%') or bk.remark like CONCAT(CONCAT('%', #{searchKeyWord}),'%'))
+			limit 50
+		</if>
 	</select>
 	
 	<!-- 获取所有通讯录信息 -->

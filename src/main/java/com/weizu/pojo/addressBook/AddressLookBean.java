@@ -34,7 +34,8 @@ public class AddressLookBean  implements Serializable{
 	/** 小程序Id */
 	private Long appId;
 
-
+	/** 搜索关键字 */
+	private String searchKeyWord;
 
 	public Long getAppId() {
 		return appId;
@@ -95,5 +96,11 @@ public class AddressLookBean  implements Serializable{
 	}
 	public void setHeadImage(String headImage) {
 		this.headImage = headImage;
+	}
+	public String getSearchKeyWord() {
+		return searchKeyWord;
+	}
+	public void setSearchKeyWord(String searchKeyWord) {
+		this.searchKeyWord = searchKeyWord;
 	}
 }

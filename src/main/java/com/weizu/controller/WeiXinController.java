@@ -265,6 +265,7 @@ public class WeiXinController extends BaseController{
 			String sessionId = request.getParameter("sessionId");
 			String surname = request.getParameter("surname");
 			String appId = request.getParameter("appId");
+			String searchKeyWord = request.getParameter("searchKeyWord"); // 搜索关键字
 			UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
 			if(userOpenInfo!=null){
 				WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
@@ -285,20 +286,25 @@ public class WeiXinController extends BaseController{
                         break;
                     }
                 }
-                if(surNameBean!=null){
+				AddressLookBean param = new AddressLookBean();
+				param.setAppId(weChatAPPBean.getId());
+				if(surNameBean!=null){
 					if(userInfoBean!=null){
 						Boolean hasRights = RightsHelper.testRights(userInfoBean.getManagerRights(), surNameBean.getId().intValue());
 						re.setManagerRights(hasRights);
 					}
-                    AddressLookBean param = new AddressLookBean();
-                    param.setSurnameId(surNameBean.getId());
-                    param.setAppId(weChatAPPBean.getId());
-                    List<AddressLookBean> list = addressLookService.findAddressLookByCondition(param);
-                    if(list!=null && list.size()>0){
-                        re.setListData(list);
-                        re.setResult(ResultHelper.SUCCESS);
-                    }
-                }
+					param.setSurnameId(surNameBean.getId());
+				} else if(searchKeyWord!=null && !searchKeyWord.trim().equals("")){
+					param.setSearchKeyWord(searchKeyWord);
+				} else {
+					re.setMsg("系统异常，关键字和姓氏不能同时为空");
+					re.setResult(ResultHelper.FAIL);
+				}
+				List<AddressLookBean> list = addressLookService.findAddressLookByCondition(param);
+				if(list!=null && list.size()>0){
+					re.setListData(list);
+					re.setResult(ResultHelper.SUCCESS);
+				}
 			} else {
                 re.setResult(ResultHelper.SESSION_INVALID);
             }
