@@ -5,10 +5,7 @@ import com.fh.controller.base.BaseController;
 import com.weizu.common.enums.MiniProgramStateEnum;
 import com.weizu.common.enums.ModuleEnum;
 import com.weizu.common.enums.StatusEnum;
-import com.weizu.helper.ResultHelper;
-import com.weizu.helper.UserOpenInfo;
-import com.weizu.helper.WeChatAppHelper;
-import com.weizu.helper.WeiXinMemoryCacheHelper;
+import com.weizu.helper.*;
 import com.weizu.pojo.addressBook.WeChatAPPBean;
 import com.weizu.pojo.oa.BaseRE;
 import com.weizu.pojo.other.GetImageTextRE;
@@ -209,7 +206,8 @@ public class WeiXinOtherController  extends BaseController {
                 bean.setStatus(StatusEnum.EFFECTIVE.getIndex());
                 imageTextService.insertImageText(bean);
                 re.setResult(ResultHelper.SUCCESS);
-                sendMessage(bean);
+                // 发送订阅消息
+                SubscribeMessageHelper.sendMessageAsync(bean);
             } else {
                 re.setResult(ResultHelper.SESSION_INVALID);
             }
@@ -222,11 +220,6 @@ public class WeiXinOtherController  extends BaseController {
             writer.print(JSON.toJSONString(re));
             writer.flush();
         }
-    }
-
-    // 发送订阅消息
-    private void sendMessage(ImageTextBean bean){
-
     }
 
     @RequestMapping(value="/deleteImageText")
