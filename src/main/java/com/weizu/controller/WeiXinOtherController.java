@@ -2,6 +2,7 @@ package com.weizu.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.fh.controller.base.BaseController;
+import com.weizu.common.enums.MiniProgramStateEnum;
 import com.weizu.common.enums.ModuleEnum;
 import com.weizu.common.enums.StatusEnum;
 import com.weizu.helper.ResultHelper;
@@ -173,6 +174,7 @@ public class WeiXinOtherController  extends BaseController {
             String title = request.getParameter("title");
             String content = request.getParameter("content");
             String module = request.getParameter("module");
+            String programState = request.getParameter("programState");
             String cloudPathArrayStr = request.getParameter("cloudPathArrayStr");
             UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
             if(userOpenInfo!=null){
@@ -194,13 +196,20 @@ public class WeiXinOtherController  extends BaseController {
                 if(StringUtil.isNotEmpty(module)){
                     bean.setModule(Integer.parseInt(module));
                 } else {
-                    // 默认为校园一角
-                    bean.setModule(ModuleEnum.SCHOOL.getIndex());
+                    // 默认为公告
+                    bean.setModule(ModuleEnum.NOTICE.getIndex());
+                }
+                if(StringUtil.isNotEmpty(programState)){
+                    bean.setProgramState(Integer.parseInt(programState));
+                } else {
+                    // 默认为正式版
+                    bean.setProgramState(MiniProgramStateEnum.FORMAL.getIndex());
                 }
                 bean.setAppId(weChatAPPBean.getId());
                 bean.setStatus(StatusEnum.EFFECTIVE.getIndex());
                 imageTextService.insertImageText(bean);
                 re.setResult(ResultHelper.SUCCESS);
+                sendMessage(bean);
             } else {
                 re.setResult(ResultHelper.SESSION_INVALID);
             }
@@ -213,6 +222,11 @@ public class WeiXinOtherController  extends BaseController {
             writer.print(JSON.toJSONString(re));
             writer.flush();
         }
+    }
+
+    // 发送订阅消息
+    private void sendMessage(ImageTextBean bean){
+
     }
 
     @RequestMapping(value="/deleteImageText")

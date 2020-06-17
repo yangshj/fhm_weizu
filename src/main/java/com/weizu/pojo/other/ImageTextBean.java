@@ -30,6 +30,8 @@ public class ImageTextBean implements Serializable {
     private Date modifyTime;
     /** 所属模块 ModuleEnum */
     private Integer module;
+    /** 所属模块 MiniProgramStateEnum */
+    private Integer programState;
     /** 小程序Id */
     private Long appId;
     /** 是否有效 */
@@ -131,5 +133,11 @@ public class ImageTextBean implements Serializable {
     }
     public void setModule(Integer module) {
         this.module = module;
+    }
+    public Integer getProgramState() {
+        return programState;
+    }
+    public void setProgramState(Integer programState) {
+        this.programState = programState;
     }
 }

@@ -20,7 +20,10 @@ public enum ModuleEnum {
     SIX_GRADE(16, "六年级风采"),
     SEVEN_GRADE(17, "七年级风采"),
     EIGHT_GRADE(18, "八年级风采"),
-    NINE_GRADE(19, "九年级风采");
+    NINE_GRADE(19, "九年级风采"),
+    NOTIFY(20, "通知"),
+    BROADCAST(21, "广播"),
+    ADVERT(22, "广告");
 
 
     private Integer index;

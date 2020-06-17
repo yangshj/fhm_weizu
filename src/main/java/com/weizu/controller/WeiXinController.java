@@ -129,6 +129,8 @@ public class WeiXinController extends BaseController{
 		String language = request.getParameter("language");
 		String nickName = request.getParameter("nickName");
 		String province = request.getParameter("province");
+		String subscriptions = request.getParameter("subscriptions");
+		System.out.println("subscriptions:"+subscriptions);
 		// 特殊符号处理
 		nickName = StringUtil.handleSpecial(nickName);
 		country =  StringUtil.handleSpecial(country);
@@ -166,6 +168,7 @@ public class WeiXinController extends BaseController{
 				bean.setOpenId(userOpenInfo.getOpenId());
 				bean.setProvince(province);
 				bean.setAppId(weChatAPPBean.getId());
+				bean.setSubscriptions(subscriptions);
 				userInfoService.inserWeiZuUser(bean);
 				userOpenInfo.setUserId(bean.getId());
 				// 暂时放开权限
@@ -188,6 +191,17 @@ public class WeiXinController extends BaseController{
                     userInfoService.updateUserById(bean);
                 } else {
 					System.out.println("头像没发生变化不更新： "+usrString);
+				}
+				// 更新数据库消息订阅
+				if(StringUtil.isNotEmpty(subscriptions) && !subscriptions.equals(exit.getSubscriptions())){
+					UserInfoBean bean = new UserInfoBean();
+					bean.setId(exit.getId());
+					bean.setAppId(weChatAPPBean.getId());
+					bean.setSubscriptions(subscriptions);
+					System.out.println("更新数据库昵称: "+nickName);
+					userInfoService.updateUserById(bean);
+				} else {
+					System.out.println("消息订阅没发生变化不更新： "+usrString);
 				}
                 if(StringUtil.isNotEmpty(exit.getManagerRights()) && !exit.getManagerRights().equals("0")){
 					userOpenInfo.setManager(true);

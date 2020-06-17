@@ -18,6 +18,7 @@
 			 province,
 			 open_id,
 			 app_id,
+			 subscriptions,
 			 create_time,
 			 modify_time
 		) values (
@@ -30,6 +31,7 @@
 			#{province},
 			#{openId},
 			#{appId},
+			#{subscriptions},
 			now(),
 			now()
 		)
@@ -67,6 +69,9 @@
 			<if test="managerRights != null and managerRights != ''">
 				,manager_rights = #{managerRights}
 			</if>
+			<if test="subscriptions != null and subscriptions != ''">
+				,subscriptions = #{subscriptions}
+			</if>
 			where 
 				open_id = #{openId}
 	</update>
@@ -96,6 +101,9 @@
 			<if test="managerRights != null and managerRights != ''">
 				,manager_rights = #{managerRights}
 			</if>
+			<if test="subscriptions != null and subscriptions != ''">
+				,subscriptions = #{subscriptions}
+			</if>
 			where 
 				id = #{id}
 	</update>
@@ -113,6 +121,7 @@
 			 province as province,
 			 open_id as openId,
 			 app_id as appId,
+			 subscriptions as subscriptions,
 			 rights as rights,
 			 manager_rights as managerRights,
 			 admin as admin
@@ -135,6 +144,7 @@
 			 province as province,
 			 open_id as openId,
 			 app_id as appId,
+			 subscriptions as subscriptions,
 			 rights as rights,
 			 manager_rights as managerRights,
 			 admin as admin,
@@ -160,7 +170,7 @@
 			 app_id as appId,
 			 rights as rights,
 			 manager_rights as managerRights,
-			  admin as admin,
+			 admin as admin,
 			 super_admin as superAdmin
 		from
 			weizu_user
@@ -182,6 +192,7 @@
 			 province as province,
 			 open_id as openId,
 			 app_id as appId,
+			 subscriptions as subscriptions,
 			 rights as rights,
 			 manager_rights as managerRights,
 			 admin as admin,
@@ -189,6 +200,9 @@
 		from
 			weizu_user
 		where nick_name is not null and nick_name!='' and app_id = #{appId}
+		<if test="subscriptionsNotNull!=null and subscriptionsNotNull=true"><!-- 用户名检索 -->
+			and subscriptions is not null
+		</if>
 	</select>
 
 	<!-- 列表后台查询页面 -->

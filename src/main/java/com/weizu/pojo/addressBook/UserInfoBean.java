@@ -28,6 +28,8 @@ public class UserInfoBean implements Serializable{
 	private String nickName;
 	/** 唯一标示 */
 	private String openId;
+	/** 消息订阅 */
+	private String subscriptions;
 	/** 权限 */
 	private String rights;
 	/** 管理员权限 */
@@ -46,7 +48,7 @@ public class UserInfoBean implements Serializable{
 
 
 	/**  审批权限页面用--不对应数据库 */
-
+	private Boolean subscriptionsNotNull;
 
 	public Long getAppId() {
 		return appId;
@@ -143,5 +145,17 @@ public class UserInfoBean implements Serializable{
 	}
 	public void setSuperAdmin(Integer superAdmin) {
 		this.superAdmin = superAdmin;
+	}
+	public String getSubscriptions() {
+		return subscriptions;
+	}
+	public void setSubscriptions(String subscriptions) {
+		this.subscriptions = subscriptions;
+	}
+	public Boolean getSubscriptionsNotNull() {
+		return subscriptionsNotNull;
+	}
+	public void setSubscriptionsNotNull(Boolean subscriptionsNotNull) {
+		this.subscriptionsNotNull = subscriptionsNotNull;
 	}
 }
