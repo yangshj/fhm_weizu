@@ -14,8 +14,14 @@ public class ImageTextBean implements Serializable {
 
     /** id */
     private Long id;
-    /** 员工id */
+    /** 发布人id */
     private Long userId;
+    /** 发布人微信昵称 */
+    private String nickName;
+    /** 发布人姓名 */
+    private String userName;
+    /** 发布人手机号 */
+    private String userMobile;
     /** 标题 */
     private String title;
     /** 内容 */
@@ -139,5 +145,23 @@ public class ImageTextBean implements Serializable {
     }
     public void setProgramState(Integer programState) {
         this.programState = programState;
+    }
+    public String getUserName() {
+        return userName;
+    }
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+    public String getUserMobile() {
+        return userMobile;
+    }
+    public void setUserMobile(String userMobile) {
+        this.userMobile = userMobile;
+    }
+    public String getNickName() {
+        return nickName;
+    }
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 }

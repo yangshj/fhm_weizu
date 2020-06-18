@@ -6,17 +6,19 @@ package com.weizu.common.enums;
 public enum  MiniProgramStateEnum {
 
 
-    FORMAL(1, "正式版"),
-    TRIAL(2, "体验版"),
-    DEVELOPER(3, "开发版");
+    FORMAL(1, "正式版", "formal"),
+    TRIAL(2, "体验版", "trial"),
+    DEVELOPER(3, "开发版", "developer");
 
 
     private Integer index;
     private String desc;
+    private String english;
 
-    private MiniProgramStateEnum(Integer index, String desc) {
+    private MiniProgramStateEnum(Integer index, String desc, String english) {
         this.index = index;
         this.desc = desc;
+        this.english = english;
     }
 
     public static MiniProgramStateEnum getEnumByIndex(Integer index) {
@@ -42,5 +44,11 @@ public enum  MiniProgramStateEnum {
     }
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+    public String getEnglish() {
+        return english;
+    }
+    public void setEnglish(String english) {
+        this.english = english;
     }
 }

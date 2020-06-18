@@ -171,6 +171,9 @@ public class WeiXinOtherController  extends BaseController {
             String title = request.getParameter("title");
             String content = request.getParameter("content");
             String module = request.getParameter("module");
+            String userName = request.getParameter("userName");
+            String nickName = request.getParameter("nickName");
+            String userMobile = request.getParameter("userMobile");
             String programState = request.getParameter("programState");
             String cloudPathArrayStr = request.getParameter("cloudPathArrayStr");
             UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
@@ -202,6 +205,9 @@ public class WeiXinOtherController  extends BaseController {
                     // 默认为正式版
                     bean.setProgramState(MiniProgramStateEnum.FORMAL.getIndex());
                 }
+                bean.setNickName(nickName);
+                bean.setUserName(userName);
+                bean.setUserMobile(userMobile);
                 bean.setAppId(weChatAPPBean.getId());
                 bean.setStatus(StatusEnum.EFFECTIVE.getIndex());
                 imageTextService.insertImageText(bean);

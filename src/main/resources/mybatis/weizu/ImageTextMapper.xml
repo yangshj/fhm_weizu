@@ -10,6 +10,9 @@
         </selectKey>
         insert into weizu_image_text (
         user_id,
+        nick_name,
+        user_name,
+        user_mobile,
         title,
         content,
         first_path,
@@ -22,6 +25,9 @@
         modify_time
         ) values (
         #{userId},
+        #{nickName},
+        #{userName},
+        #{userMobile},
         #{title},
         #{content},
         #{firstPath},
@@ -54,6 +60,15 @@
         <if test="userId != null and userId != ''">
             ,user_id = #{userId}
         </if>
+        <if test="nickName != null and nickName != ''">
+            ,nick_name = #{nickName}
+        </if>
+        <if test="userName != null and userName != ''">
+            ,user_name = #{userName}
+        </if>
+        <if test="userMobile != null and userMobile != ''">
+            ,user_mobile = #{userMobile}
+        </if>
         <if test="title != null and title != ''">
             ,title = #{title}
         </if>
@@ -78,6 +93,9 @@
 		select
 			 id as id,
 			 user_id as userId,
+			 nick_name as nickName,
+             user_name as userName,
+             user_mobile as userMobile,
 			 title as title,
 			 content as content,
 			 first_path as firstPath,
@@ -98,6 +116,9 @@
 		select
 			 id as id,
 			 user_id as userId,
+            nick_name as nickName,
+            user_name as userName,
+            user_mobile as userMobile,
 			 title as title,
 			 content as content,
 			 first_path as firstPath,
@@ -122,6 +143,9 @@
         select
         id as id,
         user_id as userId,
+        nick_name as nickName,
+        user_name as userName,
+        user_mobile as userMobile,
         title as title,
         content as content,
         first_path as firstPath,
@@ -155,6 +179,9 @@
             id as id,
             user_id as userId,
             title as title,
+            nick_name as nickName,
+            user_name as userName,
+            user_mobile as userMobile,
             content as content,
             first_path as firstPath,
             cloud_path as cloudPath,

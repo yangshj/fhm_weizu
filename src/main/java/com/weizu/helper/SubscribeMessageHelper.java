@@ -3,6 +3,7 @@ package com.weizu.helper;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fh.util.ServiceHelper;
+import com.weizu.common.enums.MiniProgramStateEnum;
 import com.weizu.pojo.addressBook.UserInfoBean;
 import com.weizu.pojo.addressBook.WeChatAPPBean;
 import com.weizu.pojo.other.ImageTextBean;
@@ -83,6 +84,10 @@ public class SubscribeMessageHelper {
             System.out.println("token不能为空");
             return null;
         }
+        if(bean.getProgramState()==null || MiniProgramStateEnum.getEnumByIndex(bean.getProgramState())==null){
+            System.out.println("订阅环境不能为空");
+            return null;
+        }
         // 获取token地址
         String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send";
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -92,11 +97,12 @@ public class SubscribeMessageHelper {
                 System.out.println("发送人昵称不能为空");
                 return null;
             }
+            MiniProgramStateEnum programState = MiniProgramStateEnum.getEnumByIndex(bean.getProgramState());
             String params = "{" +
                     "  \"touser\": ,\" " +openId + "\","+
                     "  \"template_id\": \"B_dQ-EKgCSVoKLDxljRJRxbLN3Ee49_arlAhGJWmRRs\"," +
                     "  \"page\": \"index\"," +
-                    "  \"miniprogram_state\":\"developer\"," +
+                    "  \"miniprogram_state\":\" " + programState.getEnglish() + "\","+
                     "  \"lang\":\"zh_CN\"," +
                     "  \"data\": {" +
                     "       \"name1\": {" +
@@ -115,8 +121,8 @@ public class SubscribeMessageHelper {
                     "}";
             HttpUtil.post(url, token, params);
         } catch (Exception e) {
-            System.err.printf("获取token失败！");
-            e.printStackTrace(System.err);
+            System.err.printf("发送订阅消息失败！");
+            e.printStackTrace();
         }
         return null;
     }
