@@ -213,7 +213,7 @@ public class WeiXinOtherController  extends BaseController {
                 imageTextService.insertImageText(bean);
                 re.setResult(ResultHelper.SUCCESS);
                 // 发送订阅消息
-                SubscribeMessageHelper.sendMessageAsync(bean);
+                SubscribeMessageHelper.sendMessageAsync(bean,weChatAPPBean);
             } else {
                 re.setResult(ResultHelper.SESSION_INVALID);
             }

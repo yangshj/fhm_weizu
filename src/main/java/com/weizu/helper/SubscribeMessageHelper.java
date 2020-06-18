@@ -8,6 +8,7 @@ import com.weizu.pojo.addressBook.UserInfoBean;
 import com.weizu.pojo.addressBook.WeChatAPPBean;
 import com.weizu.pojo.other.ImageTextBean;
 import com.weizu.service.addressLockk.UserInfoService;
+import com.weizu.service.addressLockk.WeChatAPPService;
 import com.weizu.util.HttpUtil;
 import com.weizu.util.StringUtil;
 import com.weizu.util.StringUtils;
@@ -21,16 +22,17 @@ import java.util.List;
  */
 public class SubscribeMessageHelper {
 
-    private static UserInfoService userInfoService;
+    private static final String tempId = "B_dQ-EKgCSVoKLDxljRJRwyE9dJa1ba-nh_qWuEooc0";
 
+    private static UserInfoService userInfoService;
     /**
      * 异步发送消息
      */
-    public static void sendMessageAsync(final ImageTextBean bean){
+    public static void sendMessageAsync(final ImageTextBean bean, final WeChatAPPBean weChatAPP){
         Thread t = new Thread(){
             @Override
             public void run() {
-                sendMessage(bean);
+                sendMessage(bean, weChatAPP);
             }
         };
         t.start();
@@ -40,14 +42,9 @@ public class SubscribeMessageHelper {
     /**
      * 同步发送消息
      */
-    public static void sendMessage(ImageTextBean bean){
+    public static void sendMessage(ImageTextBean bean, WeChatAPPBean weChatAPP){
         if(bean==null || bean.getAppId()==null){
             System.out.println("发送订阅消息失败缺失参数："+ JSON.toJSONString(bean));
-            return;
-        }
-        WeChatAPPBean weChatAPP = WeChatAppHelper.getWeChatApp(bean.getAppId().toString());
-        if(weChatAPP==null){
-            System.out.println("发送订阅消息失败AppId不存在："+ JSON.toJSONString(bean));
             return;
         }
         try {
@@ -59,11 +56,11 @@ public class SubscribeMessageHelper {
             param.setSubscriptionsNotNull(true);
             List<UserInfoBean> userList = userInfoService.getAllUserByCondition(param);
             for(UserInfoBean user : userList){
-                if(StringUtils.isEmpty(user.getSubscriptions(),true)){
+                if(StringUtil.isEmpty(user.getSubscriptions())){
                     continue;
                 }
-                JSONObject json = (JSONObject) JSON.toJSON(user.getSubscriptions());
-                String value = json.getString("B_dQ-EKgCSVoKLDxljRJRxbLN3Ee49_arlAhGJWmRRs");
+                JSONObject json = (JSONObject) JSON.parseObject(user.getSubscriptions());
+                String value = json.getString(tempId);
                 if(value!=null && value.equals("accept")){
                     String token = WeChatAccessTokenHelper.getToken(weChatAPP.getAppId(), weChatAPP.getAppSecret());
                     sendHttp(token, user.getOpenId(), bean);
@@ -88,6 +85,7 @@ public class SubscribeMessageHelper {
             System.out.println("订阅环境不能为空");
             return null;
         }
+        System.out.println("开始发送订阅消息:"+JSON.toJSONString(bean));
         // 获取token地址
         String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send";
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -100,8 +98,8 @@ public class SubscribeMessageHelper {
             MiniProgramStateEnum programState = MiniProgramStateEnum.getEnumByIndex(bean.getProgramState());
             String params = "{" +
                     "  \"touser\": ,\" " +openId + "\","+
-                    "  \"template_id\": \"B_dQ-EKgCSVoKLDxljRJRxbLN3Ee49_arlAhGJWmRRs\"," +
-                    "  \"page\": \"index\"," +
+                    "  \"template_id\": " + tempId + "\","+
+                    "  \"page\": \"/pages/xyyj/detail/index?share=true&id="+ bean.getId()+ "\"," +
                     "  \"miniprogram_state\":\" " + programState.getEnglish() + "\","+
                     "  \"lang\":\"zh_CN\"," +
                     "  \"data\": {" +
@@ -120,10 +118,18 @@ public class SubscribeMessageHelper {
                     "  }" +
                     "}";
             HttpUtil.post(url, token, params);
+            System.out.println("开始发送订阅消息成功:"+JSON.toJSONString(params));
         } catch (Exception e) {
             System.err.printf("发送订阅消息失败！");
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void main(String[] args) {
+        String str = "{\"wLRnD9s2MU2Z1NW37Ky2_5UrQuXQb4yFEYQ7l3toqpg\":\"accept\",\"B_dQ-EKgCSVoKLDxljRJRxbLN3Ee49_arlAhGJWmRRs\":\"accept\"}";
+        JSONObject json = (JSONObject) JSON.parseObject(str);
+        String value = json.getString("B_dQ-EKgCSVoKLDxljRJRxbLN3Ee49_arlAhGJWmRRs");
+        System.out.println("value:"+value);
     }
 }
