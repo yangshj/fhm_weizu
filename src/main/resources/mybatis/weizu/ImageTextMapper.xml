@@ -69,6 +69,9 @@
         <if test="userMobile != null and userMobile != ''">
             ,user_mobile = #{userMobile}
         </if>
+        <if test="programState != null and programState != ''">
+            ,program_state = #{programState}
+        </if>
         <if test="title != null and title != ''">
             ,title = #{title}
         </if>
@@ -96,6 +99,7 @@
 			 nick_name as nickName,
              user_name as userName,
              user_mobile as userMobile,
+             program_state as programState,
 			 title as title,
 			 content as content,
 			 first_path as firstPath,
@@ -116,9 +120,10 @@
 		select
 			 id as id,
 			 user_id as userId,
-            nick_name as nickName,
-            user_name as userName,
-            user_mobile as userMobile,
+             nick_name as nickName,
+             user_name as userName,
+             user_mobile as userMobile,
+             program_state as programState,
 			 title as title,
 			 content as content,
 			 first_path as firstPath,
@@ -146,6 +151,7 @@
         nick_name as nickName,
         user_name as userName,
         user_mobile as userMobile,
+        program_state as programState,
         title as title,
         content as content,
         first_path as firstPath,
@@ -182,6 +188,7 @@
             nick_name as nickName,
             user_name as userName,
             user_mobile as userMobile,
+            program_state as programState,
             content as content,
             first_path as firstPath,
             cloud_path as cloudPath,

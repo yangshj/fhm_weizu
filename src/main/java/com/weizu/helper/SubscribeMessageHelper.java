@@ -12,10 +12,21 @@ import com.weizu.service.addressLockk.WeChatAPPService;
 import com.weizu.util.HttpUtil;
 import com.weizu.util.StringUtil;
 import com.weizu.util.StringUtils;
+import org.apache.http.Header;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 用于发送订阅消息
@@ -59,6 +70,10 @@ public class SubscribeMessageHelper {
                 if(StringUtil.isEmpty(user.getSubscriptions())){
                     continue;
                 }
+                if(StringUtil.isEmpty(user.getOpenId())){
+                    continue;
+                }
+                System.out.println(user.getSubscriptions());
                 JSONObject json = (JSONObject) JSON.parseObject(user.getSubscriptions());
                 String value = json.getString(tempId);
                 if(value!=null && value.equals("accept")){
@@ -96,29 +111,19 @@ public class SubscribeMessageHelper {
                 return null;
             }
             MiniProgramStateEnum programState = MiniProgramStateEnum.getEnumByIndex(bean.getProgramState());
-            String params = "{" +
-                    "  \"touser\": ,\" " +openId + "\","+
-                    "  \"template_id\": " + tempId + "\","+
-                    "  \"page\": \"/pages/xyyj/detail/index?share=true&id="+ bean.getId()+ "\"," +
-                    "  \"miniprogram_state\":\" " + programState.getEnglish() + "\","+
-                    "  \"lang\":\"zh_CN\"," +
-                    "  \"data\": {" +
-                    "       \"name1\": {" +
-                    "          \"value\": \" " + user.getNickName() + "\","+
-                    "      }," +
-                    "      \"time2\": {" +
-                    "          \"value\": \" " +format.format(new Date()) + "\","+
-                    "      }," +
-                    "      \"thing3\": {" +
-                    "          \"value\": \" " +bean.getTitleAb() + "\","+
-                    "      }," +
-                    "      \"thing4\": {" +
-                    "          \"value\": \" " + bean.getContentAb() + "\","+
-                    "      } " +
-                    "  }" +
-                    "}";
-            HttpUtil.post(url, token, params);
-            System.out.println("开始发送订阅消息成功:"+JSON.toJSONString(params));
+            Template template=new Template();
+            template.setTemplate_id(tempId);
+            template.setTouser(openId);
+            template.setProgramState(programState.getEnglish());
+            template.setPage("/pages/xyyj/detail/index?share=true&id="+ bean.getId());
+            List<TemplateParam> paras=new ArrayList<TemplateParam>();
+            paras.add(new TemplateParam("name1",user.getNickName()));
+            paras.add(new TemplateParam("time2",format.format(new Date())));
+            paras.add(new TemplateParam("thing3",bean.getTitle()));
+            paras.add(new TemplateParam("thing4",bean.getContent()));
+            template.setTemplateParamList(paras);
+            System.out.println(template.toJSON());
+            HttpUtil.post(url, token, template.toJSON());
         } catch (Exception e) {
             System.err.printf("发送订阅消息失败！");
             e.printStackTrace();
@@ -126,10 +131,5 @@ public class SubscribeMessageHelper {
         return null;
     }
 
-    public static void main(String[] args) {
-        String str = "{\"wLRnD9s2MU2Z1NW37Ky2_5UrQuXQb4yFEYQ7l3toqpg\":\"accept\",\"B_dQ-EKgCSVoKLDxljRJRxbLN3Ee49_arlAhGJWmRRs\":\"accept\"}";
-        JSONObject json = (JSONObject) JSON.parseObject(str);
-        String value = json.getString("B_dQ-EKgCSVoKLDxljRJRxbLN3Ee49_arlAhGJWmRRs");
-        System.out.println("value:"+value);
-    }
+
 }

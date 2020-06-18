@@ -228,6 +228,17 @@ public class WeiXinOtherController  extends BaseController {
         }
     }
 
+    @RequestMapping(value="/test")
+    @ResponseBody
+    public void test(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        ImageTextBean bean = new ImageTextBean();
+        bean = imageTextService.findImageTextById(94L);
+        WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp("wx908e683643d04ebc");
+        // 发送订阅消息
+        SubscribeMessageHelper.sendMessage(bean,weChatAPPBean);
+    }
+
+
     @RequestMapping(value="/deleteImageText")
     @ResponseBody
     public void deleteImageText(HttpServletRequest request, HttpServletResponse response) throws IOException {
