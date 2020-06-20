@@ -22,6 +22,8 @@ public class WeChatAPPBean implements Serializable {
     private String appSecret;
     /** 是否开启权限校验 */
     private Integer permissionCheck;
+    /** 订阅消息 */
+    private Integer subscribeMessage;
 
 
     public Long getId() {
@@ -53,5 +55,11 @@ public class WeChatAPPBean implements Serializable {
     }
     public void setPermissionCheck(Integer permissionCheck) {
         this.permissionCheck = permissionCheck;
+    }
+    public Integer getSubscribeMessage() {
+        return subscribeMessage;
+    }
+    public void setSubscribeMessage(Integer subscribeMessage) {
+        this.subscribeMessage = subscribeMessage;
     }
 }

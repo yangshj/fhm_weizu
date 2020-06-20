@@ -10,6 +10,7 @@
         app_id as appId,
         app_secret as appSecret,
         permission_check as permissionCheck,
+        subscribe_message as subscribeMessage,
         create_time as createTime
         from weizu_wechat_app order by id
     </select>

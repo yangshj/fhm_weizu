@@ -54,8 +54,13 @@ public class SubscribeMessageHelper {
      * 同步发送消息
      */
     public static void sendMessage(ImageTextBean bean, WeChatAPPBean weChatAPP){
-        if(bean==null || bean.getAppId()==null){
+        if(bean==null || bean.getAppId()==null || weChatAPP==null || weChatAPP.getSubscribeMessage()==null){
             System.out.println("发送订阅消息失败缺失参数："+ JSON.toJSONString(bean));
+            return;
+        }
+        // 是否发送订阅消息
+        if(!weChatAPP.getSubscribeMessage().equals(1)){
+            System.out.println("未开启发送订阅消息："+ JSON.toJSONString(weChatAPP));
             return;
         }
         try {
