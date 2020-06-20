@@ -52,7 +52,7 @@ public class WeChatAppHelper {
         return bean;
     }
 
-    public static WeChatAPPBean getFirst(){
+    public synchronized static WeChatAPPBean getFirst(){
         return weChatAPPBeanList.get(0);
     }
 
