@@ -1,5 +1,6 @@
 package com.weizu.pojo.other;
 
+import com.weizu.util.StringUtil;
 import org.apache.ibatis.type.Alias;
 
 import java.io.Serializable;
@@ -42,6 +43,8 @@ public class ImageTextBean implements Serializable {
     private Long appId;
     /** 是否有效 */
     private Integer status;
+    /** 多个模块 */
+    private String multipleModule;
 
     /** 分页 */
     private Integer startLimit;
@@ -123,12 +126,22 @@ public class ImageTextBean implements Serializable {
         this.endLimit = endLimit;
     }
     public String getTitleAb() {
+        if(StringUtil.isNotEmpty(title) && title.length()>20){
+            titleAb =title.substring(0,15)+"...";
+        } else {
+            titleAb =title;
+        }
         return titleAb;
     }
     public void setTitleAb(String titleAb) {
         this.titleAb = titleAb;
     }
     public String getContentAb() {
+        if(StringUtil.isNotEmpty(content) && content.length()>30){
+            contentAb = content.substring(0,25) + "...";
+        } else {
+            contentAb = content;
+        }
         return contentAb;
     }
     public void setContentAb(String contentAb) {
@@ -163,5 +176,11 @@ public class ImageTextBean implements Serializable {
     }
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+    public String getMultipleModule() {
+        return multipleModule;
+    }
+    public void setMultipleModule(String multipleModule) {
+        this.multipleModule = multipleModule;
     }
 }

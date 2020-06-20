@@ -172,6 +172,9 @@
         <if test="module != null and module != ''">
             and module = #{module}
         </if>
+        <if test="multipleModule != null and multipleModule != ''">
+            and module in #{multipleModule}
+        </if>
         <if test="userId != null and userId != ''">
             and user_id = #{userId}
         </if>

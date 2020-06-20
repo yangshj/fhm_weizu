@@ -50,6 +50,7 @@ public class WeiXinOtherController  extends BaseController {
             String endLimit = request.getParameter("endLimit");
             String userId = request.getParameter("userId");
             String module = request.getParameter("module");
+            String multipleModule = request.getParameter("multipleModule");
             UserOpenInfo userOpenInfo = WeiXinMemoryCacheHelper.getOpenidBySessionId(sessionId);
             if(userOpenInfo!=null){
                 WeChatAPPBean weChatAPPBean = WeChatAppHelper.getWeChatApp(appId);
@@ -79,18 +80,6 @@ public class WeiXinOtherController  extends BaseController {
 //                    }
                 }
                 List<ImageTextBean>  list = imageTextService.loadMoreByCondition(query);
-                for(ImageTextBean bean:list){
-                    if(StringUtil.isNotEmpty(bean.getTitle()) && bean.getTitle().length()>20){
-                        bean.setTitleAb(bean.getTitle().substring(0,15)+"...");
-                    } else {
-                        bean.setTitleAb(bean.getTitle());
-                    }
-                    if(StringUtil.isNotEmpty(bean.getContent()) && bean.getContent().length()>20){
-                        bean.setContentAb(bean.getContent().substring(0,25)+"...");
-                    } else {
-                        bean.setContentAb(bean.getContent());
-                    }
-                }
                 re.setList(list);
                 re.setResult(ResultHelper.SUCCESS);
             } else {
