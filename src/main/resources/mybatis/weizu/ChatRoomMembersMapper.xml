@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weizu.chatRoomMember">
+
+    <resultMap id="BaseResultMap" type="com.weizu.pojo.chatroom.ChatRoomMemberBean">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="room_id" jdbcType="BIGINT" property="roomId" />
+        <result column="user_id" jdbcType="BIGINT" property="userId" />
+        <result column="open_id" jdbcType="VARCHAR" property="openId" />
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    </resultMap>
+    <sql id="Base_Column_List">
+       `id`, `room_id`, `user_id`, `open_id`, `create_time`, `nick_name`
+    </sql>
+
+    <insert id="insertChatRoomMember" parameterType="com.weizu.pojo.chatroom.ChatRoomMemberBean">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        insert into weizu_chat_room_member (room_id, user_id, open_id, nick_name,
+           create_time
+        )
+        values (#{roomId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
+         #{openId,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, now()
+        )
+    </insert>
+
+    <delete id="deleteChatRoomMember" parameterType="java.lang.Long">
+        delete from weizu_chat_room_member
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <update id="updateChatRoomMember" parameterType="com.weizu.pojo.chatroom.ChatRoomMemberBean">
+        update weizu_chat_room_member
+        set modify_time = now()
+        <if test="roomId != null">
+            `room_id` = #{roomId,jdbcType=BIGINT},
+        </if>
+        <if test="userId != null">
+            `user_id` = #{userId,jdbcType=BIGINT},
+        </if>
+        <if test="openId != null">
+            `open_id` = #{openId,jdbcType=VARCHAR},
+        </if>
+        <if test="createTime != null">
+            `create_time` = #{createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="nickName != null">
+            `nick_name` = #{nickName,jdbcType=VARCHAR},
+        </if>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getChatRoomMemberById" parameterType="Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from weizu_chat_room_member where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="getChatRoomMemberByCondition" parameterType="ChatRoomMemberBean" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from weizu_chat_room_member where 1=1
+        <if test="userId != null">
+            and user_id = #{userId,jdbcType=BIGINT}
+        </if>
+        <if test="roomId != null">
+            and room_id = #{roomId,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <select id="getAllChatRoomMember" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from weizu_chat_room_member
+    </select>
+</mapper>
