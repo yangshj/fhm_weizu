@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * 聊天室-人 关系表
  * @version 1.0
  * @date 2020-08-28
  */
