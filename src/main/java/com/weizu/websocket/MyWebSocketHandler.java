@@ -3,9 +3,8 @@ package com.weizu.websocket;
 import org.springframework.web.socket.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.net.URI;
+import java.util.*;
 
 /**
  * websocket处理器：功能实现的核心代码编写类
@@ -16,22 +15,26 @@ public class MyWebSocketHandler implements WebSocketHandler {
     /**
      * 定义一个全局的初始化值count=0,记录连接数
      */
-    private static int count = 0;
+    private volatile static int count = 0;
 
     /**
      * 记录所有的客户端连接
      */
-
     private volatile static List<WebSocketSession> sessions = Collections.synchronizedList(new ArrayList());
-
+    /**
+     * 存储房间号对应的所有连接
+     * Map<roomId, session>
+     */
+    private static Map<String, List<WebSocketSession>> sessionMap = new HashMap<>();
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
+        removeFromSessionMap(session);
         sessions.remove(session);
         if (session.isOpen()){
             session.close();
         }
-        count = count-1;
+        count--;
         System.out.println(count);
     }
 
@@ -44,9 +47,8 @@ public class MyWebSocketHandler implements WebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         count++;
         sessions.add(session);
-        session.sendMessage(new TextMessage("你好"));
-        System.out.println("服务端--你好");
-
+        String roomId = getRoomId(session);
+        addToSessionMap(roomId, session);
     }
 
     /**
@@ -58,21 +60,10 @@ public class MyWebSocketHandler implements WebSocketHandler {
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         String data = message.getPayload().toString();
-        System.out.println("客户端" + message.getPayload().toString());
-        try {
-                if (session.isOpen()) {
-                    synchronized (session) {
-                        session.sendMessage(new TextMessage("" + data));
-                        System.out.println("服务端" + data);
-                    }
+        System.out.println("客户端: " + data);
+        String roomId = getRoomId(session);
+        sendMessageToRoom(roomId, data);
 
-                } else {
-                    sessions.remove(session);
-                }
-        } catch (IOException e) {
-            e.printStackTrace();
-            sessions.remove(session);
-        }
     }
 
     /**
@@ -94,5 +85,60 @@ public class MyWebSocketHandler implements WebSocketHandler {
         return false;
     }
 
+    // 获取roomId
+    private String getRoomId(WebSocketSession session){
+        URI url = session.getUri();
+        String query = url.getQuery();
+        String roomId = query.substring(query.indexOf("roomId=")+7);
+        return roomId;
+    }
+
+    // 将连接添加到SessionMap
+    private synchronized void addToSessionMap(String roomId, WebSocketSession session){
+        if(sessionMap.containsKey(roomId)){
+            sessionMap.get(roomId).add(session);
+        } else {
+          List<WebSocketSession> list = new ArrayList<>();
+          list.add(session);
+          sessionMap.put(roomId, list);
+        }
+    }
+
+    // 将连接从SessionMap删除
+    private synchronized void removeFromSessionMap( WebSocketSession session){
+        Set<String> keySet = sessionMap.keySet();
+        Iterator<String> it = keySet.iterator();
+        while (it.hasNext()) {
+            String roomId = it.next();
+            if(sessionMap.containsKey(roomId)){
+                List<WebSocketSession> list = sessionMap.get(roomId);
+                list.remove(session);
+            }
+        }
+    }
+
+    // 给聊天室发消息
+    private synchronized void sendMessageToRoom(String roomId, String data){
+        if(sessionMap.containsKey(roomId)){
+            List<WebSocketSession> list = sessionMap.get(roomId);
+            for(WebSocketSession session : list){
+                try {
+                    if (session.isOpen()) {
+                        synchronized (session) {
+                            session.sendMessage(new TextMessage("" + data));
+                            System.out.println("服务端: " + data);
+                        }
+                    } else {
+                        sessions.remove(session);
+                        removeFromSessionMap(session);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    removeFromSessionMap(session);
+                    sessions.remove(session);
+                }
+            }
+        }
+    }
 
 }
