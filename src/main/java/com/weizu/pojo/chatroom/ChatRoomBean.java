@@ -16,7 +16,7 @@ public class ChatRoomBean implements Serializable {
     /**
      * 聊天室创建人
      */
-    private String owner;
+    private Long owner;
 
     /**
      * 人数
@@ -56,11 +56,11 @@ public class ChatRoomBean implements Serializable {
         this.name = name;
     }
 
-    public String getOwner() {
+    public Long getOwner() {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(Long owner) {
         this.owner = owner;
     }
 

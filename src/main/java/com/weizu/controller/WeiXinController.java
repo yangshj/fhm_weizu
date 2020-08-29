@@ -834,7 +834,7 @@ public class WeiXinController extends BaseController{
 						if(StringUtil.isNotEmpty(upAvatar) && upAvatar.equals("true")){
 							String headImage = saveImage(request,id.toString(),imageFile);
                             param.setHeadImage(headImage);
-                            param.setId(Long.valueOf(id.toString()));
+                            param.setId(param.getId());
 							addressLookService.updateAddressLook(param);
 						}
 						// 历史记录

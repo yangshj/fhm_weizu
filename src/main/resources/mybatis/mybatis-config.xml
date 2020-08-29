@@ -37,6 +37,8 @@
 		<typeAlias type="com.weizu.pojo.integral.OrderInfoBean" alias="orderInfoBean"/>
 		<typeAlias type="com.weizu.pojo.fund.FundBean" alias="fundBean"/>
 		<typeAlias type="com.weizu.pojo.fund.FundNetWorthBean" alias="fundNetWorthBean"/>
+		<typeAlias type="com.weizu.pojo.chatroom.ChatRoomBean" alias="chatRoomBean"/>
+		<typeAlias type="com.weizu.pojo.chatroom.ChatRoomMemberBean" alias="chatRoomMemberBean"/>
 
 		<!-- 分页 -->
 		<typeAlias type="com.fh.entity.Page" alias="Page"/>

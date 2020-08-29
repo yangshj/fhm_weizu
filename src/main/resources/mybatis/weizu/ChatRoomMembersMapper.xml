@@ -35,19 +35,16 @@
         update weizu_chat_room_member
         set modify_time = now()
         <if test="roomId != null">
-            `room_id` = #{roomId,jdbcType=BIGINT},
+            ,`room_id` = #{roomId,jdbcType=BIGINT}
         </if>
         <if test="userId != null">
-            `user_id` = #{userId,jdbcType=BIGINT},
+            ,`user_id` = #{userId,jdbcType=BIGINT}
         </if>
         <if test="openId != null">
-            `open_id` = #{openId,jdbcType=VARCHAR},
-        </if>
-        <if test="createTime != null">
-            `create_time` = #{createTime,jdbcType=TIMESTAMP},
+            ,`open_id` = #{openId,jdbcType=VARCHAR}
         </if>
         <if test="nickName != null">
-            `nick_name` = #{nickName,jdbcType=VARCHAR},
+            ,`nick_name` = #{nickName,jdbcType=VARCHAR}
         </if>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -58,7 +55,7 @@
         from weizu_chat_room_member where id = #{id,jdbcType=BIGINT}
     </select>
 
-    <select id="getChatRoomMemberByCondition" parameterType="ChatRoomMemberBean" resultMap="BaseResultMap">
+    <select id="getChatRoomMemberByCondition" parameterType="chatRoomMemberBean" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from weizu_chat_room_member where 1=1
