@@ -1,5 +1,6 @@
 package com.weizu.websocket;
 
+import com.alibaba.fastjson.JSON;
 import org.springframework.web.socket.*;
 
 import java.io.IOException;
@@ -29,13 +30,19 @@ public class MyWebSocketHandler implements WebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
+        String roomId = getRoomId(session);
         removeFromSessionMap(session);
         sessions.remove(session);
-        if (session.isOpen()){
-            session.close();
+        try {
+            if (session.isOpen()) {
+                session.close();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
         count--;
-        System.out.println(count);
+        // 实时推送房间人数
+        sendRoomNumber(roomId);
     }
 
     /**
@@ -49,6 +56,9 @@ public class MyWebSocketHandler implements WebSocketHandler {
         sessions.add(session);
         String roomId = getRoomId(session);
         addToSessionMap(roomId, session);
+        System.out.println("总共连接数: "+sessions.size());
+        // 实时推送房间人数
+        sendRoomNumber(roomId);
     }
 
     /**
@@ -63,7 +73,6 @@ public class MyWebSocketHandler implements WebSocketHandler {
         System.out.println("客户端: " + data);
         String roomId = getRoomId(session);
         sendMessageToRoom(roomId, data);
-
     }
 
     /**
@@ -75,8 +84,12 @@ public class MyWebSocketHandler implements WebSocketHandler {
     @Override
     public void handleTransportError(WebSocketSession session, Throwable throwable) throws Exception {
         if(session.isOpen()){
+            String roomId = getRoomId(session);
+            removeFromSessionMap(session);
             sessions.remove(session);
             session.close();
+            // 实时推送房间人数
+            sendRoomNumber(roomId);
         }
     }
 
@@ -89,6 +102,7 @@ public class MyWebSocketHandler implements WebSocketHandler {
     private String getRoomId(WebSocketSession session){
         URI url = session.getUri();
         String query = url.getQuery();
+        System.out.println("url: "+ JSON.toJSONString(url));
         String roomId = query.substring(query.indexOf("roomId=")+7);
         return roomId;
     }
@@ -125,6 +139,31 @@ public class MyWebSocketHandler implements WebSocketHandler {
                 try {
                     if (session.isOpen()) {
                         synchronized (session) {
+                            session.sendMessage(new TextMessage("" + data));
+                            System.out.println("服务端: " + data);
+                        }
+                    } else {
+                        sessions.remove(session);
+                        removeFromSessionMap(session);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    removeFromSessionMap(session);
+                    sessions.remove(session);
+                }
+            }
+        }
+    }
+
+    // 发送房间人数
+    private void sendRoomNumber(String roomId){
+        if(sessionMap.containsKey(roomId)){
+            List<WebSocketSession> list = sessionMap.get(roomId);
+            for(WebSocketSession session : list){
+                try {
+                    if (session.isOpen()) {
+                        synchronized (session) {
+                            String data = "{ \"content\": " + list.size() + ",\"type\":\"roomNum\" }";
                             session.sendMessage(new TextMessage("" + data));
                             System.out.println("服务端: " + data);
                         }
