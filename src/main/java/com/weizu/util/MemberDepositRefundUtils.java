@@ -6,14 +6,14 @@ import java.util.Map;
 
 public class MemberDepositRefundUtils {
 
-    private static String file1 = "E:/Êı¾İ·ÖÎö/ÍË¿îµ¥±í.txt";
-    private static String file2 = "E:/Êı¾İ·ÖÎö/Ñº½ğÍË¿î¼ÇÂ¼.txt";
+    private static String file1 = "F:/æ•°æ®åˆ†æ/é€€æ¬¾å•è¡¨.txt";
+    private static String file2 = "F:/æ•°æ®åˆ†æ/æŠ¼é‡‘é€€æ¬¾è®°å½•.txt";
 
 
     public static void main(String[] args) {
-        // Ô­Ê¼Êı¾İ°´ĞĞ¶ÁÈ¡
+        // åŸå§‹æ•°æ®æŒ‰è¡Œè¯»å–
         List<String> carfi_refund_list = ReadTxt.readTxtFile(file1);
-        // Ô­Ê¼Êı¾İ°´ĞĞ¶ÁÈ¡
+        // åŸå§‹æ•°æ®æŒ‰è¡Œè¯»å–
         List<String> crm_refund_list = ReadTxt.readTxtFile(file2);
         Map<String,String> carfiMap = new HashMap<>();
         for(String str : carfi_refund_list){
@@ -31,16 +31,19 @@ public class MemberDepositRefundUtils {
             if(request_no.equals("request_no")) continue;
             crmMap.put(request_no, amount);
         }
-        System.out.println("²ÆÎñÍË¿îÌõÊı£º"+carfiMap.size()+" crmÌáÏÖÌõÊı: "+crmMap.size());
-        // ÕÒ²îÒì
+        System.out.println("è´¢åŠ¡é€€æ¬¾æ¡æ•°ï¼š"+carfiMap.size()+" crmæç°æ¡æ•°: "+crmMap.size());
+        // æ‰¾å·®å¼‚
         for(String str : carfi_refund_list){
             String temp[] = str.split("\t");
             String request_no= temp[3];
             String amount = temp[9];
+            String status = temp[27];
             if(request_no.equals("request_no")) continue;
             if(request_no.length()>37){
                 request_no = request_no.substring(0, request_no.indexOf("_1"));
-//                System.out.println("request:"+request_no);
+            }
+            if(status.equals("0")){
+                continue;
             }
             if(!crmMap.containsKey(request_no)){
 //                System.out.println("request\t"+request_no + "\tamount\t"+amount);
