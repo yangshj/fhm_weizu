@@ -38,16 +38,19 @@ public class MemberDepositRefundUtils {
             String request_no= temp[3];
             String amount = temp[9];
             String status = temp[27];
+            String refundNo = temp[2];
             if(request_no.equals("request_no")) continue;
             if(request_no.length()>37){
                 request_no = request_no.substring(0, request_no.indexOf("_1"));
             }
-            if(status.equals("0")){
+            if(!status.equals("0")){
                 continue;
             }
             if(!crmMap.containsKey(request_no)){
-//                System.out.println("request\t"+request_no + "\tamount\t"+amount);
                 System.out.println(str);
+//                System.out.println("'"+refundNo+"',");
+                WriteTxt.write("F:/数据分析/已删除退款单.txt", str);
+
             }
         }
     }
