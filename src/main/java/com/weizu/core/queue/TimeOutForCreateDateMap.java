@@ -45,11 +45,11 @@ public class TimeOutForCreateDateMap <K,T> extends AbstractMyMap<K, T> implement
 				}
 				for(int i=0; i<listData.size(); i++){
 					long time = System.currentTimeMillis() - listData.get(i).getValue().createTime;
-					if (time >= timeOut) {
+					if (time >= defaultTimeOut) {
 						final int index = i;
 						handlerTimeOut(listData.get(index));
 					} else {
-						long waitTime = timeOut-time;
+						long waitTime = defaultTimeOut-time;
 						actualTimeOut = waitTime;
 						break;
 					}
