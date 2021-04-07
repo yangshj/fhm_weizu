@@ -21,42 +21,38 @@ public class TimeOutForCreateDateMap <K,T> extends AbstractMyMap<K, T> implement
 	@Override
 	protected TimerTask<Void, Void> createTimeOutTask(final long timeOut, final Map<K, AbstractMyMap<K, T>.Cache<T>> map) {
 		return  new TimerTask<Void, Void>(){
-//			@Override
-//			protected long period() {
-//				return timeOut/3;
-//			}
+			private volatile long defaultTimeOut = timeOut;
+			private volatile long actualTimeOut = timeOut;
+			@Override
+			protected long period() {
+				return actualTimeOut;
+			}
 			@Override
 			protected Void doInBackground(Void... params) throws Throwable {
-				while(!Thread.interrupted()){
-			        final List<java.util.Map.Entry<K, TimeOutForCreateDateMap<K, T>.Cache<T>>> listData = new ArrayList<java.util.Map.Entry<K, TimeOutForCreateDateMap<K, T>.Cache<T>>>(map.entrySet());  
-			        Collections.sort(listData, new Comparator<java.util.Map.Entry<K, TimeOutForCreateDateMap<K, T>.Cache<T>>>() {
-						@Override
-						public int compare(
-								java.util.Map.Entry<K, AbstractMyMap<K, T>.Cache<T>> o1,
-								java.util.Map.Entry<K, AbstractMyMap<K, T>.Cache<T>> o2) {
-							Long l1 = Long.valueOf(o1.getValue().createTime);
-							Long l2 = Long.valueOf(o2.getValue().createTime);
-							return l1.compareTo(l2);
-						}
-					});
-			        
-			        for(int i=0; i<listData.size(); i++){
-			        	long time = System.currentTimeMillis()-listData.get(i).getValue().createTime;
-			        	if(time>=timeOut){
-			        		final int index = i;
-			        		new Thread(new Runnable() {
-								@Override
-								public void run() {
-									handlerTimeOut(listData.get(index));
-								}
-							}).start();
-			        		handlerTimeOut(listData.get(index));
-			        	} else {
-			        		long waitTime = timeOut-time;
-			        		Thread.sleep(waitTime);
-			        		break;
-			        	}
-			        }
+				final List<java.util.Map.Entry<K, TimeOutForCreateDateMap<K, T>.Cache<T>>> listData = new ArrayList<java.util.Map.Entry<K, TimeOutForCreateDateMap<K, T>.Cache<T>>>(map.entrySet());
+				Collections.sort(listData, new Comparator<java.util.Map.Entry<K, TimeOutForCreateDateMap<K, T>.Cache<T>>>() {
+					@Override
+					public int compare(
+							java.util.Map.Entry<K, AbstractMyMap<K, T>.Cache<T>> o1,
+							java.util.Map.Entry<K, AbstractMyMap<K, T>.Cache<T>> o2) {
+						Long l1 = Long.valueOf(o1.getValue().createTime);
+						Long l2 = Long.valueOf(o2.getValue().createTime);
+						return l1.compareTo(l2);
+					}
+				});
+				if(listData.size()==0){
+					actualTimeOut = defaultTimeOut;
+				}
+				for(int i=0; i<listData.size(); i++){
+					long time = System.currentTimeMillis() - listData.get(i).getValue().createTime;
+					if (time >= timeOut) {
+						final int index = i;
+						handlerTimeOut(listData.get(index));
+					} else {
+						long waitTime = timeOut-time;
+						actualTimeOut = waitTime;
+						break;
+					}
 				}
 				return null;
 			}
