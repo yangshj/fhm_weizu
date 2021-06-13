@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.weizu.core.queue.ITimeOutMap;
 import com.weizu.core.queue.TimeOutForCreateDateMap;
+import com.weizu.util.HttpsClientUtil;
 import com.weizu.util.StringUtil;
 
 import java.io.BufferedReader;
@@ -75,24 +76,25 @@ public class BaiduAuthServiceHelper {
                 // 3. 官网获取的 Secret Key
                 + "&client_secret=" + sk;
         try {
-            URL realUrl = new URL(getAccessTokenUrl);
-            // 打开和URL之间的连接
-            HttpURLConnection connection = (HttpURLConnection) realUrl.openConnection();
-            connection.setRequestMethod("GET");
-            connection.connect();
-            // 获取所有响应头字段
-            Map<String, List<String>> map = connection.getHeaderFields();
-            // 遍历所有的响应头字段
-            for (String key : map.keySet()) {
-                System.err.println(key + "--->" + map.get(key));
-            }
-            // 定义 BufferedReader输入流来读取URL的响应
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String result = "";
-            String line;
-            while ((line = in.readLine()) != null) {
-                result += line;
-            }
+//            URL realUrl = new URL(getAccessTokenUrl);
+//            // 打开和URL之间的连接
+//            HttpURLConnection connection = (HttpURLConnection) realUrl.openConnection();
+//            connection.setRequestMethod("GET");
+//            connection.connect();
+//            // 获取所有响应头字段
+//            Map<String, List<String>> map = connection.getHeaderFields();
+//            // 遍历所有的响应头字段
+//            for (String key : map.keySet()) {
+//                System.err.println(key + "--->" + map.get(key));
+//            }
+//            // 定义 BufferedReader输入流来读取URL的响应
+//            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//            String result = "";
+//            String line;
+//            while ((line = in.readLine()) != null) {
+//                result += line;
+//            }
+            String result = HttpsClientUtil.sendRequest(getAccessTokenUrl, null, null);
             /**
              * 返回结果示例
              */
@@ -105,5 +107,10 @@ public class BaiduAuthServiceHelper {
             e.printStackTrace(System.err);
         }
         return null;
+    }
+
+    public static void main(String[] args) {
+        String auth = getAuth();
+        System.out.println("auth:"+auth);
     }
 }
